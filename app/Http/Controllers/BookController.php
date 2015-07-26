@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Book;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,8 +18,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        print 'asdf';
-        //
+        $books = Book::all();
+        return view('books.index')->withBooks($books);
     }
 
     /**
@@ -27,7 +29,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        return view('books.create');
     }
 
     /**
@@ -38,7 +40,13 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        $input = $request->all();
+        Book::create($input);
+        //Session::flash('flash_message', 'Book successfully added!');
+        return redirect()->back();
     }
 
     /**
@@ -49,7 +57,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        return view('books.show')->withBook($book);
     }
 
     /**
@@ -60,7 +69,8 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        return view('books.edit')->withBook($book);
     }
 
     /**
@@ -72,7 +82,13 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $book = Book::findOrFail($id);
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+        $input = $request->all();
+        $book->fill($input)->save();
+        return redirect()->back();
     }
 
     /**
@@ -83,6 +99,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        $book->delete();
+        return redirect()->route('books.index');
     }
 }
