@@ -2,10 +2,10 @@
  
 @section('content')
  
-<div class="title">{{ $book->name }}</div>
+<h1>{{ $book->name }}</h1>
 
-    <p>
-	    <a href="{{ route('books.edit', $book->id) }}" class="btn btn-info">Edit</a>
-    </p>
+<p>
+    <a href="{{ route('books.edit', $book->id) }}">Edit</a>
+</p>
  
 @stop

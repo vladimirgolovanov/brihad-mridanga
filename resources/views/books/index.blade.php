@@ -2,17 +2,17 @@
  
 @section('content')
  
-<div class="title">Welcome Home</div>
+<h1>Books</h1>
 
 @foreach($books as $book)
     <p>
 	    {{ $book->name }}
-	    <a href="{{ route('books.show', $book->id) }}" class="btn btn-info">View</a>
-	    <a href="{{ route('books.edit', $book->id) }}" class="btn btn-info">Edit</a>
+	    <a href="{{ route('books.show', $book->id) }}">View</a>
+	    <a href="{{ route('books.edit', $book->id) }}">Edit</a>
     </p>
 @endforeach
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores, possimus, ullam? Deleniti dicta eaque facere, facilis in inventore mollitia officiis porro totam voluptatibus! Adipisci autem cumque enim explicabo, iusto sequi.</p>
+<p><a href="{{ route('books.create') }}">Create book</a></p>
 <hr>
  
 @stop
