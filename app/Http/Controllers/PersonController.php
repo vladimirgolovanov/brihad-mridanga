@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
+use App\Person;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class BookController extends Controller
+class PersonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +18,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::all();
-        return view('books.index')->withBooks($books);
+        $persons = Person::all();
+        return view('persons.index')->withPersons($persons);
     }
 
     /**
@@ -29,7 +29,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        return view('persons.create');
     }
 
     /**
@@ -44,9 +44,9 @@ class BookController extends Controller
             'name' => 'required',
         ]);
         $input = $request->all();
-        Book::create($input);
-        //Session::flash('flash_message', 'Book successfully added!');
-        return redirect()->route('books.index');
+        Person::create($input);
+        //Session::flash('flash_message', 'Person successfully added!');
+        return redirect()->route('persons.index');
     }
 
     /**
@@ -57,8 +57,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.show')->withBook($book);
+        $person = Person::findOrFail($id);
+        return view('persons.show')->withPerson($person);
     }
 
     /**
@@ -69,8 +69,8 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.edit')->withBook($book);
+        $person = Person::findOrFail($id);
+        return view('persons.edit')->withPerson($person);
     }
 
     /**
@@ -82,12 +82,12 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $book = Book::findOrFail($id);
+        $person = Person::findOrFail($id);
         $this->validate($request, [
             'name' => 'required'
         ]);
         $input = $request->all();
-        $book->fill($input)->save();
+        $person->fill($input)->save();
         return redirect()->back();
     }
 
@@ -99,8 +99,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
-        $book->delete();
-        return redirect()->route('books.index');
+        $person = Person::findOrFail($id);
+        $person->delete();
+        return redirect()->route('persons.index');
     }
 }

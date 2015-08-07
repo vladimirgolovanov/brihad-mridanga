@@ -27,6 +27,7 @@
             <span class="mdl-layout-title">Store books</span>
             <nav class="mdl-navigation">
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
+                <a class="mdl-navigation__link" href="{{ route('persons.index') }}">Persons</a>
             </nav>
         </div>
         <main class="mdl-layout__content">
