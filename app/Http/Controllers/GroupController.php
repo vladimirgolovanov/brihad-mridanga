@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Book;
 use App\Group;
 
 use Illuminate\Http\Request;
@@ -10,7 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class BookController extends Controller
+class GroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,10 +19,7 @@ class BookController extends Controller
     public function index()
     {
         $groups = Group::all();
-        foreach($groups as $group) {
-            $books[$group->id] = Book::where('group_id', $group->id)->get();
-        }
-        return view('books.index')->withBooks($books)->withGroups($groups);
+        return view('groups.index')->withGroups($groups);
     }
 
     /**
@@ -33,8 +29,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $groups = Group::all();
-        return view('books.create')->withGroups($groups);
+        return view('groups.create');
     }
 
     /**
@@ -47,12 +42,11 @@ class BookController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'group_id' => 'required',
         ]);
         $input = $request->all();
-        Book::create($input);
-        //Session::flash('flash_message', 'Book successfully added!');
-        return redirect()->route('books.index');
+        Group::create($input);
+        //Session::flash('flash_message', 'Group successfully added!');
+        return redirect()->route('groups.index');
     }
 
     /**
@@ -63,8 +57,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.show')->withBook($book);
+        $group = Group::findOrFail($id);
+        return view('groups.show')->withGroup($group);
     }
 
     /**
@@ -75,9 +69,8 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
-        $groups = Group::all();
-        return view('books.edit')->withBook($book)->withGroups($groups);
+        $group = Group::findOrFail($id);
+        return view('groups.edit')->withGroup($group);
     }
 
     /**
@@ -89,12 +82,12 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $book = Book::findOrFail($id);
+        $group = Group::findOrFail($id);
         $this->validate($request, [
             'name' => 'required'
         ]);
         $input = $request->all();
-        $book->fill($input)->save();
+        $group->fill($input)->save();
         return redirect()->back();
     }
 
@@ -106,8 +99,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
-        $book->delete();
-        return redirect()->route('books.index');
+        $group = Group::findOrFail($id);
+        $group->delete();
+        return redirect()->route('groups.index');
     }
 }

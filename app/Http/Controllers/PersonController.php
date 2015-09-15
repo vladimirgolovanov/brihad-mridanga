@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Person;
+use App\Group;
 
 use Illuminate\Http\Request;
 
@@ -18,8 +19,11 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $persons = Person::all();
-        return view('persons.index')->withPersons($persons);
+        $groups = Group::all();
+        foreach($groups as $group) {
+            $persons[$group->id] = Person::where('group_id', $group->id)->get();
+        }
+        return view('persons.index')->withPersons($persons)->withGroups($groups);
     }
 
     /**
@@ -29,7 +33,8 @@ class PersonController extends Controller
      */
     public function create()
     {
-        return view('persons.create');
+        $groups = Group::all();
+        return view('persons.create')->withGroups($groups);
     }
 
     /**
@@ -42,6 +47,7 @@ class PersonController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'group_id' => 'required',
         ]);
         $input = $request->all();
         Person::create($input);
@@ -70,7 +76,8 @@ class PersonController extends Controller
     public function edit($id)
     {
         $person = Person::findOrFail($id);
-        return view('persons.edit')->withPerson($person);
+        $groups = Group::all();
+        return view('persons.edit')->withPerson($person)->withGroups($groups);
     }
 
     /**
@@ -84,7 +91,8 @@ class PersonController extends Controller
     {
         $person = Person::findOrFail($id);
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'group_id' => 'required',
         ]);
         $input = $request->all();
         $person->fill($input)->save();

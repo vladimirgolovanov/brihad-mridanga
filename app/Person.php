@@ -9,7 +9,8 @@ class Person extends Model
     protected $table = 'persons';
 
     protected $fillable = [
-        'name'
+        'name',
+        'group_id'
     ];
 	public static function asdf()
 	{

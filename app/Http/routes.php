@@ -19,3 +19,5 @@ Route::resource('books', 'BookController');
 
 Route::resource('persons', 'PersonController');
 
+Route::resource('groups', 'GroupController');
+

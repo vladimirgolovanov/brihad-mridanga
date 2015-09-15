@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Store books</title>
-        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.1/material.cyan-red.min.css">
-        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.1/material.min.js"></script>
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.orange-deep_orange.min.css">
+        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -26,6 +26,7 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Store books</span>
             <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="{{ route('groups.index') }}">Groups</a>
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
                 <a class="mdl-navigation__link" href="{{ route('persons.index') }}">Persons</a>
             </nav>

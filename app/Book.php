@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
+        'group_id'
     ];
 	public static function asdf()
 	{
