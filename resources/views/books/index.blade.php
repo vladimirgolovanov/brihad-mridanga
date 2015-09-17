@@ -11,6 +11,7 @@
             {{ $book->name }}
             <a href="{{ route('books.show', $book->id) }}">View</a>
             <a href="{{ route('books.edit', $book->id) }}">Edit</a>
+            <a href="{{ route('newbookprice', ['id'=>$book->id]) }}">Price</a>
         </p>
     @endforeach
 @endforeach

@@ -21,3 +21,7 @@ Route::resource('persons', 'PersonController');
 
 Route::resource('groups', 'GroupController');
 
+Route::resource('bookprice', 'BookPriceController');
+
+Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
+
