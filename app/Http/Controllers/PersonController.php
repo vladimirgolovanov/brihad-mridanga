@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Person;
 use App\Group;
+use App\Operation;
 
 use Illuminate\Http\Request;
 
@@ -64,7 +65,12 @@ class PersonController extends Controller
     public function show($id)
     {
         $person = Person::findOrFail($id);
-        return view('persons.show')->withPerson($person);
+        list($operations, $summ) = Operation::get_all_operations($id);
+        return view('persons.show', [
+            'operations' => $operations,
+            'person' => $person,
+            'summ' => $summ,
+            ]);
     }
 
     /**

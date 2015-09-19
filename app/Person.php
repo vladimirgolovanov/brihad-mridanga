@@ -12,9 +12,4 @@ class Person extends Model
         'name',
         'group_id'
     ];
-	public static function asdf()
-	{
-		print 'asdf';
-	}
-    //
 }

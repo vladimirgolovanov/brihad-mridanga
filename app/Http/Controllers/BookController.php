@@ -19,11 +19,12 @@ class BookController extends Controller
      */
     public function index()
     {
-        $groups = Group::all();
+        /*$groups = Group::all();
         foreach($groups as $group) {
             $books[$group->id] = Book::where('group_id', $group->id)->get();
-        }
-        return view('books.index')->withBooks($books)->withGroups($groups);
+        }*/
+        list($books, $price) = Book::get_all_books();
+        return view('books.index', ['books' => $books, 'price' => $price]);
     }
 
     /**

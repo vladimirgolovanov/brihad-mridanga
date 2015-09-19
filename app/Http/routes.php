@@ -25,3 +25,7 @@ Route::resource('bookprice', 'BookPriceController');
 
 Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
 
+Route::get('operation/make', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
+
+Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
+
