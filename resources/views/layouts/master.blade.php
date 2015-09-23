@@ -29,7 +29,6 @@
                 <a class="mdl-navigation__link" href="{{ route('groups.index') }}">Groups</a>
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
                 <a class="mdl-navigation__link" href="{{ route('persons.index') }}">Persons</a>
-                <a class="mdl-navigation__link" href="{{ route('operation.make') }}">Add books</a>
             </nav>
         </div>
         <main class="mdl-layout__content">
