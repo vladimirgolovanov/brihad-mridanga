@@ -2,15 +2,13 @@
  
 @section('content')
  
-<h1>Make operation</h1>
+<h1>Back laxmi</h1>
 
 {!! Form::open([
     'route' => 'operation.store'
 ]) !!}
 
-@foreach($books as $book)
-	<p>{!! $book->name !!} {!! Form::text('bookcount['.$book->id.']', null, ['class' => 'mdl-textfield__input']) !!}</p>
-@endforeach
+<p>Amount: {!! Form::text('laxmi', null, ['class' => 'mdl-textfield__input']) !!}</p>
 
 {!! Form::hidden('personid', $personid, ['class' => 'mdl-textfield__input']) !!}
 {!! Form::hidden('operation_type', $operation_type, ['class' => 'mdl-textfield__input']) !!}

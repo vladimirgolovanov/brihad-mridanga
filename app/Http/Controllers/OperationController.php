@@ -14,14 +14,44 @@ use App\Http\Controllers\Controller;
 class OperationController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
+     * Show the form for making order on books.
      *
      * @return Response
      */
-    public function make()
+    public function make($personid)
+    {
+        // тут и далее должен учавствовать person id
+        list($books, $price) = Book::get_all_books();
+        return view('operation.make', ['books' => $books, 'price' => $price, 'operation_type' => 1, 'personid' => $personid]);
+    }
+    /**
+     * Show the form for adding laxmi.
+     *
+     * @return Response
+     */
+    public function laxmi($personid)
+    {
+        return view('operation.laxmi', ['operation_type' => 2, 'personid' => $personid]);
+    }
+    /**
+     * Show the form for setting remains.
+     *
+     * @return Response
+     */
+    public function remain($personid)
     {
         list($books, $price) = Book::get_all_books();
-        return view('operation.make', ['books' => $books, 'price' => $price, 'operation_type' => 1]);
+        return view('operation.remain', ['books' => $books, 'operation_type' => 3, 'personid' => $personid]);
+    }
+    /**
+     * Show the form for returning books.
+     *
+     * @return Response
+     */
+    public function booksreturn($personid)
+    {
+        list($books, $price) = Book::get_all_books();
+        return view('operation.return', ['books' => $books, 'operation_type' => 4, 'personid' => $personid]);
     }
 
     public function store(Request $request)
@@ -30,17 +60,45 @@ class OperationController extends Controller
         /*$this->validate($request, [
             'personid' => 'required'
         ]);*/
-        $personid = 1;
-        foreach($request->bookcount as $bookid => $count) {
+        // возможно есть 1, 3, 4 и есть 2; 1, 3, 4 можно объединить
+        if($request->operation_type == 1) {
+            foreach($request->bookcount as $bookid => $count) {
+                $operation = new Operation;
+                $operation->book_id = $bookid;
+                $operation->quantity = $count;
+                $operation->person_id = $request->personid;
+                $operation->datetime = $timestamp;
+                $operation->operation_type = $request->operation_type;
+                $operation->save();
+            }
+        } elseif($request->operation_type == 2) {
             $operation = new Operation;
-            $operation->book_id = $bookid;
-            $operation->quantity = $count;
-            $operation->person_id = $personid;
             $operation->datetime = $timestamp;
+            $operation->person_id = $request->personid;
+            $operation->laxmi = $request->laxmi;
             $operation->operation_type = $request->operation_type;
             $operation->save();
-            //save data here: [increment_id, timestamp?], qty (count), bookid, data, personid (book_price_id?)
+        } elseif($request->operation_type == 3) {
+            foreach($request->bookcount as $bookid => $count) {
+                $operation = new Operation;
+                $operation->book_id = $bookid;
+                $operation->quantity = $count;
+                $operation->person_id = $request->personid;
+                $operation->datetime = $timestamp;
+                $operation->operation_type = $request->operation_type;
+                $operation->save();
+            }
+        } elseif($request->operation_type == 4) {
+            foreach($request->bookcount as $bookid => $count) {
+                $operation = new Operation;
+                $operation->book_id = $bookid;
+                $operation->quantity = $count;
+                $operation->person_id = $request->personid;
+                $operation->datetime = $timestamp;
+                $operation->operation_type = $request->operation_type;
+                $operation->save();
+            }
         }
-        return redirect()->route('books.index');
+        return redirect()->route('persons.show', $request->personid); // возвращать на текущего personid
     }
 }

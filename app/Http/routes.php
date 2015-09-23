@@ -25,7 +25,9 @@ Route::resource('bookprice', 'BookPriceController');
 
 Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
 
-Route::get('operation/make', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
-
+Route::get('operation/{personid}/make', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
+Route::get('operation/{personid}/laxmi', ['as'=>'operation.laxmi', 'uses'=>'OperationController@laxmi']);
+Route::get('operation/{personid}/remain', ['as'=>'operation.remain', 'uses'=>'OperationController@remain']);
+Route::get('operation/{personid}/return', ['as'=>'operation.return', 'uses'=>'OperationController@booksreturn']);
 Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
 

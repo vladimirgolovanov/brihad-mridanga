@@ -2,7 +2,7 @@
  
 @section('content')
  
-<h1>Make operation</h1>
+<h1>Return books</h1>
 
 {!! Form::open([
     'route' => 'operation.store'
