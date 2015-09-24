@@ -67,11 +67,13 @@ class PersonController extends Controller
         $person = Person::findOrFail($id);
         list($operations, $summ) = Operation::get_all_operations($id);
         $operation_type_name = Operation::operation_type_name($id);
+        $book_names_by_id = Operation::book_names_by_id();
         return view('persons.show', [
             'operations' => $operations,
             'person' => $person,
             'summ' => $summ,
             'operation_type_name' => $operation_type_name,
+            'book_names_by_id' => $book_names_by_id,
             ]);
     }
 
