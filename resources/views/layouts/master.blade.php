@@ -52,13 +52,13 @@
                 </div>
             </div>
         </main>
-        <footer class="mdl-mini-footer">
+<!--         <footer class="mdl-mini-footer">
             <div class="mdl-mini-footer__right-section">
                 <ul class="mdl-mini-footer--link-list">
                     <li><a href="#">Help</a></li>
                 </ul>
             </div>
-        </footer>
+        </footer> -->
     </div>
     </body>
 </html>
