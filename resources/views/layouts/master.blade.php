@@ -20,9 +20,6 @@
     </head>
     <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
-        <header class="mdl-layout__header">
-        <div class="mdl-layout-icon"></div>
-        </header>
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Store books</span>
             <nav class="mdl-navigation">
@@ -32,6 +29,9 @@
             </nav>
         </div>
         <main class="mdl-layout__content">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row"></div>
+            </header>
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--1-col">
                 </div>
