@@ -18,7 +18,7 @@
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 @foreach($operations as $datetime => $operation)
 	<tr>
-		<td class="mdl-data-table__cell--non-numeric">{{ $operation['data'][0]['nice_date'] }}</td>
+		<td class="mdl-data-table__cell--non-numeric"><div id="{{ $datetime }}">{{ $operation['data'][0]['nice_date'] }}</div><div class="mdl-tooltip" for="{{ $datetime }}">{{ $datetime }}</div></td>
 		<td class="mdl-data-table__cell--non-numeric" colspan="2">{{ $operation_type_name[$operation['data'][0]['operation_type']] }}</td>
 		<td colspan="2"></td>
 		<td>
