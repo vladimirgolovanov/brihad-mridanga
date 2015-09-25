@@ -61,7 +61,7 @@ class OperationController extends Controller
             'personid' => 'required'
         ]);*/
         // возможно есть 1, 3, 4 и есть 2; 1, 3, 4 можно объединить
-        if($request->operation_type == 1) {
+        if(in_array($request->operation_type, [1,3,4])) {
             foreach($request->bookcount as $bookid => $count) {
                 if($count) {
                     $operation = new Operation;
@@ -80,30 +80,6 @@ class OperationController extends Controller
             $operation->laxmi = $request->laxmi;
             $operation->operation_type = $request->operation_type;
             $operation->save();
-        } elseif($request->operation_type == 3) {
-            foreach($request->bookcount as $bookid => $count) {
-                if($count) {
-                    $operation = new Operation;
-                    $operation->book_id = $bookid;
-                    $operation->quantity = $count;
-                    $operation->person_id = $request->personid;
-                    $operation->datetime = $timestamp;
-                    $operation->operation_type = $request->operation_type;
-                    $operation->save();
-                }
-            }
-        } elseif($request->operation_type == 4) {
-            foreach($request->bookcount as $bookid => $count) {
-                if($count) {
-                    $operation = new Operation;
-                    $operation->book_id = $bookid;
-                    $operation->quantity = $count;
-                    $operation->person_id = $request->personid;
-                    $operation->datetime = $timestamp;
-                    $operation->operation_type = $request->operation_type;
-                    $operation->save();
-                }
-            }
         }
         return redirect()->route('persons.show', $request->personid); // возвращать на текущего personid
     }

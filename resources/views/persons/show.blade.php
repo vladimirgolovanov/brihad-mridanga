@@ -49,6 +49,18 @@
 	</tr>
 	<?php
 			}
+		} elseif($operation['data'][0]['operation_type'] == 4) {
+			foreach($operation['data'] as $o) {
+	?>
+	<tr>
+	<td></td>
+	<td>&nbsp;</td>
+	<td class="mdl-data-table__cell--non-numeric">{{ $book_names_by_id[$o['book_id']] }}</td>
+	<td class="mdl-data-table__cell--non-numeric">&times;&nbsp;{{ $o['quantity'] }}</td>
+	<td colspan="2">&nbsp;</td>
+	</tr>
+	<?php
+			}
 		}
 	?>
 @endforeach
