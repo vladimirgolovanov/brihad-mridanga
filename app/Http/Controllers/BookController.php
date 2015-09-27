@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\BookPrice;
 use App\Group;
+
+use Auth;
 
 use Illuminate\Http\Request;
 
@@ -19,11 +22,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        /*$groups = Group::all();
-        foreach($groups as $group) {
-            $books[$group->id] = Book::where('group_id', $group->id)->get();
-        }*/
-        list($books, $price) = Book::get_all_books();
+        list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('books.index', ['books' => $books, 'price' => $price]);
     }
 
@@ -34,8 +33,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $groups = Group::all();
-        return view('books.create')->withGroups($groups);
+        return view('books.create');
     }
 
     /**
@@ -48,11 +46,19 @@ class BookController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'group_id' => 'required',
         ]);
-        $input = $request->all();
-        Book::create($input);
-        //Session::flash('flash_message', 'Book successfully added!');
+        $book = new Book;
+        $book->shortname = $request->shortname;
+        $book->name = $request->name;
+        $book->pack = $request->pack;
+        $book->group_id = 1;
+        $book->group_id = 1;
+        $book->user_id = Auth::user()->id;
+        $book->save();
+        $bookprice = new BookPrice;
+        $bookprice->book_id = $book->id;
+        $bookprice->price = $request->bookprice;
+        $bookprice->save();
         return redirect()->route('books.index');
     }
 
@@ -77,8 +83,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Book::findOrFail($id);
-        $groups = Group::all();
-        return view('books.edit')->withBook($book)->withGroups($groups);
+        return view('books.edit')->withBook($book);
     }
 
     /**
@@ -96,7 +101,7 @@ class BookController extends Controller
         ]);
         $input = $request->all();
         $book->fill($input)->save();
-        return redirect()->back();
+        return redirect()->route('books.index');
     }
 
     /**

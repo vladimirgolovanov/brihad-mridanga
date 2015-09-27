@@ -6,6 +6,8 @@ use App\Book;
 use App\Group;
 use App\Operation;
 
+use Auth;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -21,7 +23,7 @@ class OperationController extends Controller
     public function make($personid)
     {
         // тут и далее должен учавствовать person id
-        list($books, $price) = Book::get_all_books();
+        list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('operation.make', ['books' => $books, 'price' => $price, 'operation_type' => 1, 'personid' => $personid]);
     }
     /**
@@ -40,7 +42,7 @@ class OperationController extends Controller
      */
     public function remain($personid)
     {
-        list($books, $price) = Book::get_all_books();
+        list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('operation.remain', ['books' => $books, 'operation_type' => 3, 'personid' => $personid]);
     }
     /**
@@ -50,7 +52,7 @@ class OperationController extends Controller
      */
     public function booksreturn($personid)
     {
-        list($books, $price) = Book::get_all_books();
+        list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('operation.return', ['books' => $books, 'operation_type' => 4, 'personid' => $personid]);
     }
 
@@ -81,6 +83,6 @@ class OperationController extends Controller
             $operation->operation_type = $request->operation_type;
             $operation->save();
         }
-        return redirect()->route('persons.show', $request->personid); // возвращать на текущего personid
+        return redirect()->route('persons.show', $request->personid);
     }
 }

@@ -11,7 +11,10 @@
 |
 */
 
+//$user = Auth::user();
+
 Route::get('/', function () {
+	//print Auth::user()->name;
     return view('welcome');
 });
 
@@ -31,3 +34,11 @@ Route::get('operation/{personid}/remain', ['as'=>'operation.remain', 'uses'=>'Op
 Route::get('operation/{personid}/return', ['as'=>'operation.return', 'uses'=>'OperationController@booksreturn']);
 Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
 
+// Authentication routes...
+Route::get('auth/login', ['as'=>'auth.login', 'uses'=>'Auth\AuthController@getLogin']);
+Route::post('auth/login', 'Auth\AuthController@postLogin');
+Route::get('auth/logout', ['as'=>'auth.logout', 'uses'=>'Auth\AuthController@getLogout']);
+
+// Registration routes...
+Route::get('auth/register', ['as'=>'auth.register', 'uses'=>'Auth\AuthController@getRegister']);
+Route::post('auth/register', 'Auth\AuthController@postRegister');

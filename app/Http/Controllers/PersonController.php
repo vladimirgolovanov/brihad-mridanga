@@ -6,6 +6,8 @@ use App\Person;
 use App\Group;
 use App\Operation;
 
+use Auth;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -50,8 +52,11 @@ class PersonController extends Controller
             'name' => 'required',
             'group_id' => 'required',
         ]);
-        $input = $request->all();
-        Person::create($input);
+        $person = new Person;
+        $person->name = $request->name;
+        $person->group_id = $request->group_id;
+        $person->user_id = Auth::user()->id;
+        $person->save();
         //Session::flash('flash_message', 'Person successfully added!');
         return redirect()->route('persons.index');
     }

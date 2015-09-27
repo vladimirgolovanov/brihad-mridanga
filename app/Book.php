@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     protected $fillable = [
+        'shortname',
         'name',
-        'group_id'
+        'pack',
     ];
-    public static function get_all_books()
+    public static function get_all_books($user_id)
     {
         /*$results = DB::select( DB::raw("`bookprice`.`book_id`, `bookprice`.`price` FROM `bookprice` WHERE `book_id` IN (SELECT `book_id` FROM `bookprice` GROUP BY `book_id` HAVING `created_at`=MAX(`created_at`))"), array(
             'somevariable' => $someVariable,
         ));*/
-        $books = DB::table('books')->orderBy('books.id', 'asc')->get();
+        $books = DB::table('books')->where('user_id', $user_id)->orderBy('books.id', 'asc')->get();
         $bookprice = DB::select("SELECT `bookprice`.`book_id`, `bookprice`.`price` FROM `bookprice` WHERE `book_id` IN (SELECT `book_id` FROM `bookprice` GROUP BY `book_id` HAVING `created_at`=MAX(`created_at`))");
         if(count($bookprice)) foreach($bookprice as $bp) $price[$bp->book_id] = $bp->price;
         else $price = [];

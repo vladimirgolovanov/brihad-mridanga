@@ -25,9 +25,13 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Store books</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="{{ route('groups.index') }}">Groups</a>
+            @if(Auth::check())
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
                 <a class="mdl-navigation__link" href="{{ route('persons.index') }}">Persons</a>
+                <a class="mdl-navigation__link" href="{{ route('auth.logout') }}">Logout</a>
+            @else
+                <a class="mdl-navigation__link" href="{{ route('auth.login') }}">Login</a>
+            @endif
             </nav>
         </div>
         <main class="mdl-layout__content">

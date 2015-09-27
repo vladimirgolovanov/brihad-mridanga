@@ -9,18 +9,29 @@
 ]) !!}
 
 <div class="mdl-textfield mdl-js-textfield textfield-demo">
+    {!! Form::label('shortname', 'Short name:', ['class' => 'mdl-textfield__label']) !!}
+    {!! Form::text('shortname', null, ['class' => 'mdl-textfield__input']) !!}
+</div>
+
+<br>
+
+<div class="mdl-textfield mdl-js-textfield textfield-demo">
     {!! Form::label('name', 'Name:', ['class' => 'mdl-textfield__label']) !!}
     {!! Form::text('name', null, ['class' => 'mdl-textfield__input']) !!}
 </div>
 
 <br>
+
 <div class="mdl-textfield mdl-js-textfield textfield-demo">
-	@foreach($groups as $group)
-	    <label for="group-{{ $group->id }}" class="mdl-radio mdl-js-radio mdl-js-ripple-effect">
-	        <input type="radio" class="mdl-radio__button" id="group-{{ $group->id }}" name="group_id" value="{{ $group->id }}" />
-	        <span class="mdl-radio__label">{{ $group->name }}</span>
-	    </label>
-	@endforeach
+    {!! Form::label('pack', 'Pack:', ['class' => 'mdl-textfield__label']) !!}
+    {!! Form::text('pack', 10, ['class' => 'mdl-textfield__input']) !!}
+</div>
+
+<br>
+
+<div class="mdl-textfield mdl-js-textfield textfield-demo">
+    {!! Form::label('bookprice', 'Price:', ['class' => 'mdl-textfield__label']) !!}
+    {!! Form::text('bookprice', null, ['class' => 'mdl-textfield__input']) !!}
 </div>
 
 <br>
