@@ -22,8 +22,6 @@ Route::resource('books', 'BookController');
 
 Route::resource('persons', 'PersonController');
 
-Route::resource('groups', 'GroupController');
-
 Route::resource('bookprice', 'BookPriceController');
 
 Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
@@ -38,7 +36,6 @@ Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@
 Route::get('auth/login', ['as'=>'auth.login', 'uses'=>'Auth\AuthController@getLogin']);
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', ['as'=>'auth.logout', 'uses'=>'Auth\AuthController@getLogout']);
-
 // Registration routes...
 Route::get('auth/register', ['as'=>'auth.register', 'uses'=>'Auth\AuthController@getRegister']);
 Route::post('auth/register', 'Auth\AuthController@postRegister');

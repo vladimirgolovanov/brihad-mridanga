@@ -10,6 +10,5 @@ class Person extends Model
 
     protected $fillable = [
         'name',
-        'group_id'
     ];
 }

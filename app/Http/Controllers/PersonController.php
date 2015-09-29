@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Person;
-use App\Group;
 use App\Operation;
 
 use Auth;
@@ -22,11 +21,8 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $groups = Group::all();
-        foreach($groups as $group) {
-            $persons[$group->id] = Person::where('group_id', $group->id)->get();
-        }
-        return view('persons.index')->withPersons($persons)->withGroups($groups);
+        $persons = Person::where('user_id', Auth::user()->id)->get();
+        return view('persons.index')->withPersons($persons);
     }
 
     /**
@@ -36,8 +32,7 @@ class PersonController extends Controller
      */
     public function create()
     {
-        $groups = Group::all();
-        return view('persons.create')->withGroups($groups);
+        return view('persons.create');
     }
 
     /**
@@ -50,11 +45,9 @@ class PersonController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'group_id' => 'required',
         ]);
         $person = new Person;
         $person->name = $request->name;
-        $person->group_id = $request->group_id;
         $person->user_id = Auth::user()->id;
         $person->save();
         //Session::flash('flash_message', 'Person successfully added!');
@@ -91,8 +84,7 @@ class PersonController extends Controller
     public function edit($id)
     {
         $person = Person::findOrFail($id);
-        $groups = Group::all();
-        return view('persons.edit')->withPerson($person)->withGroups($groups);
+        return view('persons.edit')->withPerson($person);
     }
 
     /**
@@ -107,7 +99,6 @@ class PersonController extends Controller
         $person = Person::findOrFail($id);
         $this->validate($request, [
             'name' => 'required',
-            'group_id' => 'required',
         ]);
         $input = $request->all();
         $person->fill($input)->save();

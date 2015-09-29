@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Book;
 use App\BookPrice;
-use App\Group;
 
 use Auth;
 
@@ -51,8 +50,6 @@ class BookController extends Controller
         $book->shortname = $request->shortname;
         $book->name = $request->name;
         $book->pack = $request->pack;
-        $book->group_id = 1;
-        $book->group_id = 1;
         $book->user_id = Auth::user()->id;
         $book->save();
         $bookprice = new BookPrice;
