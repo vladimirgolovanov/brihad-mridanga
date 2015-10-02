@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/static/jquery-2.1.4.min.js"></script>
         <script src="/static/functions.js"></script>
+        <link rel="stylesheet" href="/static/style.css">
         <style>
         .layout-transparent {
           background: url('../assets/demos/transparent.jpg') center / cover;
