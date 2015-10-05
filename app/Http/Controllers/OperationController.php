@@ -63,6 +63,9 @@ class OperationController extends Controller
             'personid' => 'required'
         ]);*/
         // возможно есть 1, 3, 4 и есть 2; 1, 3, 4 можно объединить
+        if($request->custom_date_switch) {
+            $timestamp = $request->custom_date.date(" H:i:s");
+        }
         if(in_array($request->operation_type, [1,3,4])) {
             foreach($request->bookcount as $bookid => $count) {
                 if($count) {

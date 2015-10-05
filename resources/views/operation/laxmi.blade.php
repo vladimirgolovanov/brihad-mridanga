@@ -8,6 +8,14 @@
     'route' => 'operation.store'
 ]) !!}
 
+<p>
+<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="custom_date_switch">
+  <input type="checkbox" name="custom_date_switch" id="custom_date_switch" class="mdl-switch__input"  />
+  <span class="mdl-switch__label">Custom date</span>
+</label><br><br>
+<input type="text" name="custom_date" id="custom_date" disabled style="display:none;" placeholder="YYYY-MM-DD" />
+</p>
+
 <p>Amount: {!! Form::text('laxmi', null, ['class' => 'mdl-textfield__input']) !!}</p>
 
 {!! Form::hidden('personid', $personid, ['class' => 'mdl-textfield__input']) !!}

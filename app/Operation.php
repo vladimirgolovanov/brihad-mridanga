@@ -12,7 +12,7 @@ class Operation extends Model
     {
         $operations = [];
         $summ = 0;
-        $os = DB::table('operations')->where('person_id', $personid)->get();
+        $os = DB::table('operations')->where('person_id', $personid)->orderBy('datetime', 'asc')->get();
         foreach($os as $o) {
             $nice_date = self::convert_to_nice_date($o->datetime); // проверить правильность self::
             if($o->operation_type == 1) {

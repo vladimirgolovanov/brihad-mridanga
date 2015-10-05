@@ -13,4 +13,14 @@ jQuery(function($) {
             else $('#'+field).val(0);
         }
     });
+    $('#custom_date_switch').on("change", function() {
+        if($('#custom_date_switch').is(':checked')) {
+            $('#custom_date').show();
+            $('#custom_date').prop("disabled", false);
+        } else {
+            $('#custom_date').hide();
+            $('#custom_date').prop("disabled", true);
+            $('#custom_date').val("");
+        }
+    });
 });
