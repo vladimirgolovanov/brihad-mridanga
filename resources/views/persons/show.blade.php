@@ -16,6 +16,11 @@
 </div>
 
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+	<tr>
+	<td colspan="4"></td>
+	<td class="mdl-data-table__cell--non-numeric">Итого:</td>
+	<td>{{ $summ }}</td>
+	</tr>
 @foreach($operations as $datetime => $operation)
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric"><div id="{{ $datetime }}">{{ $operation['data'][0]['nice_date'] }}</div><div class="mdl-tooltip" for="{{ $datetime }}">{{ $datetime }}</div></td>
@@ -64,11 +69,6 @@
 		}
 	?>
 @endforeach
-	<tr>
-	<td colspan="4"></td>
-	<td class="mdl-data-table__cell--non-numeric">Итого:</td>
-	<td>{{ $summ }}</td>
-	</tr>
 </table>
  
 @stop
