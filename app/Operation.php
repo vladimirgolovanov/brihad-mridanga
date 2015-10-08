@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Operation extends Model
 {
     protected $table = 'operations';
-    public static function get_all_operations($personid) // Требует рефакторинга
+    public static function get_all_operations($personid, $operationid = 0) // Требует рефакторинга
     {
         $operations = [];
         $summ = 0;
-        $os = DB::table('operations')->where('person_id', $personid)->orderBy('datetime', 'desc')->get();
+        if($operationid) {
+            $os = DB::table('operations')->where('person_id', $personid)->where('datetime', $operationid)->orderBy('datetime', 'desc')->get();
+        } else {
+            $os = DB::table('operations')->where('person_id', $personid)->orderBy('datetime', 'desc')->get();
+        }
         foreach($os as $o) {
             $nice_date = self::convert_to_nice_date($o->datetime); // проверить правильность self::
             if($o->operation_type == 1) {
@@ -110,5 +114,13 @@ class Operation extends Model
         } else {
             return $day."&nbsp;".$month."&nbsp;".$year;
         }
+    }
+    public static function get_current_operation($personid, $operationid, $bookid) {
+        $operation = DB::table('operations')
+            ->where('person_id', $personid)
+            ->where('datetime', $operationid)
+            ->where('book_id', $bookid)
+            ->first();
+        return $operation;
     }
 }

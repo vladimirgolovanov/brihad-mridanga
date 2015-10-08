@@ -74,6 +74,46 @@ class PersonController extends Controller
             'book_names_by_id' => $book_names_by_id,
             ]);
     }
+    public function operation($personid, $operationid)
+    {
+        $person = Person::findOrFail($personid);
+        list($operations, $summ) = Operation::get_all_operations($personid, $operationid);
+        $operation_type_name = Operation::operation_type_name($personid);
+        $book_names_by_id = Operation::book_names_by_id();
+        return view('persons.operation', [
+            'operations' => $operations,
+            'person' => $person,
+            'summ' => $summ,
+            'operation_type_name' => $operation_type_name,
+            'book_names_by_id' => $book_names_by_id,
+            ]);
+    }
+
+    public function edit_operation($personid, $operationid, $bookid) {
+        $operation = Operation::get_current_operation($personid, $operationid, $bookid);
+        return view('persons.edit_operation')->withOperation($operation);
+    }
+
+    public function store_operation(Request $request, $personid, $operationid, $bookid)
+    {
+        /*$this->validate($request, [
+            'datetime' => 'required',
+        ]);*/ // здесь должна быть валидация
+        $person = Operation::where('person_id', $personid)->where('datetime', $operationid)->where('book_id', $bookid)
+            ->update([
+                'datetime' => $request->datetime,
+                'quantity' => $request->quantity,
+                'operation_type' => $request->operation_type,
+                'laxmi' => $request->laxmi,
+            ]);
+        return redirect()->route('persons.operation', ['personid' => $personid, 'operationid' => $operationid]);
+    }
+    public function destroy_operation($personid, $operationid, $bookid)
+    {
+        $person = Operation::where('person_id', $personid)->where('datetime', $operationid)->where('book_id', $bookid)
+        ->delete();
+        return redirect()->route('persons.show', $personid);
+    }
 
     /**
      * Show the form for editing the specified resource.
