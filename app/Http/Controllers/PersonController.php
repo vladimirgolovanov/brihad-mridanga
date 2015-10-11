@@ -63,27 +63,45 @@ class PersonController extends Controller
     public function show($id)
     {
         $person = Person::findOrFail($id);
-        list($operations, $summ) = Operation::get_all_operations($id);
+        list($milestones, $dates) = Operation::get_operation_milestones($id);
+        list($milestones, $operations, $summ, $books) = Operation::get_operations_by_milestone($id, $milestones, $dates);
+        $operation_type_name = Operation::operation_type_name();
+        $book_names_by_id = Operation::book_names_by_id();
+        $milestonedata = Operation::get_milestone_data($id, $milestones);
+        return view('persons.show', [
+            'milestonedata' => $milestonedata,
+            'milestones' => $milestones,
+            'operations' => $operations,
+            'person' => $person,
+            'summ' => $summ,
+            'books' => $books,
+            'operation_type_name' => $operation_type_name,
+            'book_names_by_id' => $book_names_by_id,
+            ]);
+        /*$person = Person::findOrFail($id);
+        list($operations, $summ, $books) = Operation::get_all_operations($id);
         $operation_type_name = Operation::operation_type_name($id);
         $book_names_by_id = Operation::book_names_by_id();
         return view('persons.show', [
             'operations' => $operations,
             'person' => $person,
             'summ' => $summ,
+            'books' => $books,
             'operation_type_name' => $operation_type_name,
             'book_names_by_id' => $book_names_by_id,
-            ]);
+            ]);*/
     }
     public function operation($personid, $operationid)
     {
         $person = Person::findOrFail($personid);
-        list($operations, $summ) = Operation::get_all_operations($personid, $operationid);
+        list($operations, $summ, $books) = Operation::get_all_operations($personid, $operationid);
         $operation_type_name = Operation::operation_type_name($personid);
         $book_names_by_id = Operation::book_names_by_id();
         return view('persons.operation', [
             'operations' => $operations,
             'person' => $person,
             'summ' => $summ,
+            'books' => $books,
             'operation_type_name' => $operation_type_name,
             'book_names_by_id' => $book_names_by_id,
             ]);
@@ -103,7 +121,6 @@ class PersonController extends Controller
             ->update([
                 'datetime' => $request->datetime,
                 'quantity' => $request->quantity,
-                'operation_type' => $request->operation_type,
                 'laxmi' => $request->laxmi,
             ]);
         return redirect()->route('persons.operation', ['personid' => $personid, 'operationid' => $operationid]);

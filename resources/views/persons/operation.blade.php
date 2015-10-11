@@ -24,6 +24,18 @@
 	</tr>
 	<?php
 			}
+		} elseif($operation['data'][0]['operation_type'] == 3) {
+			foreach($operation['data'] as $o) {
+	?>
+	<tr>
+	<td class="mdl-data-table__cell--non-numeric">{{ $book_names_by_id[$o['book_id']] }}</td>
+	<td class="mdl-data-table__cell--non-numeric">&times;&nbsp;{{ $o['quantity'] }}</td>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td><a href="{{ route('persons.edit.operation', ['personid' => $person['id'], 'operationid' => $datetime, 'bookid' => $o['book_id']]) }}">edit</a></td>
+	</tr>
+	<?php
+			}
 		} elseif($operation['data'][0]['operation_type'] == 4) {
 			foreach($operation['data'] as $o) {
 	?>
@@ -39,9 +51,5 @@
 	?>
 @endforeach
 </table>
-
-<div>
-<a href="{{ route('persons.edit', $person->id) }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Редактировать</a>
-</div>
 
 @stop

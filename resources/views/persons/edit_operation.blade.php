@@ -20,11 +20,6 @@
 </div>
 <br>
 <div class="mdl-textfield mdl-js-textfield textfield-demo">
-    {!! Form::label('operation_type', 'Operation Type:', ['class' => 'mdl-textfield__label']) !!}
-    {!! Form::text('operation_type', null, ['class' => 'mdl-textfield__input']) !!}
-</div>
-<br>
-<div class="mdl-textfield mdl-js-textfield textfield-demo">
     {!! Form::label('laxmi', 'Laxmi:', ['class' => 'mdl-textfield__label']) !!}
     {!! Form::text('laxmi', null, ['class' => 'mdl-textfield__input']) !!}
 </div>

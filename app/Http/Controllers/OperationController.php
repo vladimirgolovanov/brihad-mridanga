@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Book;
 use App\Group;
 use App\Operation;
+use App\Person;
 
 use Auth;
 
