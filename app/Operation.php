@@ -145,12 +145,14 @@ class Operation extends Model
                     ];
                     // отдельно пишем сумму каждой строчки, чтобы считать
                     $operations[$milestone[0]][$o->datetime]['quantity'][] = $o->quantity*$price;
+                    $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
                 } elseif($o->operation_type == 2) {
                     $operations[$milestone[0]][$o->datetime]['data'][] = [
                         'laxmi' => $o->laxmi,
                         'operation_type' => $o->operation_type,
                         'nice_date' => $nice_date,
                     ];
+                    $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
                 } elseif($o->operation_type == 3) { // не отображается! - потому что это информация майлстоуна, а не подстроки - поэтому этот кусок трубуется убрать
                     $operations[$milestone[0]][$o->datetime]['data'][] = [
                         'book_id' => $o->book_id,
@@ -158,6 +160,7 @@ class Operation extends Model
                         'operation_type' => $o->operation_type,
                         'nice_date' => $nice_date,
                     ];
+                    $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
                 } elseif($o->operation_type == 4) {
                     $backbooks = self::find_books_to_return($personid, $o->book_id, $o->datetime, $o->quantity, []);
                     $operations[$milestone[0]][$o->datetime]['data'][] = [
@@ -167,6 +170,7 @@ class Operation extends Model
                         //'price' => $price, // здесь нельзя однозначно писать, хотя интерфейс должен требовать
                         'nice_date' => $nice_date,
                     ];
+                    $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
                 }
                 if(in_array($o->operation_type, [1,3])) if(!isset($books[$milestone[0]][$o->book_id])) $books[$milestone[0]][$o->book_id] = 0;
                 if($o->operation_type == 1) {
@@ -205,12 +209,14 @@ class Operation extends Model
                     'price' => $price,
                     'nice_date' => $nice_date,
                 ];
+                $operations[$o->datetime]['description'] = $o->description;
             } elseif($o->operation_type == 2) {
                 $operations[$o->datetime]['data'][] = [
                     'laxmi' => $o->laxmi,
                     'operation_type' => $o->operation_type,
                     'nice_date' => $nice_date,
                 ];
+                $operations[$o->datetime]['description'] = $o->description;
             } elseif($o->operation_type == 3) {
                 $operations[$o->datetime]['data'][] = [
                     'book_id' => $o->book_id,
@@ -218,6 +224,7 @@ class Operation extends Model
                     'operation_type' => $o->operation_type,
                     'nice_date' => $nice_date,
                 ];
+                $operations[$o->datetime]['description'] = $o->description;
             } elseif($o->operation_type == 4) {
                 $backbooks = self::find_books_to_return($personid, $o->book_id, $o->datetime, $o->quantity, []);
                 // формируем массив данных в двух видах
@@ -228,6 +235,7 @@ class Operation extends Model
                     //'price' => $price,
                     'nice_date' => $nice_date,
                 ];
+                $operations[$o->datetime]['description'] = $o->description;
             }
             if(in_array($o->operation_type, [1,3,4])) if(!isset($books[$o->book_id])) $books[$o->book_id] = 0;
             if($o->operation_type == 1) {

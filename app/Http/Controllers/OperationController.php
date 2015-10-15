@@ -76,6 +76,7 @@ class OperationController extends Controller
                     $operation->person_id = $request->personid;
                     $operation->datetime = $timestamp;
                     $operation->operation_type = $request->operation_type;
+                    $operation->description = $request->description;
                     $operation->save();
                 }
             }
@@ -85,6 +86,7 @@ class OperationController extends Controller
             $operation->person_id = $request->personid;
             $operation->laxmi = $request->laxmi;
             $operation->operation_type = $request->operation_type;
+            $operation->description = $request->description;
             $operation->save();
         }
         return redirect()->route('persons.show', $request->personid);

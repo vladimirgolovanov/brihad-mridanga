@@ -25,6 +25,8 @@
 
 <br>
 
+<p>Description: {!! Form::textarea('description', null, ['rows' => 3, 'style' => 'width:100%']) !!}</p>
+
 {!! Form::submit('Operate', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}
  
 {!! Form::close() !!}

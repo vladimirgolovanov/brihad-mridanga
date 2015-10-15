@@ -41,6 +41,7 @@
 		<td class="mdl-data-table__cell--non-numeric" colspan="2">
 			<a href="{{ route('persons.operation', [$person->id, $datetime]) }}">{{ $operation['data'][0]['nice_date'] }}</a>,
 			{{ $operation_type_name[$operation['data'][0]['operation_type']] }}
+			<p style="color:#666;">{{ $operation['description'] }}</p>
 		</td>
 	</tr>
 	<?php

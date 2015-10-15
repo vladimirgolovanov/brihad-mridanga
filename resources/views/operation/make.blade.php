@@ -28,6 +28,8 @@
     </p>
 @endforeach
 
+<p>Description: {!! Form::textarea('description', null, ['rows' => 3, 'style' => 'width:100%']) !!}</p>
+
 {!! Form::hidden('personid', $personid, ['class' => 'mdl-textfield__input']) !!}
 {!! Form::hidden('operation_type', $operation_type, ['class' => 'mdl-textfield__input']) !!}
 
