@@ -8,6 +8,7 @@
 
 <p>{{ $operation_type_name[$operations[array_keys($operations)[0]]['data'][0]['operation_type']] }}</p>
 <p>Сумма: {{ $summ }}</p>
+<p style="color:#666;">{{ $operations[array_keys($operations)[0]]['description'] }}</p>
 
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 @foreach($operations as $datetime => $operation)
