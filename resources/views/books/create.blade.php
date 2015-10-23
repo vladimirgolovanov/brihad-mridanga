@@ -24,7 +24,7 @@
 
 <div class="mdl-textfield mdl-js-textfield textfield-demo">
     {!! Form::label('pack', 'Pack:', ['class' => 'mdl-textfield__label']) !!}
-    {!! Form::text('pack', 10, ['class' => 'mdl-textfield__input']) !!}
+    {!! Form::text('pack', 1, ['class' => 'mdl-textfield__input']) !!}
 </div>
 
 <br>
