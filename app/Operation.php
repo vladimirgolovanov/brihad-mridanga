@@ -51,7 +51,9 @@ class Operation extends Model
             ->where('person_id', $personid)
             ->orderBy('datetime', 'asc')
             ->first();
-        $firstdate = date("Y-m-d H:i:s", strtotime($firstdate->datetime.' -1 days'));
+        // Исправляем ошибку при с пустой базой
+        if(isset($firstdate->datetime)) $firstdate = date("Y-m-d H:i:s", strtotime($firstdate->datetime.' -1 days'));
+        else $firstdate = date("Y-m-d H:i:s", strtotime(0));
         $rmilestones[] = [$firstdate, $prevmilestone];
         $ops = DB::table('operations')
             ->select('datetime')
