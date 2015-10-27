@@ -32,9 +32,13 @@ Route::patch('persons/{personid}/operation/{operationid}/store/{bookid}', ['as'=
 Route::delete('persons/{personid}/operation/{operationid}/delete/{bookid}', ['as'=>'persons.operation.delete', 'uses'=>'PersonController@destroy_operation']);
 
 Route::get('operation/{personid}/make', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
+Route::get('operation/{personid}/make/{datetime}', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
 Route::get('operation/{personid}/laxmi', ['as'=>'operation.laxmi', 'uses'=>'OperationController@laxmi']);
+Route::get('operation/{personid}/laxmi/{datetime}', ['as'=>'operation.laxmi', 'uses'=>'OperationController@laxmi']);
 Route::get('operation/{personid}/remain', ['as'=>'operation.remain', 'uses'=>'OperationController@remain']);
+Route::get('operation/{personid}/remain/{datetime}', ['as'=>'operation.remain', 'uses'=>'OperationController@remain']);
 Route::get('operation/{personid}/return', ['as'=>'operation.return', 'uses'=>'OperationController@booksreturn']);
+Route::get('operation/{personid}/return/{datetime}', ['as'=>'operation.return', 'uses'=>'OperationController@booksreturn']);
 Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
 
 // Authentication routes...
