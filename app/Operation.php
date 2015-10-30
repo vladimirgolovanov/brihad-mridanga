@@ -257,6 +257,64 @@ class Operation extends Model
         }
         return [$operations, $summ, $books];
     }
+
+    /**
+     * @param $personid
+     * @return mixed
+     */
+    public static function get_operations($personid) // Требует рефакторинга
+    {
+        $books = array();
+        $laxmi = 0;
+        $os = DB::table('operations')->where('person_id', $personid)->orderBy('datetime', 'asc')->get();
+        foreach($os as $o) {
+            switch($o->operation_type) {
+                case 1:
+                    $oss[] = 'выдача';
+                    if(isset($books[$o->book_id])) {
+                        $books[$o->book_id][0] += $o->quantity;
+                        $books[$o->book_id][] = array($o->quantity, 'цена');
+                    }
+                    else {
+                        $books[$o->book_id] = array($o->quantity, array($o->quantity, 'цена'));
+                    }
+                    break;
+                case 2:
+                    $oss[] = 'лакшми';
+                    $laxmi += $o->laxmi;
+                    break;
+                case 3:
+                    $oss[] = 'остаток';
+                    break;
+                case 4:
+                    $oss[] = 'возврат';
+                    if(isset($books[$o->book_id])) {
+                        $books[$o->book_id][0] -= $o->quantity;
+                        $qty = $o->quantity;
+                        foreach(array_slice($books[$o->book_id], 1) as $b2) {
+                            if($b2[0] <= $qty) {
+                                $shifted_b = array_splice($books[$o->book_id], 1, 1);
+                                $qty -= $shifted_b[0][0];
+                            } else {
+                                $books[$o->book_id][1][0] -= $qty;
+                                break;
+                            }
+                        }
+                        if($qty == 0) {
+                            unset($books[$o->book_id]);
+                        } elseif($qty < 0) {
+                            $books[$o->book_id] = 'Вернули слишком много';
+                        }
+                    }
+                    else {
+                        $books[$o->book_id] = 'Вернули книги которые не брали';
+                    }
+                    break;
+            }
+        }
+        return $books;
+    }
+
     public static function operation_type_name() {
         // переместить это в БД миграциями
         $operation_type_name = [

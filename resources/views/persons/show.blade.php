@@ -15,6 +15,8 @@
 <a href="{{ route('operation.return', $person->id) }}" class="mdl-button mdl-js-button mdl-button--accent">Возврат книг</a>
 </div>
 
+<pre><?php print_r($os); ?></pre>
+
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 @foreach($milestones as $milestone)
 	<?php if(isset($next) and count($next)) { ?>
