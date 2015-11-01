@@ -69,8 +69,9 @@ class Operation extends Model
     }
 
     // Взять самую свежую цену книги на определенную дату
-    public static function get_book_price_by_date($book_id, $datetime)
+    public static function get_book_price_by_date($book_id, $datetime = 0)
     {
+        if(!$datetime) $datetime = date("Y-m-d H:i:s");
         $price = DB::table('bookprice')
             ->select('price')
             ->where('book_id', $book_id)
@@ -90,10 +91,10 @@ class Operation extends Model
             ->where('operation_type', 1)
             ->orderBy('datetime', 'desc')
             ->first();
-        $backbooks[] = [
-            'datetime' => $recentbooks->datetime,
-            'quantity' => ($recentbooks->quantity >= $quantity) ? $quantity : $recentbooks->quantity
-        ];
+//        $backbooks[] = [
+//            'datetime' => $recentbooks->datetime,
+//            'quantity' => ($recentbooks->quantity >= $quantity) ? $quantity : $recentbooks->quantity
+//        ];
         if(isset($recentbooks->quantity) and $recentbooks->quantity < $quantity) {
             $quantity = $quantity-$recentbooks->quantity;
             $backbooks = self::find_books_to_return($person_id, $book_id, $recentbooks->datetime, $quantity, $backbooks);
@@ -257,6 +258,155 @@ class Operation extends Model
         }
         return [$operations, $summ, $books];
     }
+
+    /**
+     * @param $personid
+     * @return mixed
+     */
+    public static function get_operations($personid) // Требует рефакторинга
+    {
+        $books = array();
+        $books_left = array();
+        $used = 0;
+        $laxmi = 0;
+        $os = DB::table('operations AS o')
+            ->leftJoin('books AS b', 'o.book_id', '=', 'b.id')
+            ->where('o.person_id', $personid)
+            ->orderBy('o.datetime', 'asc')
+            ->select(
+                'o.datetime',
+                'o.person_id',
+                'o.book_id',
+                'o.quantity',
+                'o.operation_type',
+                'o.created_at',
+                'o.updated_at',
+                'o.laxmi',
+                'o.description',
+                'b.name'
+            )
+            ->get();
+        $prevcase = 0;
+        $prevop = 0;
+        $lxm = 0;
+        foreach($os as $o) {
+            if($prevcase == 3 && ($o->operation_type != 3 || ($o->operation_type == 3 && $prevop != $o->datetime))) {
+                foreach($books as $k => $v) {
+                    foreach(array_slice($v, 1) as $b) {
+                        $lxm += $b[0] * $b[1];
+                    }
+                    unset($books[$k]);
+                }
+                $books = $books_left;
+                $books_left = [];
+                $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
+                $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
+                if($laxmi > $lxm) {
+                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => $laxmi - $lxm);
+                    $lxm = 0;
+                } elseif($laxmi < $lxm) {
+                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $lxm - $laxmi);
+                    $lxm -= $laxmi;
+                } else {
+                    $lxm = 0;
+                }
+            }
+            if($prevop != $o->datetime) {
+                $oss[] = array('type' => 'operation', 'o' => $o);
+            }
+            switch($o->operation_type) {
+                case 3:
+                    $prevcase = 3;
+                    $prevop = $o->datetime;
+                    if(isset($books[$o->book_id])) {
+                        $used = $books[$o->book_id][0] - $o->quantity;
+                        foreach (array_slice($books[$o->book_id], 1) as $b) {
+                            if ($b[0] <= $used) {
+                                $shifted_b = array_splice($books[$o->book_id], 1, 1);
+                                $used -= $shifted_b[0][0];
+                                $lxm += $b[0] * $b[1];
+                            } else {
+                                $books[$o->book_id][1][0] -= $used;
+                                $lxm += $used * $b[1];
+                                break;
+                            }
+                        }
+                        if ($o->quantity > 0) {
+                            $books_left[$o->book_id] = [$o->quantity, [$o->quantity, self::get_book_price_by_date($o->book_id, $o->updated_at)]];
+                        }
+                        unset($books[$o->book_id]);
+                    } else {
+                        $oss[] = array('type' => 'warning', 'o' => 'Остаток книг, которых не было');
+                    }
+                    $oss[] = array('type' => 'subop', 'o' => $o);
+                    break;
+                case 1:
+                    $prevcase = 1;
+                    $prevop = $o->datetime;
+                    if(isset($books[$o->book_id])) {
+                        $books[$o->book_id][0] += $o->quantity;
+                        $books[$o->book_id][] = array($o->quantity, self::get_book_price_by_date($o->book_id, $o->updated_at));
+                    } else {
+                        $books[$o->book_id] = [$o->quantity, [$o->quantity, self::get_book_price_by_date($o->book_id, $o->updated_at)]];
+                    }
+                    $oss[] = array('type' => 'subop', 'o' => $o);
+                    break;
+                case 2:
+                    $prevcase = 2;
+                    $prevop = $o->datetime;
+                    $laxmi += $o->laxmi;
+                    $oss[] = array('type' => 'subop', 'o' => $o);
+                    break;
+                case 4:
+                    $prevcase = 4;
+                    $prevop = $o->datetime;
+                    if(isset($books[$o->book_id])) {
+                        $books[$o->book_id][0] -= $o->quantity;
+                        $qty = $o->quantity;
+                        $complete = 0;
+                        foreach(array_slice($books[$o->book_id], 1) as $b2) {
+                            if($b2[0] <= $qty) {
+                                $shifted_b = array_splice($books[$o->book_id], 1, 1);
+                                $qty -= $shifted_b[0][0];
+                            } else {
+                                $books[$o->book_id][1][0] -= $qty;
+                                $qty = $books[$o->book_id][1][0];
+                                $complete = 1;
+                                break;
+                            }
+                        }
+                        if($qty == 0) {
+                            unset($books[$o->book_id]);
+                        } elseif($complete) {
+                            $books[$o->book_id] = [$qty, [$qty, self::get_book_price_by_date($o->book_id, $o->updated_at)]];
+                        } else {
+                            unset($books[$o->book_id]);
+                            $oss[] = array('type' => 'warning', 'o' => 'Вернули лишние книги');
+                        }
+                    }
+                    else {
+                        $oss[] = array('type' => 'warning', 'o' => 'Сданы книги, которые не выдавались');
+                        //$books[$o->book_id] = [$o->quantity, [$o->quantity, self::get_book_price_by_date($o->book_id, $o->updated_at)]];
+                    }
+                    $oss[] = array('type' => 'subop', 'o' => $o);
+                    break;
+            }
+        }
+        if($prevcase == 3) {
+            foreach($books as $k => $v) {
+                foreach(array_slice($v, 1) as $b) {
+                    $lxm += $b[0] * $b[1];
+                }
+                unset($books[$k]);
+            }
+            $books = $books_left;
+            $books_left = [];
+            $oss[] = array('type' => 'info-rest-laxmi', 'o' => $lxm);
+            $lxm = 0;
+        }
+        return $oss;
+    }
+
     public static function operation_type_name() {
         // переместить это в БД миграциями
         $operation_type_name = [
