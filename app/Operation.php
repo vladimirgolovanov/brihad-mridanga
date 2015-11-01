@@ -402,8 +402,17 @@ class Operation extends Model
             }
             $books = $books_left;
             $books_left = [];
-            $oss[] = array('type' => 'info-rest-laxmi', 'o' => $lxm);
-            $lxm = 0;
+            $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
+            $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
+            if($laxmi > $lxm) {
+                $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => $laxmi - $lxm);
+                $lxm = 0;
+            } elseif($laxmi < $lxm) {
+                $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $lxm - $laxmi);
+                $lxm -= $laxmi;
+            } else {
+                $lxm = 0;
+            }
         }
         return $oss;
     }
