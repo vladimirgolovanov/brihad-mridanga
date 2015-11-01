@@ -110,6 +110,7 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::findOrFail($id);
+        BookPrice::where('book_id', $book->id)->delete();
         $book->delete();
         return redirect()->route('books.index');
     }
