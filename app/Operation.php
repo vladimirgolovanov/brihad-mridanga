@@ -289,6 +289,7 @@ class Operation extends Model
         $prevcase = 0;
         $prevop = 0;
         $lxm = 0;
+        $oss = [];
         foreach($os as $o) {
             if($prevcase == 3 && ($o->operation_type != 3 || ($o->operation_type == 3 && $prevop != $o->datetime))) {
                 foreach($books as $k => $v) {
