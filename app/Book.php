@@ -11,6 +11,9 @@ class Book extends Model
         'shortname',
         'name',
         'pack',
+        'price_buy',
+        'price',
+        'price_shop',
     ];
     public static function get_all_books($user_id)
     {

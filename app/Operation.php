@@ -14,7 +14,7 @@ class Operation extends Model
         $milestones = DB::table('operations')
             ->select('datetime', 'book_id', 'quantity')
             ->where('person_id', $personid)
-            ->where('operation_type', 3)
+            ->where('operation_type', 10)
             ->groupBy('datetime')
             ->orderBy('datetime', 'desc')
             ->get();
@@ -156,7 +156,7 @@ class Operation extends Model
                         'nice_date' => $nice_date,
                     ];
                     $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
-                } elseif($o->operation_type == 3) { // не отображается! - потому что это информация майлстоуна, а не подстроки - поэтому этот кусок трубуется убрать
+                } elseif($o->operation_type == 10) { // не отображается! - потому что это информация майлстоуна, а не подстроки - поэтому этот кусок трубуется убрать
                     $operations[$milestone[0]][$o->datetime]['data'][] = [
                         'book_id' => $o->book_id,
                         'quantity' => $o->quantity,
@@ -175,14 +175,14 @@ class Operation extends Model
                     ];
                     $operations[$milestone[0]][$o->datetime]['description'] = $o->description;
                 }
-                if(in_array($o->operation_type, [1,3])) if(!isset($books[$milestone[0]][$o->book_id])) $books[$milestone[0]][$o->book_id] = 0;
+                if(in_array($o->operation_type, [1,10])) if(!isset($books[$milestone[0]][$o->book_id])) $books[$milestone[0]][$o->book_id] = 0;
                 if($o->operation_type == 1) {
                     $summ[$milestone[0]] = $summ[$milestone[0]]+($price*$o->quantity);
                     $books[$milestone[0]][$o->book_id] = $books[$milestone[0]][$o->book_id]+$o->quantity; // возможно упростить += или как-то так
                 } elseif($o->operation_type == 2) {
                     $summ[$milestone[0]] = $summ[$milestone[0]]-($o->laxmi);
                     // тут необходим просто учет внесенного laxmi
-                } elseif($o->operation_type == 3) {
+                } elseif($o->operation_type == 10) {
                 } elseif($o->operation_type == 4) {
                     foreach($backbooks as $backbook) {
                         $backprice = self::get_book_price_by_date($o->book_id, $backbook['datetime']);
@@ -220,7 +220,7 @@ class Operation extends Model
                     'nice_date' => $nice_date,
                 ];
                 $operations[$o->datetime]['description'] = $o->description;
-            } elseif($o->operation_type == 3) {
+            } elseif($o->operation_type == 10) {
                 $operations[$o->datetime]['data'][] = [
                     'book_id' => $o->book_id,
                     'quantity' => $o->quantity,
@@ -240,13 +240,13 @@ class Operation extends Model
                 ];
                 $operations[$o->datetime]['description'] = $o->description;
             }
-            if(in_array($o->operation_type, [1,3,4])) if(!isset($books[$o->book_id])) $books[$o->book_id] = 0;
+            if(in_array($o->operation_type, [1,10,4])) if(!isset($books[$o->book_id])) $books[$o->book_id] = 0;
             if($o->operation_type == 1) {
                 $summ = $summ+($price*$o->quantity);
                 $books[$o->book_id] = $books[$o->book_id]+$o->quantity;
             } elseif($o->operation_type == 2) {
                 $summ = $summ-($o->laxmi);
-            } elseif($o->operation_type == 3) {
+            } elseif($o->operation_type == 10) {
             } elseif($o->operation_type == 4) {
                 $books[$o->book_id] = $books[$o->book_id]-$o->quantity;
                 foreach($backbooks as $backbook) {
@@ -272,9 +272,12 @@ class Operation extends Model
         $os = DB::table('operations AS o')
             ->leftJoin('books AS b', 'o.book_id', '=', 'b.id')
             ->where('o.person_id', $personid)
+            ->orderBy('o.custom_date', 'asc')
+            ->orderBy('o.operation_type', 'asc')
             ->orderBy('o.datetime', 'asc')
             ->select(
                 'o.datetime',
+                'o.custom_date',
                 'o.person_id',
                 'o.book_id',
                 'o.quantity',
@@ -291,7 +294,7 @@ class Operation extends Model
         $lxm = 0;
         $oss = [];
         foreach($os as $o) {
-            if($prevcase == 3 && ($o->operation_type != 3 || ($o->operation_type == 3 && $prevop != $o->datetime))) {
+            if($prevcase == 10 && ($o->operation_type != 10 || ($o->operation_type == 10 && $prevop != $o->datetime))) {
                 foreach($books as $k => $v) {
                     foreach(array_slice($v, 1) as $b) {
                         $lxm += $b[0] * $b[1];
@@ -306,18 +309,19 @@ class Operation extends Model
                     $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => $laxmi - $lxm);
                     $lxm = 0;
                 } elseif($laxmi < $lxm) {
-                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $lxm - $laxmi);
-                    $lxm -= $laxmi;
+                    $lxm = $laxmi - $lxm;
+                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => -$lxm);
                 } else {
                     $lxm = 0;
                 }
+                $laxmi = 0;
             }
-            if($prevop != $o->datetime) {
+            if($prevop != $o->datetime || !$prevop) {
                 $oss[] = array('type' => 'operation', 'o' => $o);
             }
             switch($o->operation_type) {
-                case 3:
-                    $prevcase = 3;
+                case 10:
+                    $prevcase = 10;
                     $prevop = $o->datetime;
                     if(isset($books[$o->book_id])) {
                         $used = $books[$o->book_id][0] - $o->quantity;
@@ -393,7 +397,7 @@ class Operation extends Model
                     break;
             }
         }
-        if($prevcase == 3) {
+        if($prevcase == 10) {
             foreach($books as $k => $v) {
                 foreach(array_slice($v, 1) as $b) {
                     $lxm += $b[0] * $b[1];
@@ -408,13 +412,19 @@ class Operation extends Model
                 $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => $laxmi - $lxm);
                 $lxm = 0;
             } elseif($laxmi < $lxm) {
-                $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $lxm - $laxmi);
-                $lxm -= $laxmi;
+                $lxm = $laxmi - $lxm;
+                $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => -$lxm);
             } else {
                 $lxm = 0;
             }
+            $laxmi = 0;
         }
-        return $oss;
+        foreach($os as $o) {
+            if($o->book_id && isset($books[$o->book_id])) {
+                $books[$o->book_id]['name'] = $o->name;
+            }
+        }
+        return [$oss, $books, $lxm, $laxmi];
     }
 
     public static function operation_type_name() {
@@ -422,7 +432,7 @@ class Operation extends Model
         $operation_type_name = [
             1 => 'Выдача книг',
             2 => 'Сдача лакшми',
-            3 => 'Отчет об остатке книг',
+            10 => 'Отчет об остатке книг',
             4 => 'Возврат книг',
         ];
         return $operation_type_name;

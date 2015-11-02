@@ -23,12 +23,12 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function make($personid, $datetime = 0)
+    public function make($personid, $datetime = '', $custom_date = '')
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
                        // В любом случае при сохранении можно удялять все.
-                       // Если создаем - ничего не треяем. Если редактируем - так и надо.
+                       // Если создаем - ничего не теряем. Если редактируем - так и надо.
         if($datetime) {
             // выбираем редактируемые операции
             $os = DB::table('operations')
@@ -37,9 +37,11 @@ class OperationController extends Controller
                 ->get();
             foreach($os as $o) {
                 $bookvalues[$o->book_id] = $o->quantity;
+                $price[$o->book_id] = $o->price;
                 if($o->description) $editing['description'] = $o->description;
             }
             $editing['bookvalues'] = $bookvalues;
+            $editing['price'] = $price;
         }
         list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('operation.make', [
@@ -49,6 +51,7 @@ class OperationController extends Controller
             'personid' => $personid,
             'editing' => $editing,
             'datetime' => $datetime,
+            'custom_date' => $custom_date,
         ]);
     }
     /**
@@ -56,7 +59,7 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function laxmi($personid, $datetime = 0)
+    public function laxmi($personid, $datetime = '', $custom_date = '')
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
@@ -76,6 +79,7 @@ class OperationController extends Controller
             'personid' => $personid,
             'editing' => $editing,
             'datetime' => $datetime,
+            'custom_date' => $custom_date,
         ]);
     }
     /**
@@ -83,7 +87,7 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function remain($personid, $datetime = 0)
+    public function remain($personid, $datetime = '', $custom_date = '')
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
@@ -104,10 +108,11 @@ class OperationController extends Controller
         list($books, $price) = Book::get_all_books(Auth::user()->id);
         return view('operation.remain', [
             'books' => $books,
-            'operation_type' => 3,
+            'operation_type' => 10,
             'personid' => $personid,
             'editing' => $editing,
             'datetime' => $datetime,
+            'custom_date' => $custom_date,
         ]);
     }
     /**
@@ -115,7 +120,7 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function booksreturn($personid, $datetime = 0)
+    public function booksreturn($personid, $datetime = '', $custom_date = '')
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
@@ -140,32 +145,29 @@ class OperationController extends Controller
             'personid' => $personid,
             'editing' => $editing,
             'datetime' => $datetime,
+            'custom_date' => $custom_date,
         ]);
     }
 
     public function store(Request $request)
     {
-        $timestamp = date("Y-m-d H:i:s");
-        /*$this->validate($request, [
-            'personid' => 'required'
-        ]);*/
-        // возможно есть 1, 3, 4 и есть 2; 1, 3, 4 можно объединить
-        if($request->custom_date_switch) {
-            $timestamp = $request->custom_date.date(" H:i:s");
-        } // Есть вероятность, что пройдет 0000 - необходимо найти этот случай
+        $datetime = $request->datetime?$request->datetime:date("Y-m-d H:i:s");
+        // возможно есть 1, 10, 4 и есть 2; 1, 10, 4 можно объединить
         // Удаляем все с данным таймстемпом и personid
         $os = DB::table('operations')
             ->where('person_id', $request->personid)
-            ->where('datetime', $timestamp)
+            ->where('datetime', $datetime)
             ->delete();
-        if(in_array($request->operation_type, [1,3,4])) {
+        if(in_array($request->operation_type, [1,10,4])) {
             foreach($request->bookcount as $bookid => $count) {
                 if($count) {
                     $operation = new Operation;
                     $operation->book_id = $bookid;
                     $operation->quantity = $count;
                     $operation->person_id = $request->personid;
-                    $operation->datetime = $timestamp;
+                    $operation->datetime = $datetime;
+                    $operation->custom_date = $request->custom_date;
+                    $operation->price = $request->price[$bookid];
                     $operation->operation_type = $request->operation_type;
                     $operation->description = $request->description;
                     $operation->save();
@@ -173,7 +175,8 @@ class OperationController extends Controller
             }
         } elseif($request->operation_type == 2) {
             $operation = new Operation;
-            $operation->datetime = $timestamp;
+            $operation->datetime = $datetime;
+            $operation->custom_date = $request->custom_date;
             $operation->person_id = $request->personid;
             $operation->laxmi = $request->laxmi;
             $operation->operation_type = $request->operation_type;

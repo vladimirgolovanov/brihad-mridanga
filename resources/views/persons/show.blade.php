@@ -15,19 +15,34 @@
 <a href="{{ route('operation.return', $person->id) }}" class="mdl-button mdl-js-button mdl-button--accent">Возврат книг</a>
 </div>
 
-<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--6-col">
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
+            <tr style="background:#ccc;">
+                <td class="mdl-data-table__cell--non-numeric" colspan="2">Книги на руках</td>
+            </tr>
+            @foreach($books as $b)
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">{{ $b['name'] }}</td>
+                <td>&times;&nbsp;{{ $b[0] }}</td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col">
+<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
 @foreach($os as $o)
     @if($o['type'] == 'operation')
-	<tr<?php if($o['o']->operation_type == 3) { ?> style="background:#ccc;"<?php } ?>>
+	<tr<?php if($o['o']->operation_type == 10) { ?> style="background:#ccc;"<?php } ?>>
 		<td class="mdl-data-table__cell--non-numeric">
             <a href="{{ route('persons.operation', [$person->id, $o['o']->datetime]) }}"><?php switch($o['o']->operation_type) {
                 case 1: print "Выдача книг"; break;
                 case 2: print "Сдача лакшми"; break;
-                case 3: print "Отчет об остатке книг"; break;
+                case 10: print "Отчет об остатке книг"; break;
                 case 4: print "Возврат книг"; break;
             }
             ?></a></td>
-        <td>{{ date("j M", strtotime($o['o']->updated_at)) }}</td>
+        <td>{{ date("j M", strtotime($o['o']->custom_date)) }}</td>
 	</tr>
 	@elseif($o['type'] == 'info')
     <tr style="background:#ccc;">
@@ -43,10 +58,10 @@
         @if($o['o']->operation_type == 2)
     <tr>
         <td class="mdl-data-table__cell--non-numeric"></td>
-        <td>{{ $o['o']->laxmi }}</td>
+        <td>{{ $o['o']->laxmi }} р.</td>
     </tr>
         @else
-    <tr<?php if($o['o']->operation_type == 3) { ?> style="background:#ccc;"<?php } ?>>
+    <tr<?php if($o['o']->operation_type == 10) { ?> style="background:#ccc;"<?php } ?>>
         <td class="mdl-data-table__cell--non-numeric">{{ $o['o']->name }}</td>
         <td>&times;&nbsp;{{ $o['o']->quantity }}</td>
     </tr>
@@ -54,5 +69,6 @@
     @endif
 @endforeach
 </table>
-
+    </div>
+</div>
  @stop
