@@ -63,23 +63,12 @@ class PersonController extends Controller
     public function show($id)
     {
         $person = Person::findOrFail($id);
-        $os = Operation::get_operations($id);
-        list($milestones, $dates) = array(array(), array());
-        list($milestones, $operations, $summ, $books) = array(array(), array(), array(), array());
-        list($milestones, $dates) = Operation::get_operation_milestones($id);
-        list($milestones, $operations, $summ, $books) = Operation::get_operations_by_milestone($id, $milestones, $dates);
-        $operation_type_name = Operation::operation_type_name();
-        $book_names_by_id = Operation::book_names_by_id();
-        $milestonedata = Operation::get_milestone_data($id, $milestones);
+        list($os, $books, $lxm, $laxmi) = Operation::get_operations($id);
         return view('persons.show', [
-            'milestonedata' => $milestonedata,
-            'milestones' => $milestones,
-            'operations' => $operations,
             'person' => $person,
-            'summ' => $summ,
             'books' => $books,
-            'operation_type_name' => $operation_type_name,
-            'book_names_by_id' => $book_names_by_id,
+            'lxm' => $lxm,
+            'laxmi' => $laxmi,
             'os' => $os,
             ]);
         /*$person = Person::findOrFail($id);

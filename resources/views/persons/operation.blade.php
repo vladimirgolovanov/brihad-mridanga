@@ -26,7 +26,7 @@
 	</tr>
 	<?php
 			}
-		} elseif($operation['data'][0]['operation_type'] == 3) {
+		} elseif($operation['data'][0]['operation_type'] == 10) {
 			foreach($operation['data'] as $o) {
 	?>
 	<tr>
@@ -59,7 +59,7 @@
 <p><a href="/operation/<?=$person['id']?>/<?php
 if($operation['data'][0]['operation_type'] == 1) print 'make';
 elseif($operation['data'][0]['operation_type'] == 2) print 'laxmi';
-elseif($operation['data'][0]['operation_type'] == 3) print 'remain';
+elseif($operation['data'][0]['operation_type'] == 10) print 'remain';
 elseif($operation['data'][0]['operation_type'] == 4) print 'return';
 ?>/<?=array_keys($operations)[0]?>" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Edit operations</a></p>
 

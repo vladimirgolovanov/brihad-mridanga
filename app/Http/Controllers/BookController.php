@@ -50,11 +50,14 @@ class BookController extends Controller
         $book->shortname = $request->shortname;
         $book->name = $request->name;
         $book->pack = $request->pack;
+        $book->price_buy = $request->price_buy;
+        $book->price = $request->price;
+        $book->price_shop = $request->price_shop;
         $book->user_id = Auth::user()->id;
         $book->save();
         $bookprice = new BookPrice;
         $bookprice->book_id = $book->id;
-        $bookprice->price = $request->bookprice;
+        $bookprice->price = $request->price;
         $bookprice->save();
         return redirect()->route('books.index');
     }
