@@ -2,9 +2,9 @@
 <html>
     <head>
         <title>Store books</title>
-        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.orange-deep_orange.min.css">
-        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="/static/material.min.css">
+        <script src="/static/material.min.js"></script>
+        <link rel="stylesheet" href="/static/material-icons.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/static/jquery-2.1.4.min.js"></script>
         <script src="/static/functions.js"></script>

@@ -11,11 +11,14 @@
 <input type="hidden" name="datetime" id="datetime" value="{{ $datetime?$datetime:"" }}"/>
 <?php /* if(datetime) */ ?>
 <p>
-    <input type="text" name="custom_date" id="custom_date" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
+    <input type="text" name="custom_date" id="custom_date" tabindex="1" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
 </p>
 
 @foreach($books as $book)
-	<p>{!! $book->name !!} {!! Form::text('bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['class' => 'mdl-textfield__input']) !!}</p>
+	<p>{!! $book->name !!}
+        {!! Form::text('bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['class' => 'mdl-textfield__input']) !!}
+        {!! Form::hidden('price['.$book->id.']', $book->price) !!}
+    </p>
 @endforeach
 
 {!! Form::hidden('personid', $personid, ['class' => 'mdl-textfield__input']) !!}

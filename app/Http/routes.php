@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('bookgroups', 'BookGroupController');
+
 Route::resource('books', 'BookController');
 
 Route::resource('persons', 'PersonController');

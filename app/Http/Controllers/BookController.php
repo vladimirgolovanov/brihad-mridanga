@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Book;
-use App\BookPrice;
 
 use Auth;
 
@@ -21,8 +20,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        list($books, $price) = Book::get_all_books(Auth::user()->id);
-        return view('books.index', ['books' => $books, 'price' => $price]);
+        $books = Book::get_all_books(Auth::user()->id);
+        return view('books.index', ['books' => $books]);
     }
 
     /**
@@ -55,10 +54,6 @@ class BookController extends Controller
         $book->price_shop = $request->price_shop;
         $book->user_id = Auth::user()->id;
         $book->save();
-        $bookprice = new BookPrice;
-        $bookprice->book_id = $book->id;
-        $bookprice->price = $request->price;
-        $bookprice->save();
         return redirect()->route('books.index');
     }
 
@@ -113,7 +108,6 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::findOrFail($id);
-        BookPrice::where('book_id', $book->id)->delete();
         $book->delete();
         return redirect()->route('books.index');
     }

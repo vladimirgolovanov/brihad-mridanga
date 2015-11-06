@@ -54,12 +54,12 @@
 {!! Form::submit('Update', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}
  
 {!! Form::close() !!}
-
+<!--
 {!! Form::open([
     'method' => 'DELETE',
     'route' => ['books.destroy', $book->id]
 ]) !!}
 {!! Form::submit('Delete book?', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}
 {!! Form::close() !!}
-
+-->
 @stop

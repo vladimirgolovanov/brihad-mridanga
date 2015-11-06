@@ -11,19 +11,19 @@
 <input type="hidden" name="datetime" id="datetime" value="{{ $datetime?$datetime:"" }}"/>
 <?php /* if(datetime) */ ?>
 <p>
-<input type="text" name="custom_date" id="custom_date" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
+<input type="text" name="custom_date" id="custom_date" tabindex="1" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
 </p>
-
+<?php $popular = 1; $tabindex = 2; ?>
 @foreach($books as $book)
-    <p>
+    <p<?php if(!$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
         <div style="width:50%;float:left;">
             {!! $book->name !!}
         </div>
         <div style="float:left;">
-            <span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="less{{ $book->id }}" data-move="less"><i class="material-icons">arrow_drop_down</i></span>{!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id]) !!}<span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="more{{ $book->id }}" data-move="more"><i class="material-icons">arrow_drop_up</i></span>
+            <span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="less{{ $book->id }}" data-move="less"><i class="material-icons">arrow_drop_down</i></span>{!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id, 'tabindex' => $tabindex++]) !!}<span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="more{{ $book->id }}" data-move="more"><i class="material-icons">arrow_drop_up</i></span>
         </div>
         <div style="float:left;">
-            {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($price[$book->id])), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
+            {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
         </div>
         <div style="clear:both;"></div>
     </p>
