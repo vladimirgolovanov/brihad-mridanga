@@ -14,6 +14,13 @@
     <input type="text" name="custom_date" id="custom_date" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
 </p>
 
+<p>
+    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="empty_switch">
+        <input type="checkbox" name="empty_switch" id="empty_switch" class="mdl-switch__input" <?php if($empty) print ' checked'; ?> />
+        <span class="mdl-switch__label">Empty</span>
+    </label>
+</p>
+
 @foreach($books as $book)
 	<p>{!! $book->name !!}
         {!! Form::text('bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['class' => 'mdl-textfield__input']) !!}

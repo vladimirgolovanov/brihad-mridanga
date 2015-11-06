@@ -43,10 +43,30 @@ class OperationController extends Controller
             $editing['bookvalues'] = $bookvalues;
             $editing['price'] = $price;
         }
-        list($books, $price) = Book::get_all_books(Auth::user()->id);
+        $books = Book::get_all_books(Auth::user()->id);
+        $os = DB::table('operations')
+            ->where('operation_type', '=', 1)
+            ->orderBy('custom_date', 'desc')
+            ->limit(20)
+            ->get();
+        foreach($books as $k => $v) {
+            $books[$k]->sorting = 0;
+        }
+        foreach($os as $o) {
+            foreach($books as $k => $v) {
+                if($books[$k]->id == $o->book_id) $books[$k]->sorting += $o->quantity;
+            }
+        }
+        usort($books, function($a, $b) {
+           if($a->sorting < $b->sorting) {
+               return 1;
+           } elseif($a->sorting == $b->sorting) {
+               if($a->id < $b->id) return -1;
+               else return 1;
+           } else return -1;
+        });
         return view('operation.make', [
             'books' => $books,
-            'price' => $price,
             'operation_type' => 1,
             'personid' => $personid,
             'editing' => $editing,
@@ -87,7 +107,7 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function remain($personid, $datetime = '', $custom_date = '')
+    public function remain($personid, $datetime = '', $custom_date = '', $empty = '')
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
@@ -105,7 +125,7 @@ class OperationController extends Controller
             }
             $editing['bookvalues'] = $bookvalues;
         }
-        list($books, $price) = Book::get_all_books(Auth::user()->id);
+        $books = Book::get_all_books(Auth::user()->id);
         return view('operation.remain', [
             'books' => $books,
             'operation_type' => 10,
@@ -113,6 +133,7 @@ class OperationController extends Controller
             'editing' => $editing,
             'datetime' => $datetime,
             'custom_date' => $custom_date,
+            'empty' => $empty,
         ]);
     }
     /**
@@ -138,7 +159,7 @@ class OperationController extends Controller
             }
             $editing['bookvalues'] = $bookvalues;
         }
-        list($books, $price) = Book::get_all_books(Auth::user()->id);
+        $books = Book::get_all_books(Auth::user()->id);
         return view('operation.return', [
             'books' => $books,
             'operation_type' => 4,
@@ -159,18 +180,31 @@ class OperationController extends Controller
             ->where('datetime', $datetime)
             ->delete();
         if(in_array($request->operation_type, [1,10,4])) {
-            foreach($request->bookcount as $bookid => $count) {
-                if($count) {
-                    $operation = new Operation;
-                    $operation->book_id = $bookid;
-                    $operation->quantity = $count;
-                    $operation->person_id = $request->personid;
-                    $operation->datetime = $datetime;
-                    $operation->custom_date = $request->custom_date;
-                    $operation->price = $request->price[$bookid];
-                    $operation->operation_type = $request->operation_type;
-                    $operation->description = $request->description;
-                    $operation->save();
+            if($request->empty_switch) {
+                $operation = new Operation;
+                $operation->book_id = 0;
+                $operation->quantity = 0;
+                $operation->person_id = $request->personid;
+                $operation->datetime = $datetime;
+                $operation->custom_date = $request->custom_date;
+                $operation->price = 0;
+                $operation->operation_type = $request->operation_type;
+                $operation->description = $request->description;
+                $operation->save();
+            } else {
+                foreach($request->bookcount as $bookid => $count) {
+                    if($count) {
+                        $operation = new Operation;
+                        $operation->book_id = $bookid;
+                        $operation->quantity = $count;
+                        $operation->person_id = $request->personid;
+                        $operation->datetime = $datetime;
+                        $operation->custom_date = $request->custom_date;
+                        $operation->price = $request->price[$bookid];
+                        $operation->operation_type = $request->operation_type;
+                        $operation->description = $request->description;
+                        $operation->save();
+                    }
                 }
             }
         } elseif($request->operation_type == 2) {

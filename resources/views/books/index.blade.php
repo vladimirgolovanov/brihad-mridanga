@@ -8,11 +8,7 @@
 
 @foreach($books as $book)
     <p>
-        {{ $book->name }}
-        <a href="{{ route('books.show', $book->id) }}">View</a>
-        <a href="{{ route('books.edit', $book->id) }}">Edit</a>
-        {{ $price[$book->id] }}
-        <a href="{{ route('newbookprice', ['id'=>$book->id]) }}">Price</a>
+        <a href="{{ route('books.edit', $book->id) }}">{{ $book->name }}</a>
     </p>
 @endforeach
 

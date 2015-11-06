@@ -60,7 +60,7 @@
         <td class="mdl-data-table__cell--non-numeric"></td>
         <td>{{ $o['o']->laxmi }} р.</td>
     </tr>
-        @else
+        @elseif($o['o']->book_id)
     <tr<?php if($o['o']->operation_type == 10) { ?> style="background:#ccc;"<?php } ?>>
         <td class="mdl-data-table__cell--non-numeric">{{ $o['o']->name }}</td>
         <td>&times;&nbsp;{{ $o['o']->quantity }}</td>

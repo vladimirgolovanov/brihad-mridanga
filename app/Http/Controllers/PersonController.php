@@ -21,7 +21,7 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $persons = Person::where('user_id', Auth::user()->id)->get();
+        $persons = Person::where('user_id', Auth::user()->id)->orderBy('name')->get();
         return view('persons.index')->withPersons($persons);
     }
 
