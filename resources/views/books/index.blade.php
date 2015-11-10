@@ -8,7 +8,7 @@
 
 @foreach($books as $book)
     <p>
-        <a href="{{ route('books.edit', $book->id) }}">{{ $book->name }}</a>
+        <a href="{{ route('books.edit', $book->id) }}">{{ $book->name }}</a> <span font="-2">{{ $book->bookgroup_name }}</span>
     </p>
 @endforeach
 

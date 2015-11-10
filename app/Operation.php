@@ -6,6 +6,7 @@ use Auth;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use MyProject\Proxies\__CG__\stdClass;
 
 class Operation extends Model
 {
@@ -29,6 +30,15 @@ class Operation extends Model
             $backbooks = self::find_books_to_return($person_id, $book_id, $recentbooks->datetime, $quantity, $backbooks);
         }
         return $backbooks;
+    }
+
+    public static function get_last_remains_date($personid) {
+        $o = DB::table('operations')
+            ->where('person_id', $personid)
+            ->where('operation_type', 10)
+            ->orderBy('custom_date', 'desc')
+            ->first();
+        return $o?$o->custom_date:'';
     }
 
     public static function get_all_operations($personid, $operationid) // Требует рефакторинга
@@ -150,28 +160,32 @@ class Operation extends Model
                 $gain = 0;
                 $total_books = 0;
                 $points = 0;
+                $book_types = ['Махабиги' => 0, 'Биги' => 0, 'Средние' => 0, 'Маленькие' => 0];
                 foreach($books_distr as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $books_info[$k]->name, 'o' => $v);
                     $gain += ($books_info[$k]->price - $books_info[$k]->price_buy) * $v;
                     $total_books += $v;
                     switch($books_info[$k]->book_type) {
-                        case 1: $points += 2 * $v; break;
-                        case 2: $points += 1 * $v; break;
-                        case 3: $points += 0.5 * $v; break;
-                        case 4: $points += 0.25 * $v; break;
+                        case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; break;
+                        case 2: $points += 1 * $v; $book_types['Биги'] += $v; break;
+                        case 3: $points += 0.5 * $v; $book_types['Средние'] += $v; break;
+                        case 4: $points += 0.25 * $v; $book_types['Маленькие'] += $v; break;
                     }
                 }
                 $oss[] = array('type' => 'info', 'text' => 'Всего распространено книг', 'o' => $total_books);
+                foreach($book_types as $k => $v) {
+                    $oss[] = array('type' => 'info', 'text' => $k, 'o' => $v);
+                }
                 $oss[] = array('type' => 'info', 'text' => 'Всего очков', 'o' => $points);
-                $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm.' р.');
-                $oss[] = array('type' => 'info', 'text' => 'Прибыль', 'o' => $gain.' р.');
-                $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi.' р.');
+                $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
+                $oss[] = array('type' => 'info', 'text' => 'Прибыль', 'o' => $gain);
+                $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
                 if($laxmi > $lxm) {
-                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $lxm).' р.');
+                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $lxm));
                     $lxm = 0;
                 } elseif($laxmi < $lxm) {
                     $lxm = $laxmi - $lxm;
-                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => (-$lxm).' р.');
+                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => (-$lxm));
                 } else {
                     $lxm = 0;
                 }
@@ -273,6 +287,78 @@ class Operation extends Model
             }
         }
         return [$oss, $books, $lxm, $laxmi];
+    }
+
+    public static function monthly_report() {
+        $ps = DB::table('persons')->select('id', 'name')->where('id', '>=', 27)->where('user_id', Auth::user()->id)->orderBy('name')->get();
+        $report = [];
+        $totals = [
+            'total' => 0,
+            'points' => 0,
+            'gain' => 0,
+            'donation' => 0,
+            'debt' => 0,
+            'maha' => 0,
+            'big' => 0,
+            'middle' => 0,
+            'small' => 0
+        ];
+        foreach($ps as $p) {
+            $last_remains_date = self::get_last_remains_date($p->id);
+            if($last_remains_date) {
+                list($oss, $books, $lxm, $laxmi) = self::get_operations($p->id);
+                $r = new \stdClass();
+                $r->name = $p->name;
+                $state = 0;
+                foreach($oss as $os) {
+                    if($os['type'] == 'operation' && $os['o']->custom_date == $last_remains_date) {
+                        $state = 1;
+                        $r->remains_date = $last_remains_date;
+                        $r->donation = '';
+                        $r->debt = '';
+                    } elseif($state == 1) {
+                        if($os['type'] == 'info') {
+                            switch($os['text']) {
+                                case 'Всего распространено книг':
+                                    $r->total = $os['o'];
+                                    $totals['total'] += $os['o'];
+                                    break;
+                                case 'Всего очков':
+                                    $r->points = $os['o'];
+                                    $totals['points'] += $os['o'];
+                                    break;
+                                case 'Прибыль':
+                                    $r->gain = $os['o'];
+                                    $totals['gain'] += $os['o'];
+                                    break;
+                                case 'Сверхпожертвование':
+                                    $r->donation = $os['o'];
+                                    $totals['donation'] += $os['o'];
+                                    break;
+                                case 'Долг':
+                                    $r->debt = $os['o'];
+                                    $totals['debt'] += $os['o'];
+                                    break;
+                                case 'Махабиги':
+                                    $totals['maha'] += $os['o'];
+                                    break;
+                                case 'Биги':
+                                    $totals['big'] += $os['o'];
+                                    break;
+                                case 'Средние':
+                                    $totals['middle'] += $os['o'];
+                                    break;
+                                case 'Маленькие':
+                                    $totals['small'] += $os['o'];
+                                    break;
+                            }
+                        }
+                    }
+                }
+                $report[] = $r;
+            }
+        }
+        return [$report, $totals];
     }
 
     public static function operation_type_name() {

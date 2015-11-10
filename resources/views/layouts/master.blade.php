@@ -24,11 +24,13 @@
     <body>
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
         <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Store books</span>
+            <span class="mdl-layout-title">Brihad Mridanga</span>
             <nav class="mdl-navigation">
             @if(Auth::check())
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
+                <a class="mdl-navigation__link" href="{{ route('bookgroups.index') }}">Book Groups</a>
                 <a class="mdl-navigation__link" href="{{ route('persons.index') }}">Persons</a>
+                <a class="mdl-navigation__link" href="{{ route('report') }}">Reports</a>
                 <a class="mdl-navigation__link" href="{{ route('auth.logout') }}">Logout</a>
             @else
                 <a class="mdl-navigation__link" href="{{ route('auth.login') }}">Login</a>

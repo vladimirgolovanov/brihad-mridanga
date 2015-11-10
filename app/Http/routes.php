@@ -28,6 +28,8 @@ Route::resource('bookprice', 'BookPriceController');
 
 Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
 
+Route::get('report', ['as'=>'report', 'uses'=>'ReportController@index']);
+
 Route::get('persons/{personid}/operation/{operationid}', ['as'=>'persons.operation', 'uses'=>'PersonController@operation']);
 Route::get('persons/{personid}/operation/{operationid}/edit/{bookid}', ['as'=>'persons.edit.operation', 'uses'=>'PersonController@edit_operation']);
 Route::patch('persons/{personid}/operation/{operationid}/store/{bookid}', ['as'=>'persons.operation.store', 'uses'=>'PersonController@store_operation']);

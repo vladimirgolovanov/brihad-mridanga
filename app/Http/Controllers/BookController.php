@@ -49,6 +49,7 @@ class BookController extends Controller
         $book->shortname = $request->shortname;
         $book->name = $request->name;
         $book->pack = $request->pack;
+        $book->bookgroup_id = $request->bookgroup_id?:null;
         $book->price_buy = $request->price_buy;
         $book->price = $request->price;
         $book->price_shop = $request->price_shop;
@@ -95,7 +96,9 @@ class BookController extends Controller
             'name' => 'required'
         ]);
         $input = $request->all();
-        $book->fill($input)->save();
+        $book->fill($input);
+        $book->bookgroup_id = $request->bookgroup_id?:null;
+        $book->save();
         return redirect()->route('books.index');
     }
 
