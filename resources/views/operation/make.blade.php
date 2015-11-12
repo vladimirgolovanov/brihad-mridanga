@@ -15,18 +15,17 @@
 </p>
 <?php $popular = 1; $tabindex = 2; ?>
 @foreach($books as $book)
-    <p<?php if(!$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
-        <div style="width:50%;float:left;">
-            {!! $book->name !!}
-        </div>
-        <div style="float:left;">
-            <span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="less{{ $book->id }}" data-move="less"><i class="material-icons">arrow_drop_down</i></span>{!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id, 'tabindex' => $tabindex++]) !!}<span class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored stepqty" field="quantity{{ $book->id }}" id="more{{ $book->id }}" data-move="more"><i class="material-icons">arrow_drop_up</i></span>
-        </div>
-        <div style="float:left;">
-            {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
-        </div>
-        <div style="clear:both;"></div>
-    </p>
+<div class="mdl-grid"<?php if(!$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
+    <div class="mdl-cell mdl-cell--4-col  mdl-cell--2-col-phone">
+        {!! $book->name !!}
+    </div>
+    <div class="mdl-cell mdl-cell--1-col">
+        {!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id, 'tabindex' => $tabindex++]) !!}
+    </div>
+    <div class="mdl-cell mdl-cell--1-col">
+        {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
+    </div>
+</div>
 @endforeach
 
 <p>Description: {!! Form::textarea('description', ((isset($editing['description']))?($editing['description']):(null)), ['rows' => 3, 'style' => 'width:100%']) !!}</p>

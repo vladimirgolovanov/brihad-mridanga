@@ -203,6 +203,11 @@ class Operation extends Model
 
                     } elseif(isset($books[$o->book_id])) {
                         $used = $books[$o->book_id][0] - $o->quantity;
+//                        print $o->book_id.'-';
+//                        print_r($used);
+//                        print "<br>";
+//                        print_r($books[$o->book_id]);
+//                        print "<br>";
                         if($used < 0) {
                             $oss[] = array('type' => 'warning', 'o' => 'Сдано больше чем было ('.$books[$o->book_id][0].')');
                             $used = 0;
@@ -259,7 +264,6 @@ class Operation extends Model
                                 $qty -= $shifted_b[0][0];
                             } else {
                                 $books[$o->book_id][1][0] -= $qty;
-                                $qty = $books[$o->book_id][1][0];
                                 $complete = 1;
                                 break;
                             }
@@ -267,7 +271,7 @@ class Operation extends Model
                         if($qty == 0) {
                             unset($books[$o->book_id]);
                         } elseif($complete) {
-                            $books[$o->book_id] = [$qty, [$qty, $o->price]];
+                            $books[$o->book_id] = [$books[$o->book_id][0], [$books[$o->book_id][0], $o->price]];
                         } else {
                             unset($books[$o->book_id]);
                             $oss[] = array('type' => 'warning', 'o' => 'Вернули лишние книги');
