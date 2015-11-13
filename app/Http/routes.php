@@ -15,7 +15,7 @@
 
 Route::get('/', function () {
 	//print Auth::user()->name;
-    return view('welcome2');
+    return view('welcome');
 });
 
 Route::resource('bookgroups', 'BookGroupController');
