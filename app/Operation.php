@@ -293,8 +293,8 @@ class Operation extends Model
         return [$oss, $books, $lxm, $laxmi];
     }
 
-    public static function monthly_report() {
-        $ps = DB::table('persons')->select('id', 'name')->where('id', '>=', 27)->where('user_id', Auth::user()->id)->orderBy('name')->get();
+    public static function monthly_report($begin_date, $end_date) {
+        $ps = DB::table('persons')->select('id', 'name')->where('user_id', Auth::user()->id)->orderBy('name')->get();
         $report = [];
         $totals = [
             'total' => 0,
@@ -309,7 +309,7 @@ class Operation extends Model
         ];
         foreach($ps as $p) {
             $last_remains_date = self::get_last_remains_date($p->id);
-            if($last_remains_date) {
+            if($last_remains_date && (!$begin_date || (strcmp($last_remains_date, $begin_date) >= 0 && strcmp($last_remains_date, $end_date) <= 0))) {
                 list($oss, $books, $lxm, $laxmi) = self::get_operations($p->id);
                 $r = new \stdClass();
                 $r->name = $p->name;

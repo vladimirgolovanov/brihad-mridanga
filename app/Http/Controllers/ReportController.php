@@ -18,9 +18,9 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($begin_date = 0, $end_date = 0)
     {
-        list($report, $totals) = Operation::monthly_report();
+        list($report, $totals) = Operation::monthly_report($begin_date, $end_date);
         return view('reports.index', ['totals' => $totals])->withReport($report);
     }
 
