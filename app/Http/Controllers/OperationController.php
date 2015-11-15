@@ -23,7 +23,16 @@ class OperationController extends Controller
      *
      * @return Response
      */
-    public function make($personid, $datetime = '', $custom_date = '')
+    public function make_shop($personid, $datetime = '', $custom_date = '')
+    {
+        return self::make($personid, $datetime, $custom_date, true);
+    }
+    /**
+     * Show the form for making order on books.
+     *
+     * @return Response
+     */
+    public function make($personid, $datetime = '', $custom_date = '', $shop = false)
     {
         // ВЫНЕСТИ ИЗ КОНТРОЛЛЕРА
         $editing = []; // Если массив не пустой - редактируем.
@@ -72,6 +81,7 @@ class OperationController extends Controller
             'editing' => $editing,
             'datetime' => $datetime,
             'custom_date' => $custom_date,
+            'shop' => $shop,
         ]);
     }
     /**

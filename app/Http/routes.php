@@ -37,6 +37,7 @@ Route::patch('persons/{personid}/operation/{operationid}/store/{bookid}', ['as'=
 Route::delete('persons/{personid}/operation/{operationid}/delete/{bookid}', ['as'=>'persons.operation.delete', 'uses'=>'PersonController@destroy_operation']);
 
 Route::get('operation/{personid}/make', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
+Route::get('operation/{personid}/make_shop', ['as'=>'operation.make_shop', 'uses'=>'OperationController@make_shop']);
 Route::get('operation/{personid}/make/{datetime}', ['as'=>'operation.make', 'uses'=>'OperationController@make']);
 Route::get('operation/{personid}/laxmi', ['as'=>'operation.laxmi', 'uses'=>'OperationController@laxmi']);
 Route::get('operation/{personid}/laxmi/{datetime}', ['as'=>'operation.laxmi', 'uses'=>'OperationController@laxmi']);
