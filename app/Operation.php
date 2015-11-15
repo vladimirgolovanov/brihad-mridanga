@@ -289,8 +289,21 @@ class Operation extends Model
         return [$oss, $books, $lxm, $laxmi];
     }
 
-    public static function monthly_report($begin_date, $end_date) {
-        $ps = DB::table('persons')->select('id', 'name')->where('user_id', Auth::user()->id)->orderBy('name')->get();
+    public static function monthly_report($begin_date, $end_date, $persons) {
+        if(count($persons)) {
+            $ps = DB::table('persons')
+                ->select('id', 'name')
+                ->whereIn('id', $persons)
+                ->where('user_id', Auth::user()->id)
+                ->orderBy('name')
+                ->get();
+        } else {
+            $ps = DB::table('persons')
+                ->select('id', 'name')
+                ->where('user_id', Auth::user()->id)
+                ->orderBy('name')
+                ->get();
+        }
         $report = [];
         $totals = [
             'total' => 0,
@@ -305,57 +318,69 @@ class Operation extends Model
         ];
         foreach($ps as $p) {
             $last_remains_date = self::get_last_remains_date($p->id);
-            if($last_remains_date && (!$begin_date || (strcmp($last_remains_date, $begin_date) >= 0 && strcmp($last_remains_date, $end_date) <= 0))) {
+//            if($last_remains_date && (!$begin_date || (strcmp($last_remains_date, $begin_date) >= 0 && strcmp($last_remains_date, $end_date) <= 0))) {
+            if(1) {
                 list($oss, $books, $lxm, $laxmi) = self::get_operations($p->id);
                 $r = new \stdClass();
+                $r->person_id = $p->id;
                 $r->name = $p->name;
+                $r->remains_date = $last_remains_date;
+                $r->donation = 0;
+                $r->debt = 0;
+                $r->total = 0;
+                $r->points = 0;
+                $r->gain = 0;
+                $r->maha = 0;
+                $r->big = 0;
+                $r->middle = 0;
+                $r->small = 0;
                 $state = 0;
                 foreach($oss as $os) {
-                    if($os['type'] == 'operation' && $os['o']->custom_date == $last_remains_date) {
+                    if($state == 0 && $os['type'] == 'operation' && $os['o']->operation_type == 10 && (!$begin_date || (strcmp($os['o']->custom_date, $begin_date) >= 0 && strcmp($os['o']->custom_date, $end_date) <= 0))) {
                         $state = 1;
-                        $r->remains_date = $last_remains_date;
-                        $r->donation = '';
-                        $r->debt = '';
-                    } elseif($state == 1) {
+                    } elseif($state > 0) {
                         if($os['type'] == 'info') {
+                            $state = 2;
                             switch($os['text']) {
                                 case 'Всего распространено книг':
-                                    $r->total = $os['o'];
+                                    $r->total += $os['o'];
                                     $totals['total'] += $os['o'];
                                     break;
                                 case 'Всего очков':
-                                    $r->points = $os['o'];
+                                    $r->points += $os['o'];
                                     $totals['points'] += $os['o'];
                                     break;
                                 case 'Прибыль':
-                                    $r->gain = $os['o'];
+                                    $r->gain += $os['o'];
                                     $totals['gain'] += $os['o'];
                                     break;
                                 case 'Сверхпожертвование':
-                                    $r->donation = $os['o'];
+                                    $r->donation += $os['o'];
                                     $totals['donation'] += $os['o'];
                                     break;
                                 case 'Долг':
-                                    $r->debt = $os['o'];
+                                    $r->debt += $os['o'];
                                     $totals['debt'] += $os['o'];
                                     break;
                                 case 'Махабиги':
-                                    $r->maha = $os['o'];
+                                    $r->maha += $os['o'];
                                     $totals['maha'] += $os['o'];
                                     break;
                                 case 'Биги':
-                                    $r->big = $os['o'];
+                                    $r->big += $os['o'];
                                     $totals['big'] += $os['o'];
                                     break;
                                 case 'Средние':
-                                    $r->middle = $os['o'];
+                                    $r->middle += $os['o'];
                                     $totals['middle'] += $os['o'];
                                     break;
                                 case 'Маленькие':
-                                    $r->small = $os['o'];
+                                    $r->small += $os['o'];
                                     $totals['small'] += $os['o'];
                                     break;
                             }
+                        } elseif($state == 2) {
+                            $state = 0;
                         }
                     }
                 }
