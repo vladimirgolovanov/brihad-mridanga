@@ -17,6 +17,7 @@
 
 <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--6-col">
+        @if(count($books))
         <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
             <tr style="background:#ccc;">
                 <td class="mdl-data-table__cell--non-numeric" colspan="2">Книги на руках</td>
@@ -27,7 +28,12 @@
                 <td>&times;&nbsp;{{ $b[0] }}</td>
             </tr>
             @endforeach
+            <tr style="background:#ccc;">
+                <td class="mdl-data-table__cell--non-numeric">Стоимость книг на руках</td>
+                <td>{{ $current_books_price }}</td>
+            </tr>
         </table>
+        @endif
     </div>
     <div class="mdl-cell mdl-cell--6-col">
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
