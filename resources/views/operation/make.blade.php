@@ -13,6 +13,13 @@
 <p>
 <input type="text" name="custom_date" id="custom_date" tabindex="1" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
 </p>
+
+@if(!$datetime)
+<p>
+    <a href="{{ route('operation.make'.($shop?'':'_shop'), $personid) }}" class="mdl-button mdl-js-button mdl-button--accent">{{ $shop?'Distribution prices':'Shop prices' }}</a>
+</p>
+@endif
+
 <?php $popular = 1; $tabindex = 2; ?>
 @foreach($books as $book)
 <div class="mdl-grid"<?php if(!$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
@@ -23,7 +30,7 @@
         {!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id, 'tabindex' => $tabindex++]) !!}
     </div>
     <div class="mdl-cell mdl-cell--1-col">
-        {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
+        {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($shop?$book->price_shop:$book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
     </div>
 </div>
 @endforeach
