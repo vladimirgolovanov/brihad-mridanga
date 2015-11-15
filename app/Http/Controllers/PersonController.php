@@ -72,13 +72,14 @@ class PersonController extends Controller
     public function show($id)
     {
         $person = Person::findOrFail($id);
-        list($os, $books, $lxm, $laxmi) = Operation::get_operations($id);
+        list($os, $books, $lxm, $laxmi, $current_books_price) = Operation::get_operations($id);
         return view('persons.show', [
             'person' => $person,
             'books' => $books,
             'lxm' => $lxm,
             'laxmi' => $laxmi,
             'os' => $os,
+            'current_books_price' => $current_books_price,
             ]);
         /*$person = Person::findOrFail($id);
         list($operations, $summ, $books) = Operation::get_all_operations($id);

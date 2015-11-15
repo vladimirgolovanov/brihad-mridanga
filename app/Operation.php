@@ -286,7 +286,13 @@ class Operation extends Model
                 $books[$o->book_id]['name'] = $o->name;
             }
         }
-        return [$oss, $books, $lxm, $laxmi];
+        $current_books_price = 0;
+        foreach($books as $k => $v) {
+            foreach(array_slice($v, 1) as $b) {
+                $current_books_price += $b[0] * $b[1];
+            }
+        }
+        return [$oss, $books, $lxm, $laxmi, $current_books_price];
     }
 
     public static function monthly_report($begin_date, $end_date, $persons) {
