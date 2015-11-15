@@ -29,6 +29,7 @@ Route::resource('bookprice', 'BookPriceController');
 Route::get('bookprice/{id}/new', ['as'=>'newbookprice', 'uses'=>'BookPriceController@create']);
 
 Route::get('report/{begin_date?}/{end_date?}', ['as'=>'report', 'uses'=>'ReportController@index']);
+Route::post('report/{begin_date?}/{end_date?}', ['as'=>'report', 'uses'=>'ReportController@getselected']);
 
 Route::get('persons/{personid}/operation/{operationid}', ['as'=>'persons.operation', 'uses'=>'PersonController@operation']);
 Route::get('persons/{personid}/operation/{operationid}/edit/{bookid}', ['as'=>'persons.edit.operation', 'uses'=>'PersonController@edit_operation']);

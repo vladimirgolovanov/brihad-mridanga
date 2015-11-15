@@ -28,6 +28,7 @@
 			}
 		} elseif($operation['data'][0]['operation_type'] == 10) {
 			foreach($operation['data'] as $o) {
+				if($o['book_id']) {
 	?>
 	<tr>
 	<td class="mdl-data-table__cell--non-numeric">{{ $book_names_by_id[$o['book_id']] }}</td>
@@ -37,6 +38,7 @@
 	<!-- <td><a href="{{ route('persons.edit.operation', ['personid' => $person['id'], 'operationid' => $datetime, 'bookid' => $o['book_id']]) }}">edit</a></td> -->
 	</tr>
 	<?php
+				}
 			}
 		} elseif($operation['data'][0]['operation_type'] == 4) {
 			foreach($operation['data'] as $o) {

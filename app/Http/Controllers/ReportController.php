@@ -20,7 +20,20 @@ class ReportController extends Controller
      */
     public function index($begin_date = 0, $end_date = 0)
     {
-        list($report, $totals) = Operation::monthly_report($begin_date, $end_date);
+        list($report, $totals) = Operation::monthly_report($begin_date, $end_date, []);
+        return view('reports.index', ['totals' => $totals])->withReport($report);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getselected(Request $request, $begin_date = 0, $end_date = 0)
+    {
+        $persons = explode(',', $request->persons);
+        list($report, $totals) = Operation::monthly_report($begin_date, $end_date, $persons);
         return view('reports.index', ['totals' => $totals])->withReport($report);
     }
 

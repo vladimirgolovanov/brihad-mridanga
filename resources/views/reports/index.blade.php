@@ -21,7 +21,7 @@
     </thead>
     <tbody>
 @foreach($report as $v)
-    <tr>
+    <tr id="{{ $v->person_id }}">
         <td class="mdl-data-table__cell--non-numeric">{{ $v->name }}</td>
         <td>{{ $v->maha }}</td>
         <td>{{ $v->big }}</td>
@@ -64,9 +64,23 @@
     </tr>
     </thead>
 </table>
-
-    <script>
-
-    </script>
+<p id="test">
+<form method="POST" accept-charset="UTF-8">
+    <?php echo csrf_field(); ?>
+    <input type="hidden" id="persons" name="persons" value="">
+    <input type="submit" id="recalc" value="Recalculate for selected!">
+</form>
+</p>
+<script>
+    $(document).ready(function() {
+        $('#recalc').on("click", function(event) {
+            $('#persons').val('');
+            $('.is-selected').each(function() {
+                if($('#persons').val()) $('#persons').val($('#persons').val() + ',' + $(this).attr('id'));
+                else $('#persons').val($(this).attr('id'));
+            });
+        });
+    });
+</script>
 
 @stop
