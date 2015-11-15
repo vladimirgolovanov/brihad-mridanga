@@ -142,6 +142,7 @@ class Operation extends Model
         $prevcase = 0;
         $prevop = 0;
         $lxm = 0;
+        $debt = 0;
         $oss = [];
         $os[] = 1;
         foreach($os as $o) {
@@ -172,6 +173,7 @@ class Operation extends Model
                         case 4: $points += 0.25 * $v; $book_types['Маленькие'] += $v; break;
                     }
                 }
+                $books_distr = [];
                 $oss[] = array('type' => 'info', 'text' => 'Всего распространено книг', 'o' => $total_books);
                 foreach($book_types as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $k, 'o' => $v);
@@ -180,15 +182,14 @@ class Operation extends Model
                 $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
                 $oss[] = array('type' => 'info', 'text' => 'Прибыль', 'o' => $gain);
                 $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
-                if($laxmi > $lxm) {
-                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $lxm));
-                    $lxm = 0;
-                } elseif($laxmi < $lxm) {
-                    $lxm = $laxmi - $lxm;
-                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => (-$lxm));
+                if($laxmi - $debt > $lxm) {
+                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $debt - $lxm));
+                } elseif($laxmi - $debt < $lxm) {
+                    $debt -= $laxmi - $lxm;
+                    $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $debt);
                 } else {
-                    $lxm = 0;
                 }
+                $lxm = 0;
                 $laxmi = 0;
             }
             if(gettype($o) != 'object') break;
@@ -203,11 +204,6 @@ class Operation extends Model
 
                     } elseif(isset($books[$o->book_id])) {
                         $used = $books[$o->book_id][0] - $o->quantity;
-//                        print $o->book_id.'-';
-//                        print_r($used);
-//                        print "<br>";
-//                        print_r($books[$o->book_id]);
-//                        print "<br>";
                         if($used < 0) {
                             $oss[] = array('type' => 'warning', 'o' => 'Сдано больше чем было ('.$books[$o->book_id][0].')');
                             $used = 0;
@@ -344,15 +340,19 @@ class Operation extends Model
                                     $totals['debt'] += $os['o'];
                                     break;
                                 case 'Махабиги':
+                                    $r->maha = $os['o'];
                                     $totals['maha'] += $os['o'];
                                     break;
                                 case 'Биги':
+                                    $r->big = $os['o'];
                                     $totals['big'] += $os['o'];
                                     break;
                                 case 'Средние':
+                                    $r->middle = $os['o'];
                                     $totals['middle'] += $os['o'];
                                     break;
                                 case 'Маленькие':
+                                    $r->small = $os['o'];
                                     $totals['small'] += $os['o'];
                                     break;
                             }
