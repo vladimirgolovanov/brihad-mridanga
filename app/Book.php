@@ -22,7 +22,7 @@ class Book extends Model
             ->leftJoin('bookgroups AS bg', 'b.bookgroup_id', '=', 'bg.id')
             ->where('b.user_id', $user_id)
             ->orderBy(DB::raw('-bg.id'), 'desc')
-            ->orderBy('b.id', 'asc')
+            ->orderBy('b.name', 'asc')
             ->select('b.*', 'bg.name AS bookgroup_name')
             ->get();
         return $books;

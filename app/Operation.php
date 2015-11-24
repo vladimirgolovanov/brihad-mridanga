@@ -196,10 +196,10 @@ class Operation extends Model
             if($prevop != $o->datetime || !$prevop) {
                 $oss[] = array('type' => 'operation', 'o' => $o);
             }
+            $prevcase = $o->operation_type;
+            $prevop = $o->datetime;
             switch($o->operation_type) {
                 case 10:
-                    $prevcase = 10;
-                    $prevop = $o->datetime;
                     if(!$o->book_id) {
 
                     } elseif(isset($books[$o->book_id])) {
@@ -231,8 +231,6 @@ class Operation extends Model
                     $oss[] = array('type' => 'subop', 'o' => $o);
                     break;
                 case 1:
-                    $prevcase = 1;
-                    $prevop = $o->datetime;
                     if(isset($books[$o->book_id])) {
                         $books[$o->book_id][0] += $o->quantity;
                         $books[$o->book_id][] = array($o->quantity, $o->price);
@@ -242,14 +240,10 @@ class Operation extends Model
                     $oss[] = array('type' => 'subop', 'o' => $o);
                     break;
                 case 2:
-                    $prevcase = 2;
-                    $prevop = $o->datetime;
                     $laxmi += $o->laxmi;
                     $oss[] = array('type' => 'subop', 'o' => $o);
                     break;
                 case 4:
-                    $prevcase = 4;
-                    $prevop = $o->datetime;
                     if(isset($books[$o->book_id])) {
                         $books[$o->book_id][0] -= $o->quantity;
                         $qty = $o->quantity;
@@ -264,7 +258,7 @@ class Operation extends Model
                                 break;
                             }
                         }
-                        if($qty == 0) {
+                        if($books[$o->book_id][0] == 0) {
                             unset($books[$o->book_id]);
                         } elseif($complete) {
                             $books[$o->book_id] = [$books[$o->book_id][0], [$books[$o->book_id][0], $o->price]];

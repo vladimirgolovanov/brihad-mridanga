@@ -61,19 +61,19 @@ class OperationController extends Controller
         foreach($books as $k => $v) {
             $books[$k]->sorting = 0;
         }
-        foreach($os as $o) {
-            foreach($books as $k => $v) {
-                if($books[$k]->id == $o->book_id) $books[$k]->sorting += $o->quantity;
-            }
-        }
-        usort($books, function($a, $b) {
-           if($a->sorting < $b->sorting) {
-               return 1;
-           } elseif($a->sorting == $b->sorting) {
-               if($a->id < $b->id) return -1;
-               else return 1;
-           } else return -1;
-        });
+//        foreach($os as $o) {
+//            foreach($books as $k => $v) {
+//                if($books[$k]->id == $o->book_id) $books[$k]->sorting += $o->quantity;
+//            }
+//        }
+//        usort($books, function($a, $b) {
+//           if($a->sorting < $b->sorting) {
+//               return 1;
+//           } elseif($a->sorting == $b->sorting) {
+//               if($a->id < $b->id) return -1;
+//               else return 1;
+//           } else return -1;
+//        });
         return view('operation.make', [
             'books' => $books,
             'operation_type' => 1,
