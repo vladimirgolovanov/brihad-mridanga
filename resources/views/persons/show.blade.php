@@ -32,6 +32,18 @@
                 <td class="mdl-data-table__cell--non-numeric">Стоимость книг на руках</td>
                 <td>{{ $current_books_price }}</td>
             </tr>
+            @if($debt)
+            <tr style="background:#ccc;">
+                <td class="mdl-data-table__cell--non-numeric">Долг</td>
+                <td>{{ $debt }}</td>
+            </tr>
+            @endif
+            @if($laxmi)
+                <tr style="background:#ccc;">
+                    <td class="mdl-data-table__cell--non-numeric">Сдано Лакшми</td>
+                    <td>{{ $laxmi }}</td>
+                </tr>
+            @endif
         </table>
         @endif
     </div>
