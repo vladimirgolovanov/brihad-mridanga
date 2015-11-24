@@ -18,6 +18,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/ng', function () {
+    //print Auth::user()->name;
+    return view('layouts/master-ng');
+});
+
 Route::resource('bookgroups', 'BookGroupController');
 
 Route::resource('books', 'BookController');

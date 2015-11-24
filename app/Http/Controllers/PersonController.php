@@ -23,14 +23,15 @@ class PersonController extends Controller
     {
         // ПЕРЕПИСАТЬ
         $persons = Person::where('user_id', Auth::user()->id)->orderBy('name')->get();
-        $ps = [];
-        foreach($persons as $k => $p) {
-            $p->last_remains_date = Operation::get_last_remains_date($p->id);
-            $ps[] = $p;
-        }
-        usort($ps, function($a, $b) {
-            return strcmp($b->last_remains_date, $a->last_remains_date);
-        });
+        $ps = $persons;
+//        $ps = [];
+//        foreach($persons as $k => $p) {
+//            $p->last_remains_date = Operation::get_last_remains_date($p->id);
+//            $ps[] = $p;
+//        }
+//        usort($ps, function($a, $b) {
+//            return strcmp($b->last_remains_date, $a->last_remains_date);
+//        });
         return view('persons.index')->withPersons($ps);
     }
 

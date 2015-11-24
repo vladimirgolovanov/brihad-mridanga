@@ -22,9 +22,9 @@
 
 <?php $popular = 1; $tabindex = 2; ?>
 @foreach($books as $book)
-<div class="mdl-grid"<?php if(!$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
+<div class="mdl-grid"<?php if(0 && !$book->sorting && $popular) { ?> style="border-bottom:1px solid orange; margin-bottom:3x`0px;"<?php $popular = 0;  } ?>>
     <div class="mdl-cell mdl-cell--4-col  mdl-cell--2-col-phone">
-        {!! $book->name !!}
+        {!! $book->name !!}<br><span class="mdl-typography--caption" style="color:#999;">{!! $book->bookgroup_name !!}</span>
     </div>
     <div class="mdl-cell mdl-cell--1-col">
         {!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id, 'tabindex' => $tabindex++]) !!}
