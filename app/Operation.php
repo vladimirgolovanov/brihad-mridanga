@@ -286,7 +286,7 @@ class Operation extends Model
                 $current_books_price += $b[0] * $b[1];
             }
         }
-        return [$oss, $books, $lxm, $laxmi, $current_books_price];
+        return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt];
     }
 
     public static function monthly_report($begin_date, $end_date, $persons) {
