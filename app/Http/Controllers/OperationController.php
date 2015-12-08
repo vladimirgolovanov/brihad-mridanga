@@ -189,6 +189,7 @@ class OperationController extends Controller
             ->where('person_id', $request->personid)
             ->where('datetime', $datetime)
             ->delete();
+        session(['custom_date' => $request->custom_date]);
         if(in_array($request->operation_type, [1,10,4])) {
             if($request->empty_switch) {
                 $operation = new Operation;
