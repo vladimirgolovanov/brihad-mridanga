@@ -11,7 +11,8 @@
 <input type="hidden" name="datetime" id="datetime" value="{{ $datetime?$datetime:"" }}"/>
 <?php /* if(datetime) */ ?>
 <p>
-    <input type="text" name="custom_date" id="custom_date" tabindex="1" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
+<input type="text" name="custom_date" id="custom_date" tabindex="1" value="{{ $custom_date?$custom_date:date("Y-m-d") }}" />
+&nbsp;&nbsp;&nbsp;<a href="#" onclick="$('#custom_date').val($(this).text());" style="text-decoration:none;color:#999;border-bottom:dotted 1px;">{{ session('custom_date') }}</a>
 </p>
 
 @foreach($books as $book)
