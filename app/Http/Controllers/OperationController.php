@@ -48,6 +48,7 @@ class OperationController extends Controller
                 $bookvalues[$o->book_id] = $o->quantity;
                 $price[$o->book_id] = $o->price;
                 if($o->description) $editing['description'] = $o->description;
+                $custom_date = $o->custom_date;
             }
             $editing['bookvalues'] = $bookvalues;
             $editing['price'] = $price;
@@ -103,6 +104,7 @@ class OperationController extends Controller
                 ->first();
             if($o->laxmi) $editing['laxmi'] = $o->laxmi;
             if($o->description) $editing['description'] = $o->description;
+            $custom_date = $o->custom_date;
         }
         return view('operation.laxmi', [
             'operation_type' => 2,
@@ -132,6 +134,7 @@ class OperationController extends Controller
             foreach($os as $o) {
                 $bookvalues[$o->book_id] = $o->quantity;
                 if($o->description) $editing['description'] = $o->description;
+                $custom_date = $o->custom_date;
             }
             $editing['bookvalues'] = $bookvalues;
         }
@@ -166,6 +169,7 @@ class OperationController extends Controller
             foreach($os as $o) {
                 $bookvalues[$o->book_id] = $o->quantity;
                 if($o->description) $editing['description'] = $o->description;
+                $custom_date = $o->custom_date;
             }
             $editing['bookvalues'] = $bookvalues;
         }
