@@ -6,8 +6,7 @@
 
 @foreach($persons as $person)
     <p>
-        {{ $person->name }}
-        <a href="{{ route('persons.show', $person->id) }}">View</a>
+        <a href="{{ route('persons.show', $person->id) }}">{{ $person->name }}</a>
         <a href="{{ route('persons.edit', $person->id) }}">Edit</a>
         {{ $person->last_remains_date }}
     </p>
