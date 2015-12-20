@@ -14,5 +14,5 @@
         {{ $person->last_remains_date }}
     </p>
 @endforeach
-    
+
 @stop
