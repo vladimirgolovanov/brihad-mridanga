@@ -1,13 +1,21 @@
 @extends('layouts.master')
  
 @section('content')
- 
+
+    <style>
+        .trunc {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+
 <h1>Report</h1>
 
-<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%; table-layout: fixed;">
     <thead>
     <tr>
-        <th class="mdl-data-table__cell--non-numeric">Person</th>
+        <th class="mdl-data-table__cell--non-numeric" style="width:150px;">Person</th>
         <th>Maha</th>
         <th>Big</th>
         <th>Middle</th>
@@ -17,12 +25,13 @@
         <th>Gain</th>
         <th>Donation</th>
         <th>Debt</th>
+        <th>Balance</th>
     </tr>
     </thead>
     <tbody>
 @foreach($report as $v)
     <tr id="{{ $v->person_id }}">
-        <td class="mdl-data-table__cell--non-numeric">{{ $v->name }}</td>
+        <td class="mdl-data-table__cell--non-numeric trunc">{{ $v->name }}</td>
         <td>{{ $v->maha }}</td>
         <td>{{ $v->big }}</td>
         <td>{{ $v->middle }}</td>
@@ -32,6 +41,7 @@
         <td>{{ $v->gain }}</td>
         <td>{{ $v->donation }}</td>
         <td>{{ $v->debt }}</td>
+        <td>{{ $v->balance }}</td>
     </tr>
 @endforeach
     </tbody>
@@ -48,6 +58,7 @@
         <td>{{ $totals['gain'] }}</td>
         <td>{{ $totals['donation'] }}</td>
         <td>{{ $totals['debt'] }}</td>
+        <td></td>
     </tr>
     <tr>
         <th></th>
@@ -61,6 +72,7 @@
         <th>Gain</th>
         <th>Donation</th>
         <th>Debt</th>
+        <th>Balance</th>
     </tr>
     </thead>
 </table>

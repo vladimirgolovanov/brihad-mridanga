@@ -320,7 +320,7 @@ class Operation extends Model
             $last_remains_date = self::get_last_remains_date($p->id);
 //            if($last_remains_date && (!$begin_date || (strcmp($last_remains_date, $begin_date) >= 0 && strcmp($last_remains_date, $end_date) <= 0))) {
             if(1) {
-                list($oss, $books, $lxm, $laxmi) = self::get_operations($p->id);
+                list($oss, $books, $lxm, $laxmi, $current_books_price) = self::get_operations($p->id);
                 $r = new \stdClass();
                 $r->person_id = $p->id;
                 $r->name = $p->name;
@@ -334,6 +334,7 @@ class Operation extends Model
                 $r->big = 0;
                 $r->middle = 0;
                 $r->small = 0;
+                $r->balance = $laxmi - $current_books_price;
                 $state = 0;
                 foreach($oss as $os) {
                     if($state == 0 && $os['type'] == 'operation' && $os['o']->operation_type == 10 && (!$begin_date || (strcmp($os['o']->custom_date, $begin_date) >= 0 && strcmp($os['o']->custom_date, $end_date) <= 0))) {
@@ -359,8 +360,7 @@ class Operation extends Model
                                     $totals['donation'] += $os['o'];
                                     break;
                                 case 'Долг':
-                                    $r->debt += $os['o'];
-                                    $totals['debt'] += $os['o'];
+                                    $r->debt = $os['o'];
                                     break;
                                 case 'Махабиги':
                                     $r->maha += $os['o'];
@@ -384,6 +384,8 @@ class Operation extends Model
                         }
                     }
                 }
+                $totals['debt'] += $r->debt;
+                $r->balance -= $r->debt;
                 $report[] = $r;
             }
         }
