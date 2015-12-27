@@ -50,7 +50,7 @@ class BookController extends Controller
         $book->name = $request->name;
         $book->pack = $request->pack;
         $book->bookgroup_id = $request->bookgroup_id?:null;
-        $book->boook_type = $request->book_type?:null;
+        $book->book_type = $request->book_type?:null;
         $book->price_buy = $request->price_buy;
         $book->price = $request->price;
         $book->price_shop = $request->price_shop;
