@@ -31,6 +31,13 @@
 <br>
 
 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
+    {!! Form::label('Book Type', 'Book Type:', ['class' => 'mdl-textfield__label']) !!}
+    {!! Form::text('book_type', null, ['class' => 'mdl-textfield__input']) !!}
+</div>
+
+<br>
+
+<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label textfield-demo">
     {!! Form::label('pack', 'Pack:', ['class' => 'mdl-textfield__label']) !!}
     {!! Form::text('pack', null, ['class' => 'mdl-textfield__input']) !!}
 </div>
