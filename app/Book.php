@@ -11,6 +11,7 @@ class Book extends Model
         'shortname',
         'name',
         'bookgroup_id',
+        'book_type',
         'pack',
         'price_buy',
         'price',
