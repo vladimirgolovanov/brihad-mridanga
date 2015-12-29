@@ -26,7 +26,11 @@ class Book extends Model
             ->orderBy('b.name', 'asc')
             ->select('b.*', 'bg.name AS bookgroup_name')
             ->get();
-        return $books;
+        $bks = [];
+        foreach($books as $b) {
+            $bks[$b->id] = $b;
+        }
+        return $bks;
     }
     public static function get_books_info($user_id)
     {
