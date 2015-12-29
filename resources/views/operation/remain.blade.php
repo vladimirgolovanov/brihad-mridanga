@@ -23,10 +23,20 @@
 </p>
 
 @foreach($books as $book)
-	<p>{!! $book->name !!}
-        {!! Form::text('bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['class' => 'mdl-textfield__input']) !!}
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--4-col  mdl-cell--2-col-phone">
+        {!! $book->name !!}<br><span class="mdl-typography--caption" style="color:#999;">{!! $book->bookgroup_name !!}{!! $book->shortname?" | ".$book->shortname:"" !!}</span>
+    </div>
+    <div class="mdl-cell mdl-cell--1-col">
+        {!! Form::input('number', 'bookcount['.$book->id.']', ((isset($editing['bookvalues'][$book->id]))?($editing['bookvalues'][$book->id]):(null)), ['data-step' => $book->pack, 'class' => 'mdl-textfield__input up_down_number', 'id' => 'quantity'.$book->id]) !!}
         {!! Form::hidden('price['.$book->id.']', $book->price) !!}
-    </p>
+    </div>
+@if(!$datetime)
+    <div class="mdl-cell mdl-cell--1-col">
+        <a href="#" onclick="$('#quantity{{ $book->id }}').val($(this).text());" style="text-decoration:none;color:#999;border-bottom:dotted 1px;">{{ $book->havegot }}</a>
+    </div>
+@endif
+</div>
 @endforeach
 
 {!! Form::hidden('personid', $personid, ['class' => 'mdl-textfield__input']) !!}

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Store books</title>
+        <title>Brihad Mridanga</title>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="/static/material.min.css">
         <script src="/static/material.min.js"></script>
         <link rel="stylesheet" href="/static/material-icons.css">
