@@ -358,6 +358,7 @@ class Operation extends Model
                                 case 'Сверхпожертвование':
                                     $r->donation += $os['o'];
                                     $totals['donation'] += $os['o'];
+                                    $r->balance += $r->donation;
                                     $r->debt = 0;
                                     break;
                                 case 'Долг':
