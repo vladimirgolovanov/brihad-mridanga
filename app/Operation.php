@@ -165,12 +165,11 @@ class Operation extends Model
                 foreach($books_distr as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $books_info[$k]->name, 'o' => $v);
                     $gain += ($books_info[$k]->price - $books_info[$k]->price_buy) * $v;
-                    $total_books += $v;
                     switch($books_info[$k]->book_type) {
-                        case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; break;
-                        case 2: $points += 1 * $v; $book_types['Биги'] += $v; break;
-                        case 3: $points += 0.5 * $v; $book_types['Средние'] += $v; break;
-                        case 4: $points += 0.25 * $v; $book_types['Маленькие'] += $v; break;
+                        case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; $total_books += $v; break;
+                        case 2: $points += 1 * $v; $book_types['Биги'] += $v; $total_books += $v; break;
+                        case 3: $points += 0.5 * $v; $book_types['Средние'] += $v; $total_books += $v; break;
+                        case 4: $points += 0.25 * $v; $book_types['Маленькие'] += $v; $total_books += $v; break;
                     }
                 }
                 $books_distr = [];

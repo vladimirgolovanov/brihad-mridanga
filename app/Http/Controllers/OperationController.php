@@ -182,8 +182,18 @@ class OperationController extends Controller
                 $custom_date = $o->custom_date;
             }
             $editing['bookvalues'] = $bookvalues;
+            $books = Book::get_all_books(Auth::user()->id);
+        } else {
+            list($oss, $bks) = Operation::get_operations($personid);
+            $bkss = Book::get_all_books(Auth::user()->id);
+            $books = [];
+            foreach($bkss as $k => $b) {
+                if(isset($bks[$k])) {
+                    $books[$k] = $b;
+                    $b->havegot = $bks[$k][0];
+                }
+            }
         }
-        $books = Book::get_all_books(Auth::user()->id);
         return view('operation.return', [
             'books' => $books,
             'operation_type' => 4,
