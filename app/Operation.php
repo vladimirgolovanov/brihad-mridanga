@@ -183,6 +183,7 @@ class Operation extends Model
                 $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
                 if($laxmi - $debt > $lxm) {
                     $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $debt - $lxm));
+                    $debt = 0;
                 } elseif($laxmi - $debt < $lxm) {
                     $debt -= $laxmi - $lxm;
                     $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $debt);
