@@ -152,6 +152,7 @@ class Operation extends Model
                     if(!isset($books_distr[$k])) $books_distr[$k] = 0;
                     foreach(array_slice($v, 1) as $b) {
                         $lxm += $b[0] * $b[1];
+                        $gain += $b[0] * (($b[1] > $books_info[$k]->price_buy)?($b[1] - $books_info[$k]->price_buy):0);
                         $books_distr[$k] += $b[0];
                     }
                     unset($books[$k]);
