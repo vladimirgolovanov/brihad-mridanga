@@ -142,6 +142,7 @@ class Operation extends Model
         $prevcase = 0;
         $prevop = 0;
         $lxm = 0;
+        $gain = 0;
         $debt = 0;
         $oss = [];
         $os[] = 1;
@@ -158,13 +159,11 @@ class Operation extends Model
                 $books = $books_left;
                 $books_left = [];
                 $oss[] = array('type' => 'info', 'text' => 'Распространенные книги:', 'o' => '');
-                $gain = 0;
                 $total_books = 0;
                 $points = 0;
                 $book_types = ['Махабиги' => 0, 'Биги' => 0, 'Средние' => 0, 'Маленькие' => 0];
                 foreach($books_distr as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $books_info[$k]->name, 'o' => $v);
-                    $gain += ($books_info[$k]->price - $books_info[$k]->price_buy) * $v;
                     switch($books_info[$k]->book_type) {
                         case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; $total_books += $v; break;
                         case 2: $points += 1 * $v; $book_types['Биги'] += $v; $total_books += $v; break;
@@ -191,6 +190,7 @@ class Operation extends Model
                 }
                 $lxm = 0;
                 $laxmi = 0;
+                $gain = 0;
             }
             if(gettype($o) != 'object') break;
             if($prevop != $o->datetime || !$prevop) {
@@ -215,9 +215,11 @@ class Operation extends Model
                                 $shifted_b = array_splice($books[$o->book_id], 1, 1);
                                 $used -= $shifted_b[0][0];
                                 $lxm += $b[0] * $b[1];
+                                $gain += $b[0] * (($b[1] > $books_info[$o->book_id]->price_buy)?($b[1] - $books_info[$o->book_id]->price_buy):0);
                             } else {
                                 $books[$o->book_id][1][0] -= $used;
                                 $lxm += $used * $b[1];
+                                $gain += $used * (($b[1] > $books_info[$o->book_id]->price_buy)?($b[1] - $books_info[$o->book_id]->price_buy):0);
                                 break;
                             }
                         }
