@@ -14,6 +14,13 @@
     {!! Form::text('name', null, ['class' => 'mdl-textfield__input']) !!}
 </div>
 
+<p>
+    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="hide">
+        <input type="checkbox" name="hide" id="hide" class="mdl-switch__input" <?php if($person->hide) print ' checked'; ?> />
+        <span class="mdl-switch__label">Hide</span>
+    </label>
+</p>
+
 <br>
 
 {!! Form::submit('Update', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}

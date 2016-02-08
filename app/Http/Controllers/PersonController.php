@@ -22,7 +22,7 @@ class PersonController extends Controller
     public function index()
     {
         // ПЕРЕПИСАТЬ
-        $persons = Person::where('user_id', Auth::user()->id)->orderBy('name')->get();
+        $persons = Person::where('user_id', Auth::user()->id)->orderBy('hide')->orderBy('name')->get();
         $ps = $persons;
 //        $ps = [];
 //        foreach($persons as $k => $p) {
@@ -163,7 +163,9 @@ class PersonController extends Controller
             'name' => 'required',
         ]);
         $input = $request->all();
-        $person->fill($input)->save();
+        $person->fill($input);
+        $person->hide = $request->hide?1:null;
+        $person->save();
         return redirect()->back();
     }
 
