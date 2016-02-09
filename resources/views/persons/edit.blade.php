@@ -27,11 +27,12 @@
  
 {!! Form::close() !!}
 
+<!--
 {!! Form::open([
     'method' => 'DELETE',
     'route' => ['persons.destroy', $person->id]
 ]) !!}
 {!! Form::submit('Delete person?', ['class' => 'mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent']) !!}
 {!! Form::close() !!}
-
+-->
 @stop
