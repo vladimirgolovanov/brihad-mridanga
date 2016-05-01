@@ -188,6 +188,7 @@ class Operation extends Model
                     $debt -= $laxmi - $lxm;
                     $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $debt);
                 } else {
+                    $debt = 0;
                 }
                 $lxm = 0;
                 $laxmi = 0;
