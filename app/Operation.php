@@ -188,6 +188,7 @@ class Operation extends Model
                     $debt -= $laxmi - $lxm;
                     $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $debt);
                 } else {
+                    $debt = 0;
                 }
                 $lxm = 0;
                 $laxmi = 0;
@@ -295,14 +296,14 @@ class Operation extends Model
     public static function monthly_report($begin_date, $end_date, $persons) {
         if(count($persons)) {
             $ps = DB::table('persons')
-                ->select('id', 'name')
+                ->select('id', 'name', 'hide')
                 ->whereIn('id', $persons)
                 ->where('user_id', Auth::user()->id)
                 ->orderBy('name')
                 ->get();
         } else {
             $ps = DB::table('persons')
-                ->select('id', 'name')
+                ->select('id', 'name', 'hide')
                 ->where('user_id', Auth::user()->id)
                 ->orderBy('name')
                 ->get();
@@ -327,6 +328,7 @@ class Operation extends Model
                 $r = new \stdClass();
                 $r->person_id = $p->id;
                 $r->name = $p->name;
+                $r->hide = $p->hide;
                 $r->remains_date = $last_remains_date;
                 $r->donation = 0;
                 $r->debt = 0;
@@ -391,7 +393,7 @@ class Operation extends Model
                 }
                 $totals['debt'] += $r->debt;
                 $r->balance -= $r->debt;
-                $report[] = $r;
+                if($r->total || $r->donation || $r->debt || !$r->hide) $report[] = $r;
             }
         }
         return [$report, $totals];
