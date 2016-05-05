@@ -17,8 +17,8 @@
 
 <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--6-col">
-        @if(count($books))
         <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
+            @if(count($books))
             <tr style="background:#ccc;">
                 <td class="mdl-data-table__cell--non-numeric" colspan="2">Книги на руках</td>
             </tr>
@@ -32,6 +32,7 @@
                 <td class="mdl-data-table__cell--non-numeric">Стоимость книг на руках</td>
                 <td>{{ $current_books_price }}</td>
             </tr>
+            @endif
             @if($debt)
             <tr style="background:#ccc;">
                 <td class="mdl-data-table__cell--non-numeric">Долг</td>
@@ -45,7 +46,6 @@
                 </tr>
             @endif
         </table>
-        @endif
     </div>
     <div class="mdl-cell mdl-cell--6-col">
 <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width:100%;">
