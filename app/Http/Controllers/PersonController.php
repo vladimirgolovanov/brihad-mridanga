@@ -14,26 +14,26 @@ use App\Http\Controllers\Controller;
 
 class PersonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
+    public function index($param = null)
     {
-        // ПЕРЕПИСАТЬ
-        $persons = Person::where('user_id', Auth::user()->id)->orderBy('hide')->orderBy('name')->get();
-        $ps = $persons;
-//        $ps = [];
-//        foreach($persons as $k => $p) {
-//            $p->last_remains_date = Operation::get_last_remains_date($p->id);
-//            $ps[] = $p;
-//        }
-//        usort($ps, function($a, $b) {
-//            return strcmp($b->last_remains_date, $a->last_remains_date);
-//        });
-        return view('persons.index')->withPersons($ps);
-    }
+        if($param == 'all') {
+            $persons = Person::where('user_id', Auth::user()->id)->orderBy('hide')->orderBy('name')->get();
+        } else {
+            $persons = Person::where('user_id', Auth::user()->id)->whereNull('hide')->orderBy('hide')->orderBy('name')->get();
+        }
+        $ps = [];
+        foreach($persons as $k => $p) {
+            $p->last_remains_date = Operation::get_last_remains_date($p->id);
+            list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($p->id);
+            $p->debt = $debt;
+            $p->current_books_price = $current_books_price;
+            $ps[] = $p;
+        }
+        usort($ps, function($a, $b) {
+            return $b->debt > $a->debt;
+        });
+        return $ps;
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -73,16 +73,14 @@ class PersonController extends Controller
     public function show($id)
     {
         $person = Person::findOrFail($id);
-        list($os, $books, $lxm, $laxmi, $current_books_price, $debt) = Operation::get_operations($id);
-        return view('persons.show', [
-            'person' => $person,
-            'books' => $books,
-            'lxm' => $lxm,
-            'laxmi' => $laxmi,
-            'os' => $os,
-            'current_books_price' => $current_books_price,
-            'debt' => $debt,
-            ]);
+        list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($id);
+        $person['books'] = $books;
+        $person['lxm'] = $lxm;
+        $person['laxmi'] = $laxmi;
+        $person['current_books_price'] = $current_books_price;
+        $person['debt'] = $debt;
+        $person['osgrp'] = $osgrp;
+        return $person;
         /*$person = Person::findOrFail($id);
         list($operations, $summ, $books) = Operation::get_all_operations($id);
         $operation_type_name = Operation::operation_type_name($id);

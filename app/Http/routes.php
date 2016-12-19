@@ -1,5 +1,8 @@
 <?php
 
+Blade::setContentTags('<%', '%>');              // for variables and all things Blade
+Blade::setEscapedContentTags('<%%', '%%>');     // for escaped data
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,18 +14,30 @@
 |
 */
 
-//$user = Auth::user();
-
 Route::get('/', function () {
-	//print Auth::user()->name;
-    return view('welcome');
+    return View::make('index');
 });
 
-Route::get('/ng', function () {
-    //print Auth::user()->name;
-    return view('layouts/master-ng');
+Route::group(['prefix' => 'api'], function() {
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+    Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
 });
 
+Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {
+    Route::resource('persons/{param}', 'PersonController', ['only' => ['index']]);
+    Route::get('persons/show/{personid}', 'PersonController@show');
+
+    Route::resource('books', 'BookController');
+});
+//    Route::get('persons/{personid}/operation/{operationid}', ['as'=>'persons.operation', 'uses'=>'PersonController@operation']);
+//    Route::get('persons/{personid}/operation/{operationid}/edit/{bookid}', ['as'=>'persons.edit.operation', 'uses'=>'PersonController@edit_operation']);
+//    Route::patch('persons/{personid}/operation/{operationid}/store/{bookid}', ['as'=>'persons.operation.store', 'uses'=>'PersonController@store_operation']);
+//    Route::delete('persons/{personid}/operation/{operationid}/delete/{bookid}', ['as'=>'persons.operation.delete', 'uses'=>'PersonController@destroy_operation']);
+
+
+
+/*
 Route::resource('bookgroups', 'BookGroupController');
 
 Route::resource('books', 'BookController');
@@ -59,3 +74,5 @@ Route::get('auth/logout', ['as'=>'auth.logout', 'uses'=>'Auth\AuthController@get
 // Registration routes...
 Route::get('auth/register', ['as'=>'auth.register', 'uses'=>'Auth\AuthController@getRegister']);
 Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+*/
