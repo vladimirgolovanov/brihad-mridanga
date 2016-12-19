@@ -1,0 +1,23 @@
+.md-button.md-fab.md-fab-top-right {
+    top:30px;
+}
+
+.float-toolbar {
+    height: 36px;
+    width: 100%;
+    position: fixed;
+    bottom: 32px;
+    right: 0px;
+}
+
+.hint {
+    /* Position the hint */
+    position: absolute;
+    left: 4px;
+    right: auto;
+    bottom: 7px;
+    /* Copy styles from ng-messages */
+    font-size: 12px;
+    line-height: 14px;
+    /* Set our own color */
+    color: #CCC; }
