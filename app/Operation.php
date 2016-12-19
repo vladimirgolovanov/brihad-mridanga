@@ -118,8 +118,6 @@ class Operation extends Model
         $books_distr = array();
         $used = 0;
         $laxmi = 0;
-        $osgrp = array();
-        $osg = [];
         $os = DB::table('operations AS o')
             ->leftJoin('books AS b', 'o.book_id', '=', 'b.id')
             ->where('o.person_id', $personid)
@@ -150,7 +148,6 @@ class Operation extends Model
         $os[] = 1;
         foreach($os as $o) {
             if($prevcase == 10 && (gettype($o) != 'object' || ($o->operation_type != 10 || ($o->operation_type == 10 && $prevop != $o->datetime)))) {
-                $osg = ['type' => 'remain'];
                 foreach($books as $k => $v) {
                     if(!isset($books_distr[$k])) $books_distr[$k] = 0;
                     foreach(array_slice($v, 1) as $b) {
@@ -166,10 +163,8 @@ class Operation extends Model
                 $total_books = 0;
                 $points = 0;
                 $book_types = ['Махабиги' => 0, 'Биги' => 0, 'Средние' => 0, 'Маленькие' => 0];
-                $osg['books_distr'] = [];
                 foreach($books_distr as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $books_info[$k]->name, 'o' => $v);
-                    $osg['books_distr'][] = ['text' => $books_info[$k]->name, 'o' => $v];
                     switch($books_info[$k]->book_type) {
                         case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; $total_books += $v; break;
                         case 2: $points += 1 * $v; $book_types['Биги'] += $v; $total_books += $v; break;
@@ -198,7 +193,6 @@ class Operation extends Model
                 $lxm = 0;
                 $laxmi = 0;
                 $gain = 0;
-                $osgrp[] = $osg;
             }
             if(gettype($o) != 'object') break;
             if($prevop != $o->datetime || !$prevop) {
@@ -296,7 +290,7 @@ class Operation extends Model
                 $current_books_price += $b[0] * $b[1];
             }
         }
-        return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp];
+        return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt];
     }
 
     public static function monthly_report($begin_date, $end_date, $persons) {
