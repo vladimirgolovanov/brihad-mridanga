@@ -36,7 +36,7 @@
 
 </body>
 
-<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
 <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
@@ -47,7 +47,6 @@
 <script src="/bower_components/ng-focus-if/focusIf.min.js"></script>
 
 <script src="/js/app.js"></script>
-<script src="/js/next-focus.js"></script>
 <script src="/js/controllers/authController.js"></script>
 <script src="/js/controllers/userController.js"></script>
 <script src="/js/controllers/personController.js"></script>

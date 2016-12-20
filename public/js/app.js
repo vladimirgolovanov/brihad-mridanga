@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'rb.select-all-on-focus'])
+        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if'])
         .config(function($stateProvider,
                          $urlRouterProvider,
                          $authProvider,
