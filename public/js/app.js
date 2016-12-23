@@ -115,22 +115,22 @@
 
             $rootScope.preloadData = function() {
 
-                $http.get('admin/persons/visible').success(function(persons) {
+                $http.get('admin/persons/visible').then(function(persons) {
                     $rootScope.persons = persons;
                     $rootScope.isLoadingPersons = false;
-                }).error(function(error) {
+                }, function(error) {
                     $rootScope.showError(error);
                     $rootScope.isLoadingPersons = false;
                 });
 
-                $http.get('admin/books').success(function(books) {
+                $http.get('admin/books').then(function(books) {
                     $rootScope.books = [];
                     angular.forEach(books, function(val) {
                         $rootScope.books.push(val);
                     });
                     console.log($rootScope.books);
                     $rootScope.isLoadingBooks = false;
-                }).error(function(error) {
+                }, function(error) {
                     $rootScope.showError(error);
                     $rootScope.isLoadingBooks = false;
                 });
