@@ -108,15 +108,15 @@
         })
         .run(function($rootScope, $state, $http) {
 
-            $rootScope.persons;
+            $rootScope.persons = [];
             $rootScope.isLoadingPersons = true;
-            $rootScope.books;
+            $rootScope.books = [];
             $rootScope.isLoadingBooks = true;
 
             $rootScope.preloadData = function() {
 
                 $http.get('admin/persons/visible').then(function(persons) {
-                    $rootScope.persons = persons;
+                    $rootScope.persons = persons.data;
                     $rootScope.isLoadingPersons = false;
                 }, function(error) {
                     $rootScope.showError(error);
@@ -124,11 +124,7 @@
                 });
 
                 $http.get('admin/books').then(function(books) {
-                    $rootScope.books = [];
-                    angular.forEach(books, function(val) {
-                        $rootScope.books.push(val);
-                    });
-                    console.log($rootScope.books);
+                    $rootScope.books = books.data;
                     $rootScope.isLoadingBooks = false;
                 }, function(error) {
                     $rootScope.showError(error);
@@ -180,13 +176,13 @@
                 $mdSidenav('left').toggle();
             };
             $scope.showPersons = function(parm) {
-
-                $http.get('admin/persons'+((parm == 'all')?'/all':'')).success(function(persons) {
-                    $scope.persons = persons;
-                    $scope.isLoading = false;
-                }).error(function(error) {
+                $scope.isLoadingPersons = true;
+                $http.get('admin/persons'+((parm == 'all')?'/all':'')).then(function(persons) {
+                    $scope.persons = persons.data;
+                    $scope.isLoadingPersons = false;
+                }, function(error) {
                     $scope.showError(error);
-                    $scope.isLoading = false;
+                    $scope.isLoadingPersons = false;
                 });
             };
             $scope.showError = function(text) {
