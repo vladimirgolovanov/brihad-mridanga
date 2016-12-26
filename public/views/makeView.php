@@ -46,10 +46,10 @@
                 <p>BBT | {{makectrl.selectedShortname}}</p>
             </div>
             <md-input-container flex="15" md-no-float class="md-subhead md-accent">
-                <input type="number" ng-model="makectrl.selectedQty" focus-if="makectrl.showSearch == 1" ng-keydown="makectrl.keyUppp($event);" ng-focus="makectrl.showSearch = 1">
+                <input type="number" ng-model="makectrl.selectedQty" focus-if="makectrl.showSearch == 1" ng-focus="if(makectrl.showSearch != 1) makectrl.showSearch = 1;" ng-keydown="makectrl.keyUppp($event);">
             </md-input-container>
             <md-input-container flex="15" md-no-float class="md-subhead">
-                <input type="number" ng-model="makectrl.selectedPrice" focus-if="makectrl.showSearch == 2" ng-keydown="makectrl.keyUppp($event);" ng-focus="makectrl.showSearch = 2">
+                <input type="number" ng-model="makectrl.selectedPrice" focus-if="makectrl.showSearch == 2" ng-focus="if(makectrl.showSearch != 2) makectrl.showSearch = 2;" ng-keydown="makectrl.keyUppp($event);">
             </md-input-container>
         </md-list-item>
     </md-list>

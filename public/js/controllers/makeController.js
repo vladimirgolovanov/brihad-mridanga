@@ -18,7 +18,7 @@
         self.keyUppp = keyUppp;
         self.searchTextChange   = searchTextChange;
         self.newState = newState;
-        self.showSearch = -1;
+        self.showSearch = 0;
         self.setFocus = setFocus;
         self.totalPrice = totalPrice;
         self.totalQty = totalQty;
@@ -39,7 +39,7 @@
         $scope.date = new Date();
 
         $scope.$watch('date', function(newVal, oldVal) {
-            if(newVal && oldVal && (newVal.toString() != oldVal.toString())) {
+            if(newVal && oldVal && (newVal.getDate()+newVal.getMonth()+newVal.getYear() != oldVal.getDate()+oldVal.getMonth()+oldVal.getYear())) {
                 self.showSearch = 0;
                 self.setFocus();
             }

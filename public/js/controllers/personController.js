@@ -12,10 +12,10 @@
         vm.isLoading = true;
         vm.person;
 
-        $http.get('admin/persons/show/'+$stateParams.id).success(function(person) {
-            vm.person = person;
+        $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
+            vm.person = person.data;
             vm.isLoading = false;
-        }).error(function(error) {
+        }, function(error) {
             vm.error = error;
             vm.isLoading = false;
         });

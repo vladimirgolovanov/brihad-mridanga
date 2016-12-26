@@ -124,7 +124,10 @@
                 });
 
                 $http.get('admin/books').then(function(books) {
-                    $rootScope.books = books.data;
+                    $rootScope.books = [];
+                    for(var key in books.data) {
+                        $rootScope.books.push(books.data[key]);
+                    }
                     $rootScope.isLoadingBooks = false;
                 }, function(error) {
                     $rootScope.showError(error);
