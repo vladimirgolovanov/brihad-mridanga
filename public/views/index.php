@@ -36,7 +36,7 @@
 
 </body>
 
-<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular/angular.min.js"></script>
 <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="/bower_components/angular-aria/angular-aria.min.js"></script>
 <script src="/bower_components/angular-messages/angular-messages.min.js"></script>

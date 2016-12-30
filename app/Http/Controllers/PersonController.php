@@ -94,6 +94,11 @@ class PersonController extends Controller
             'book_names_by_id' => $book_names_by_id,
             ]);*/
     }
+
+    public function make($data) {
+
+    }
+
     public function operation($personid, $operationid)
     {
         $person = Person::findOrFail($personid);

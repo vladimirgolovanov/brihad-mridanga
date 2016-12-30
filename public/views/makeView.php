@@ -35,9 +35,9 @@
         </md-not-found>
     </md-autocomplete>
 </md-toolbar>
-<md-content flex ng-show="makectrl.showSearch == -1">
-    <md-calendar ng-model="date"></md-calendar>
-</md-content>
+<!--<md-content flex ng-show="makectrl.showSearch == -1">-->
+<!--    <md-calendar ng-model="date"></md-calendar>-->
+<!--</md-content>-->
 <md-content ng-show="makectrl.showSearch == 1 || makectrl.showSearch == 2" class="ng-hide" md-theme="dark" layout="column">
     <md-list>
         <md-list-item class="md-2-line" flex layout-align="space-between top" layout="row">
@@ -58,10 +58,10 @@
 <md-content ng-show="makectrl.showSearch >= 0" flex ng-style="{'opacity' : makectrl.showSearch == 3 ? 0.4 : 1}">
     <md-list>
         <md-list-item>
-            <div class="md-list-item-text">{{date.toDateString()}}</div>
-            <md-button class="md-secondary md-icon-button" ng-click="makectrl.showSearch = -1">
+            <md-input-container flex>
                 <md-icon md-svg-icon="calendar"></md-icon>
-            </md-button>
+                <input type="date" ng-model="date">
+            </md-input-container>
         </md-list-item>
         <md-divider></md-divider>
     </md-list>

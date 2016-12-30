@@ -204,7 +204,24 @@ class OperationController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) {
+        foreach($request->books as $book) {
+            if($book['qty']) {
+                $operation = new Operation;
+                $operation->book_id = $book['id'];
+                $operation->quantity = $book['qty'];
+                $operation->person_id = $request->id;
+                $operation->datetime = date("Y-m-d H:i:s");
+                $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
+                $operation->price = $book['price'];
+                $operation->operation_type = 1;
+                $operation->description = "";
+                $operation->save();
+            }
+        }
+    }
+
+    public function store_old(Request $request)
     {
         $datetime = $request->datetime?$request->datetime:date("Y-m-d H:i:s");
         // возможно есть 1, 10, 4 и есть 2; 1, 10, 4 можно объединить

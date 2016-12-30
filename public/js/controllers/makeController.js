@@ -46,6 +46,12 @@
         });
 
         function submit() {
+            var postdata = { 'operation_type': '1', 'id': self.id, 'date': $scope.date, 'books': self.books };
+            $http.post('admin/operation', postdata).then(function(reaponse) {
+                $state.go('person', {'id': self.id});
+            }, function(response) {
+
+            });
             self.showSearch = 3;
         }
         function newState(state) {
