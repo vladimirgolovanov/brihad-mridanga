@@ -93,12 +93,12 @@
                 .state('person', {
                     url: '/person/:id',
                     templateUrl: '/views/personView.php',
-                    controller: 'PersonController as personctrl'
+                    controller: 'PersonController as c'
                 })
                 .state('make', {
                     url: '/person/:id/make',
                     templateUrl: '/views/makeView.php',
-                    controller: 'MakeController as makectrl'
+                    controller: 'MakeController as c'
                 })
                 .state('users', {
                     url: '/users',
@@ -169,7 +169,7 @@
                         event.preventDefault();
 
                         // go to the "main" state which in our case is users
-                        $state.go('users');
+                        $state.go('persons');
                     }
                 }
             });

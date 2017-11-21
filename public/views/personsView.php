@@ -1,3 +1,4 @@
+<div layout="column" layout-fill>
 <md-toolbar>
     <div class="md-toolbar-tools">
         <md-button class="md-icon-button" ng-click="toggleSidenav('left')" hide-gt-xs aria-label="Menu">
@@ -38,7 +39,7 @@
 
     </div>
 </md-toolbar>
-<md-content flex layout="row" layout-align="center center" id="content">
+<md-content flex layout="row" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingPersons" class="md-accent" md-diameter="20px"></md-progress-linear>
     <md-list flex ng-hide="isLoadingPersons">
         <md-list-item class="md-2-line" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsctrl.personsOrderBy:personsctrl.personsReverse">
@@ -56,3 +57,4 @@
         </div>
     </md-list>
 </md-content>
+</div>

@@ -65,3 +65,7 @@ input::-webkit-inner-spin-button {
 .books-list md-input-container {
 	margin:4px 0px 0px 0px;
 }
+
+.caption-top-align {
+	vertical-align: super;
+}

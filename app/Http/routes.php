@@ -22,6 +22,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
     Route::post('authenticate', 'AuthenticateController@authenticate');
     Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
+    Route::resource('db/{userid}', 'BookController@get_books_db');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {

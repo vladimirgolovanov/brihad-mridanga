@@ -150,7 +150,6 @@ class Operation extends Model
         $os[] = 1;
         foreach($os as $o) {
             if($prevcase == 10 && (gettype($o) != 'object' || ($o->operation_type != 10 || ($o->operation_type == 10 && $prevop != $o->datetime)))) {
-                $osg = ['type' => 'remain'];
                 foreach($books as $k => $v) {
                     if(!isset($books_distr[$k])) $books_distr[$k] = 0;
                     foreach(array_slice($v, 1) as $b) {
@@ -169,7 +168,7 @@ class Operation extends Model
                 $osg['books_distr'] = [];
                 foreach($books_distr as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $books_info[$k]->name, 'o' => $v);
-                    $osg['books_distr'][] = ['text' => $books_info[$k]->name, 'o' => $v];
+                    $osg['books_distr'][] = ['name' => $books_info[$k]->name, 'shortname' => $books_info[$k]->shortname, 'o' => $v];
                     switch($books_info[$k]->book_type) {
                         case 1: $points += 2 * $v; $book_types['Махабиги'] += $v; $total_books += $v; break;
                         case 2: $points += 1 * $v; $book_types['Биги'] += $v; $total_books += $v; break;
@@ -179,15 +178,19 @@ class Operation extends Model
                 }
                 $books_distr = [];
                 $oss[] = array('type' => 'info', 'text' => 'Всего распространено книг', 'o' => $total_books);
+                $osg['total_books'] = $total_books;
                 foreach($book_types as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $k, 'o' => $v);
                 }
                 $oss[] = array('type' => 'info', 'text' => 'Всего очков', 'o' => $points);
+                $osg['total_points'] = $points;
                 $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
                 $oss[] = array('type' => 'info', 'text' => 'Прибыль', 'o' => $gain);
+                $osg['total_gain'] = $gain;
                 $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
                 if($laxmi - $debt > $lxm) {
                     $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $debt - $lxm));
+                    $osg['total_gain'] += $laxmi - $debt - $lxm;
                     $debt = 0;
                 } elseif($laxmi - $debt < $lxm) {
                     $debt -= $laxmi - $lxm;
@@ -208,6 +211,9 @@ class Operation extends Model
             $prevop = $o->datetime;
             switch($o->operation_type) {
                 case 10:
+                    $osg['type'] = 'remain';
+                    $osg['date'] = gettype($o) == 'object' ? $o->custom_date : '';
+                    $osg['description'] = gettype($o) == 'object' ? $o->description : '';
                     if(!$o->book_id) {
 
                     } elseif(isset($books[$o->book_id])) {
@@ -296,6 +302,7 @@ class Operation extends Model
                 $current_books_price += $b[0] * $b[1];
             }
         }
+        $osgrp = array_reverse($osgrp);
         return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp];
     }
 

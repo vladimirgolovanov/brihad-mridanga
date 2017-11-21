@@ -11,6 +11,9 @@
         var vm = this;
         vm.isLoading = true;
         vm.person;
+        vm.opIcon = {
+            'remain': 'checkbox-marked-circle'
+        };
 
         $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
             vm.person = person.data;

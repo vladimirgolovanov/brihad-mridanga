@@ -1,23 +1,28 @@
 <div layout="row" layout-align="center center" layout-fill>
-    <md-whiteframe class="md-whiteframe-z1" flex="70" layout-padding>
-        <form>
-            <md-content layout="column">
-                <md-input-container>
+    <md-card class="md-whiteframe-z1" flex="100" flex-gt-xs="70" flex-gt-sm="50" flex-gt-md="33" layout-padding>
+        <md-toolbar class="md-accent md-hue-1">
+            <div class="md-toolbar-tools">
+                <h2>Brihad Mridanga Login</h2>
+            </div>
+        </md-toolbar>
+        <md-card-content>
+            <form>
+                <md-input-container class="md-block">
                     <label>Email</label>
-                    <input type="email" ng-model="auth.email">
+                    <input type="email" ng-model="auth.email" eopd-enter="auth.login()">
                 </md-input-container>
-                <md-input-container>
+                <md-input-container class="md-block">
                     <label>Password</label>
-                    <input ng-model="auth.password" type="password">
+                    <input ng-model="auth.password" type="password" eopd-enter="auth.login()">
                 </md-input-container>
-                <md-input-container layout-align="center center">
+                <md-input-container class="md-block">
                     <div layout="row" layout-margin>
                         <md-button class="md-raised" flex ng-click="auth.login()">Login</md-button>
                     </div>
                 </md-input-container>
-            </md-content>
-        </form>
-    </md-whiteframe>
+            </form>
+        </md-card-content>
+    </md-card>
 </div>
 <!--<div flex layout="column" layout-align="center center">-->
 <!--    <div>-->

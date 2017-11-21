@@ -3,6 +3,19 @@
 
     angular
         .module('bmApp')
+        .directive('eopdEnter', function () {
+            return function (scope, element, attrs) {
+                element.bind("keydown keypress", function (event) {
+                    if (event.which === 13) {
+                        scope.$apply(function () {
+                            scope.$eval(attrs.eopdEnter, {'event': event});
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            };
+        })
         .controller('AuthController', AuthController);
 
     function AuthController($auth, $state, $http, $rootScope) {
@@ -46,7 +59,7 @@
 
                 // Everything worked out so we can now redirect to
                 // the users state to view the data
-                $state.go('users', {});
+                $state.go('persons');
             });
         }
 
