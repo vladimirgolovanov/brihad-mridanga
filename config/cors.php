@@ -11,7 +11,7 @@ return [
      |
      */
     'supportsCredentials' => false,
-    'allowedOrigins' => ['localhost:4200'],
+    'allowedOrigins' => explode(',', env('VARIABLE_NAME')),
     'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
     'allowedMethods' => ['*'],
     'exposedHeaders' => [],
