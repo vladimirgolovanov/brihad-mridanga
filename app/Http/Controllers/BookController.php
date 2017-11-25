@@ -25,17 +25,6 @@ class BookController extends Controller
     }
 
     /**
-     * Get all books with prices.
-     *
-     * @return Response
-     */
-    public function get_books_db($id)
-    {
-        $books = Book::get_books_db($id);
-        return $books;
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return Response

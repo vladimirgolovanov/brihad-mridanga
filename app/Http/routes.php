@@ -22,7 +22,9 @@ Route::group(['prefix' => 'api'], function() {
     Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
     Route::post('authenticate', 'AuthenticateController@authenticate');
     Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
-    Route::get('db/{userid}', ['middleware' => 'cors', 'uses' => 'BookController@get_books_db']);
+
+    Route::get('db/{userid}', ['middleware' => 'cors', 'uses' => 'OrderController@get_books_db']);
+    Route::post('order', ['middleware' => 'cors', 'uses' => 'OrderController@make_order']);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {

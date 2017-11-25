@@ -39,7 +39,15 @@ class Book extends Model
             ->where('b.user_id', $user_id)
             ->orderBy(DB::raw('-bg.id'), 'desc')
             ->orderBy('b.name', 'asc')
-            ->select('b.*', 'bg.name AS bookgroup_name')
+            ->select(
+                'b.id',
+                'b.name',
+                'b.pack',
+                'b.price',
+                'b.price_shop',
+                'b.book_type',
+                'b.bookgroup_id',
+                'bg.name AS bookgroup_name')
             ->get();
         $bks = [];
         foreach($books as $b) {
