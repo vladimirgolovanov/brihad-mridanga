@@ -204,6 +204,22 @@ class OperationController extends Controller
         ]);
     }
 
+    public function buying_prices()
+    {
+        $books = DB::table('books')
+            ->select('id', 'price_buy')
+            ->get();
+        $bks = [];
+        foreach($books as $b) {
+            DB::table('operations')
+                ->where('book_id', $b->id)
+                ->update(['price_buy' => $b->price_buy]);
+        }
+        DB::table('operations')
+            ->where('book_id', 0)
+            ->update(['price_buy' => 0]);
+    }
+
     public function store(Request $request)
     {
         $datetime = $request->datetime?$request->datetime:date("Y-m-d H:i:s");
@@ -223,12 +239,14 @@ class OperationController extends Controller
                 $operation->datetime = $datetime;
                 $operation->custom_date = $request->custom_date;
                 $operation->price = 0;
+                $operation->price_buy = 0;
                 $operation->operation_type = $request->operation_type;
                 $operation->description = $request->description;
                 $operation->save();
             } else {
                 foreach($request->bookcount as $bookid => $count) {
                     if($count) {
+                        $book = Book::findOrFail($bookid);
                         $operation = new Operation;
                         $operation->book_id = $bookid;
                         $operation->quantity = $count;
@@ -236,6 +254,7 @@ class OperationController extends Controller
                         $operation->datetime = $datetime;
                         $operation->custom_date = $request->custom_date;
                         $operation->price = $request->price[$bookid];
+                        $operation->price_buy = $book->price_buy;
                         $operation->operation_type = $request->operation_type;
                         $operation->description = $request->description;
                         $operation->save();
