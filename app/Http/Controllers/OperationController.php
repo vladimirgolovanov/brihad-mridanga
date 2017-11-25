@@ -204,22 +204,22 @@ class OperationController extends Controller
         ]);
     }
 
-    public function buying_prices()
-    {
-        $books = DB::table('books')
-            ->select('id', 'price_buy')
-            ->get();
-        $bks = [];
-        foreach($books as $b) {
-            DB::table('operations')
-                ->where('book_id', $b->id)
-                ->update(['price_buy' => $b->price_buy]);
-        }
-        DB::table('operations')
-            ->where('book_id', 0)
-            ->update(['price_buy' => 0]);
-    }
-
+//    public function buying_prices()
+//    {
+//        $books = DB::table('books')
+//            ->select('id', 'price_buy')
+//            ->get();
+//        $bks = [];
+//        foreach($books as $b) {
+//            DB::table('operations')
+//                ->where('book_id', $b->id)
+//                ->update(['price_buy' => $b->price_buy]);
+//        }
+//        DB::table('operations')
+//            ->where('book_id', 0)
+//            ->update(['price_buy' => 0]);
+//    }
+//
     public function store(Request $request)
     {
         $datetime = $request->datetime?$request->datetime:date("Y-m-d H:i:s");
