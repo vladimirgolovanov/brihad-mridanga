@@ -11,7 +11,7 @@ return [
      |
      */
     'supportsCredentials' => false,
-    'allowedOrigins' => explode(',', env('VARIABLE_NAME')),
+    'allowedOrigins' => explode(',', env('CORS_ORIGINS')),
     'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
     'allowedMethods' => ['*'],
     'exposedHeaders' => [],
