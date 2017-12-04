@@ -39,6 +39,7 @@ class OrderController extends Controller
     {
         $order = new Order;
         $order->user_id = $request->uid;
+        $order->bv = $request->bv;
         $order->name = $request->name;
         $order->phone = $request->phone;
         $order->email = $request->email;

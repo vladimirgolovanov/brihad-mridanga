@@ -1,4 +1,5 @@
 От: <?php echo $data->name; ?><br>
+Округ/Сектор БВ: <?php echo $data->bv; ?><br>
 Телефон: <?php echo $data->phone; ?><br>
 E-mail: <?php echo $data->email; ?><br>
 Доп. информация:<br>
