@@ -61,7 +61,7 @@ class PersonController extends Controller
         $person->user_id = Auth::user()->id;
         $person->save();
         //Session::flash('flash_message', 'Person successfully added!');
-        return redirect()->route('persons.index');
+        return redirect()->route('persons.show', $person->id);
     }
 
     /**
