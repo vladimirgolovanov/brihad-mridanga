@@ -166,7 +166,7 @@ class PersonController extends Controller
         $person->fill($input);
         $person->hide = $request->hide?1:null;
         $person->save();
-        return redirect()->back();
+        return redirect()->route('persons.show', $id);
     }
 
     /**
