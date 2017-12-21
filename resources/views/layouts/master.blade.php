@@ -28,17 +28,17 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Brihad Mridanga</span>
             <nav class="mdl-navigation">
-                <a class="mdl-navigation__link" href="/persons/51">Бх. Иван Маркин</a>
-                <a class="mdl-navigation__link" href="/persons/12">Бх. Олег Тоболин</a>
-                <a class="mdl-navigation__link" href="/persons/9">Нандалала дас</a>
-                <a class="mdl-navigation__link" href="/persons/21">Варадеша дас</a>
-                <a class="mdl-navigation__link" href="/persons/231">Джулан Прия дд</a>
-                <a class="mdl-navigation__link" href="/persons/201">Диана Дреева</a>
-                <a class="mdl-navigation__link" href="/persons/214">Марианна Надина</a>
-                <a class="mdl-navigation__link" href="/persons/230">Швета Двипа Радха дд</a>
-                <a class="mdl-navigation__link" href="/persons/32">БВ ШКГд Валентина</a>
-                <a class="mdl-navigation__link" href="/persons/63">БВ ШКГд Лила Киртана дд</a>
-                <a class="mdl-navigation__link" href="/persons/33">БВ ШКГд Нила Радхика дд</a>
+                <a class="mdl-navigation__link" href="/operation/51/make">Бх. Иван Маркин</a>
+                <a class="mdl-navigation__link" href="/operation/12/make">Бх. Олег Тоболин</a>
+                <a class="mdl-navigation__link" href="/operation/9/make">Нандалала дас</a>
+                <a class="mdl-navigation__link" href="/operationoperation/21/make">Варадеша дас</a>
+                <a class="mdl-navigation__link" href="/operation/231/make">Джулан Прия дд</a>
+                <a class="mdl-navigation__link" href="/operation/201/make">Диана Дреева</a>
+                <a class="mdl-navigation__link" href="/operation/214/make">Марианна Надина</a>
+                <a class="mdl-navigation__link" href="/operation/230/make">Швета Двипа Радха дд</a>
+                <a class="mdl-navigation__link" href="/operation/32/make">БВ ШКГд Валентина</a>
+                <a class="mdl-navigation__link" href="/operation/63/make">БВ ШКГд Лила Киртана дд</a>
+                <a class="mdl-navigation__link" href="/operation/33/make">БВ ШКГд Нила Радхика дд</a>
             @if(Auth::check())
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
                 <a class="mdl-navigation__link" href="{{ route('bookgroups.index') }}">Book Groups</a>
