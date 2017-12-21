@@ -28,6 +28,17 @@
         <div class="mdl-layout__drawer">
             <span class="mdl-layout-title">Brihad Mridanga</span>
             <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="/persons/51">Бх. Иван Маркин</a>
+                <a class="mdl-navigation__link" href="/persons/12">Бх. Олег Тоболин</a>
+                <a class="mdl-navigation__link" href="/persons/9">Нандалала дас</a>
+                <a class="mdl-navigation__link" href="/persons/21">Варадеша дас</a>
+                <a class="mdl-navigation__link" href="/persons/231">Джулан Прия дд</a>
+                <a class="mdl-navigation__link" href="/persons/201">Диана Дреева</a>
+                <a class="mdl-navigation__link" href="/persons/214">Марианна Надина</a>
+                <a class="mdl-navigation__link" href="/persons/230">Швета Двипа Радха дд</a>
+                <a class="mdl-navigation__link" href="/persons/32">БВ ШКГд Валентина</a>
+                <a class="mdl-navigation__link" href="/persons/63">БВ ШКГд Лила Киртана дд</a>
+                <a class="mdl-navigation__link" href="/persons/33">БВ ШКГд Нила Радхика дд</a>
             @if(Auth::check())
                 <a class="mdl-navigation__link" href="{{ route('books.index') }}">Books</a>
                 <a class="mdl-navigation__link" href="{{ route('bookgroups.index') }}">Book Groups</a>
