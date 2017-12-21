@@ -32,6 +32,7 @@
     </div>
     <div class="mdl-cell mdl-cell--1-col">
         {!! Form::input('text', 'price['.$book->id.']', ((isset($editing['price'][$book->id]))?($editing['price'][$book->id]):($shop?$book->price_shop:$book->price)), ['class' => 'mdl-textfield__input', 'id' => 'price'.$book->id]) !!}
+        {!! Form::input('hidden', 'price_buy['.$book->id.']', ((isset($editing['price_buy'][$book->id]))?($editing['price_buy'][$book->id]):($book->price_buy)), ['class' => 'mdl-textfield__input', 'id' => 'price_buy'.$book->id]) !!}
     </div>
 </div>
 @endforeach

@@ -31,7 +31,7 @@
                 <a class="mdl-navigation__link" href="/operation/51/make">Бх. Иван Маркин</a>
                 <a class="mdl-navigation__link" href="/operation/12/make">Бх. Олег Тоболин</a>
                 <a class="mdl-navigation__link" href="/operation/9/make">Нандалала дас</a>
-                <a class="mdl-navigation__link" href="/operationoperation/21/make">Варадеша дас</a>
+                <a class="mdl-navigation__link" href="/operation/21/make">Варадеша дас</a>
                 <a class="mdl-navigation__link" href="/operation/231/make">Джулан Прия дд</a>
                 <a class="mdl-navigation__link" href="/operation/201/make">Диана Дреева</a>
                 <a class="mdl-navigation__link" href="/operation/214/make">Марианна Надина</a>

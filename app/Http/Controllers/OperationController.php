@@ -47,11 +47,13 @@ class OperationController extends Controller
             foreach($os as $o) {
                 $bookvalues[$o->book_id] = $o->quantity;
                 $price[$o->book_id] = $o->price;
+                $price_buy[$o->book_id] = $o->price_buy;
                 if($o->description) $editing['description'] = $o->description;
                 $custom_date = $o->custom_date;
             }
             $editing['bookvalues'] = $bookvalues;
             $editing['price'] = $price;
+            $editing['price_buy'] = $price_buy;
         }
         $books = Book::get_all_books(Auth::user()->id);
         $os = DB::table('operations')
@@ -254,7 +256,7 @@ class OperationController extends Controller
                         $operation->datetime = $datetime;
                         $operation->custom_date = $request->custom_date;
                         $operation->price = $request->price[$bookid];
-                        $operation->price_buy = $book->price_buy;
+                        $operation->price_buy = $request->price_buy[$bookid];
                         $operation->operation_type = $request->operation_type;
                         $operation->description = $request->description;
                         $operation->save();
