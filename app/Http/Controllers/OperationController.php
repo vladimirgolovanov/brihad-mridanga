@@ -256,7 +256,7 @@ class OperationController extends Controller
                         $operation->datetime = $datetime;
                         $operation->custom_date = $request->custom_date;
                         $operation->price = $request->price[$bookid];
-                        $operation->price_buy = $request->price_buy[$bookid];
+                        $operation->price_buy = $request->price_buy[$bookid]?$request->price_buy[$bookid]:0;
                         $operation->operation_type = $request->operation_type;
                         $operation->description = $request->description;
                         $operation->save();
