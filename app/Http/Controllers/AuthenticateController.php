@@ -16,6 +16,7 @@ class AuthenticateController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+        $this->middleware('jwt.refresh', ['only' => ['refresh']]);
     }
 
     /**
@@ -27,6 +28,11 @@ class AuthenticateController extends Controller
     {
         $users = User::all();
         return $users;
+    }
+
+    public function refresh()
+    {
+        return;
     }
 
     /**

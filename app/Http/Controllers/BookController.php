@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\BookGroup;
 
 use Auth;
 
@@ -21,7 +22,8 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::get_all_books(Auth::user()->id);
-        return $books;
+        $bookgroups = BookGroup::get_all_bookgroups(Auth::user()->id);
+        return ['books' => $books, 'bookgroups' => $bookgroups];
     }
 
     /**
@@ -42,21 +44,18 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-        $book = new Book;
-        $book->shortname = $request->shortname;
-        $book->name = $request->name;
-        $book->pack = $request->pack;
-        $book->bookgroup_id = $request->bookgroup_id?:null;
-        $book->book_type = $request->book_type;
-        $book->price_buy = $request->price_buy;
-        $book->price = $request->price;
-        $book->price_shop = $request->price_shop;
+        if($request->id) {
+            $book = Book::findOrFail($request->id);
+        } else {
+            $book = new Book;
+        }
+        $input = $request->all();
+        $book->fill($input);
         $book->user_id = Auth::user()->id;
+        $book->bookgroup_id = $request->bookgroup_id ?: null;
         $book->save();
-        return redirect()->route('books.index');
+        $book->bookgroup_name = $book->bookgroup_id?BookGroup::get_bookgroup_name($book->bookgroup_id):null;
+        return $book;
     }
 
     /**

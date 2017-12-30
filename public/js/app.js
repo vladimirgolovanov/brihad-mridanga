@@ -3,9 +3,10 @@
     'use strict';
 
     angular
-        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if'])
+        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular.filter'])
         .config(function($stateProvider,
                          $urlRouterProvider,
+                         $mdDateLocaleProvider,
                          $authProvider,
                          $httpProvider,
                          $provide,
@@ -13,7 +14,7 @@
                          $mdIconProvider,
                          $mdThemingProvider) {
 
-            $animateProvider.classNameFilter(/animate/);
+            //$animateProvider.classNameFilter(/animate/);
 
             $mdThemingProvider.theme('default')
                 .primaryPalette('blue-grey')
@@ -23,6 +24,11 @@
 
             $mdIconProvider.defaultIconSet('/static/mdi.svg');
             $mdIconProvider.iconSet('small', '/static/mdi.svg', 24);
+
+            //$mdDateLocaleProvider.formatDate = function(date) {
+            //    var m = moment(date);
+            //    return m.isValid() ? m.format('dd.MM.yyyy') : '';
+            //}
 
             function redirectWhenLoggedOut($q, $injector) {
 
@@ -85,6 +91,26 @@
                     templateUrl: '/views/settingsView.php'/*,
                     controller: 'SettingsController as settings'*/
                 })
+                .state('bookgroups', {
+                    url: '/bookgroups',
+                    templateUrl: '/views/bookgroupsView.php',
+                    controller: 'BookgroupsController as c'
+                })
+                .state('bookgroup', {
+                    url: '/bookgroup/:id',
+                    templateUrl: '/views/bookgroupView.php',
+                    controller: 'BookgroupController as c'
+                })
+                .state('books', {
+                    url: '/books',
+                    templateUrl: '/views/booksView.php',
+                    controller: 'BooksController as booksctrl'
+                })
+                .state('book', {
+                    url: '/book/:id',
+                    templateUrl: '/views/bookView.php',
+                    controller: 'BookController as c'
+                })
                 .state('persons', {
                     url: '/persons',
                     templateUrl: '/views/personsView.php',
@@ -106,31 +132,47 @@
                     controller: 'UserController as user'
                 });
         })
-        .run(function($rootScope, $state, $http) {
+        .run(function($rootScope, $state, $http, $interval, $auth) {
 
             $rootScope.persons = [];
             $rootScope.isLoadingPersons = true;
             $rootScope.books = [];
+            $rootScope.bookgroups = [];
             $rootScope.isLoadingBooks = true;
+            $rootScope.lastdate = new Date();
+
+            var refreshToken = function() {
+                $http.get('admin/refresh')
+                    .then(function(response) {
+                        var refreshToken = response.headers('Authorization');
+                        $auth.setToken(refreshToken.replace('Bearer ', ''));
+                    });
+            }
 
             $rootScope.preloadData = function() {
+
+                $rootScope.stop = $interval(refreshToken, 600000);
 
                 $http.get('admin/persons/visible').then(function(persons) {
                     $rootScope.persons = persons.data;
                     $rootScope.isLoadingPersons = false;
                 }, function(error) {
-                    $rootScope.showError(error);
+                    $rootScope.showMessage(error.data.error, 'error');
                     $rootScope.isLoadingPersons = false;
                 });
 
                 $http.get('admin/books').then(function(books) {
                     $rootScope.books = [];
-                    for(var key in books.data) {
-                        $rootScope.books.push(books.data[key]);
+                    $rootScope.bookgroups = [];
+                    for(var key in books.data['books']) {
+                        $rootScope.books.push(books.data['books'][key]);
+                    }
+                    for(var key in books.data['bookgroups']) {
+                        $rootScope.bookgroups.push(books.data['bookgroups'][key]);
                     }
                     $rootScope.isLoadingBooks = false;
                 }, function(error) {
-                    $rootScope.showError(error);
+                    $rootScope.showMessage(error.data.error, 'error');
                     $rootScope.isLoadingBooks = false;
                 });
             };
@@ -174,7 +216,31 @@
                 }
             });
         })
-        .controller('MainCtrl', function($scope, $rootScope, $mdSidenav, $mdToast, $http, $auth, $state) {
+        .controller('MainCtrl', function($scope, $rootScope, $mdSidenav, $mdToast, $http, $auth, $state, $interval) {
+            $scope.keyPressEvent = function(event) {
+                if(event.ctrlKey && event.altKey) {
+                    switch(event.key) {
+                        case 'p': $state.go('persons'); event.stopPropagation(); break;
+                        case 'b': $state.go('books'); event.stopPropagation(); break;
+                        case '1': $scope.$broadcast('operation', { num: '1' }); break;
+                    }
+                } else if(!event.ctrlKey && !event.altKey && ['books', 'persons'].indexOf($state.current.name) != -1) {
+                    if((event.charCode >= 1040 && event.charCode <= 1103) || event.charCode == 1105 || event.charCode == 1025) {
+                        $scope.$broadcast('charPressed', {
+                            char: event.key
+                        });
+                    } else if(event.key == 'ArrowDown') {
+                        $scope.$broadcast('arrow', { direction: 'down'});
+                    } else if(event.key == 'ArrowUp') {
+                        $scope.$broadcast('arrow', { direction: 'up'});
+                    } else if(event.key == 'Enter') {
+                        $scope.$broadcast('arrow', { direction: 'enter'});
+                    } else if(event.key == 'Escape') {
+                        $scope.$broadcast('arrow', { direction: 'esc'});
+                        event.stopPropagation();
+                    }
+                }
+            }
             $scope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
             };
@@ -184,15 +250,16 @@
                     $scope.persons = persons.data;
                     $scope.isLoadingPersons = false;
                 }, function(error) {
-                    $scope.showError(error);
+                    $rootScope.showMessage(error.data.error, 'error');
                     $scope.isLoadingPersons = false;
                 });
             };
-            $scope.showError = function(text) {
+            $rootScope.showMessage = function(text, theme = '') {
                 $mdToast.show(
                     $mdToast.simple()
-                        .hideDelay(10000)
+                        .hideDelay(5000)
                         .position('top right')
+                        .theme(theme)
                         .textContent(text)
                 );
             };
@@ -209,6 +276,8 @@
 
                     // Remove the current user info from rootscope
                     $rootScope.currentUser = null;
+
+                    $interval.cancel($rootScope.stop);
 
                     // Redirect to auth (necessary for Satellizer 0.12.5+)
                     $state.go('auth');

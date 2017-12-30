@@ -5,7 +5,7 @@
             <md-icon md-svg-icon="arrow-left"></md-icon>
         </md-button>
         <div flex>
-            <h2>{{c.person.name}}</h2>
+            <h2>{{person.name}}</h2>
         </div>
     </div>
 </md-toolbar>
@@ -15,19 +15,19 @@
         <strong>There was an error: </strong> {{persons.error.error}}
         <br>Please go back and login again
     </div>
-    <md-whiteframe class="md-whiteframe-1dp" ng-if="c.person.debt">
+    <md-whiteframe class="md-whiteframe-1dp" ng-if="person.debt">
         <md-list-item>
             <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
             <div class="md-list-item-text" flex>
                 <p>Долг</p>
             </div>
-            <md-text-float class="md-secondary">{{c.person.debt}} р.</md-text-float>
+            <md-text-float class="md-secondary">{{person.debt}} р.</md-text-float>
         </md-list-item>
     </md-whiteframe>
-    <md-whiteframe class="md-whiteframe-1dp" ng-if="c.person.books">
+    <md-whiteframe class="md-whiteframe-1dp" ng-if="person.books">
         <md-list flex>
-            <md-subheader ng-show="c.person.current_books_price">Книги на руках (на {{c.person.current_books_price}} р.)</md-subheader>
-            <md-list-item ng-repeat="book in c.person.books">
+            <md-subheader ng-show="person.current_books_price">Книги на руках (на {{person.current_books_price}} р.)</md-subheader>
+            <md-list-item ng-repeat="book in person.books">
                 <md-icon md-svg-icon="library-books" class="md-primary md-hue-1"></md-icon>
                 <div class="md-list-item-text" flex>
                     <p>{{book.name}}</p>
@@ -39,8 +39,8 @@
     <md-whiteframe class="md-whiteframe-1dp">
         <md-list flex>
             <md-subheader>Операции</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="os in c.person.osgrp" layout="row">
-                <md-icon md-svg-icon="{{c.opIcon[os.type]}}" class="md-accent"></md-icon>
+            <md-list-item class="md-3-line" ng-repeat="os in person.osgrp" layout="row">
+                <md-icon md-svg-icon="{{opIcon[os.type]}}" class="md-accent"></md-icon>
                 <div class="md-list-item-text" flex>
                     <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;"><span ng-repeat="book in os.books_distr">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book.o}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span></h3>
                     <h4 md-colors="{color:'grey-700'}">
@@ -58,7 +58,7 @@
 </md-content>
 <md-toolbar>
     <div class="md-toolbar-tools" layout-align="space-around center">
-        <md-button class="md-icon-button" ui-sref="make({id:c.person.id})" ng-repeat="item in ['inbox', 'currency-rub', 'checkbox-marked-circle', 'account-switch', 'minus']">
+        <md-button aria-label="{{item}}" class="md-icon-button" ui-sref="make({id:person.id})" ng-repeat="item in ['inbox', 'currency-rub', 'checkbox-marked-circle', 'account-switch', 'minus']">
             <md-icon md-svg-icon="{{item}}"></md-icon>
         </md-button>
     </div>

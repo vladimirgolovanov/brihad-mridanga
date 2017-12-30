@@ -1,10 +1,19 @@
 <div layout="column" layout-fill>
 <md-toolbar>
     <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" ng-click="toggleSidenav('left')" hide-gt-xs aria-label="Menu">
+        <md-button class="md-icon-button" ng-click="toggleSidenav('left')" hide-gt-sm aria-label="Menu">
             <md-icon md-svg-icon="menu"></md-icon>
         </md-button>
-        <h2 flex>Persons</h2>
+        <h2 flex ng-hide="showSearch">Persons</h2>
+        <md-input-container ng-show="showSearch" flex class="search-bar">
+            <input type="text" focus-if="showSearch" ng-model="searchQ" ng-focus="searchIsFocused = true;" ng-blur="searchIsFocused = false;">
+        </md-input-container>
+        <md-button class="md-icon-button" ng-hide="showSearch" ng-click="toggleSearch()" aria-label="search">
+            <md-icon md-svg-icon="magnify"></md-icon>
+        </md-button>
+        <md-button class="md-icon-button" ng-show="showSearch" ng-click="toggleSearch()" aria-label="search">
+            <md-icon md-svg-icon="close"></md-icon>
+        </md-button>
         <md-menu md-position-mode="target-right target" >
             <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                 <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
@@ -14,7 +23,7 @@
                     <md-button ng-click="showPersons('all');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="account-multiple"></md-icon>
-                            <p flex>Показать всех</p>
+                            <p flex>Show all</p>
                         </div>
                     </md-button>
                 </md-menu-item>
@@ -22,7 +31,7 @@
                     <md-button ng-click="personsctrl.personsOrder('name');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="sort-alphabetical"></md-icon>
-                            <p flex>По алфавиту</p>
+                            <p flex>By ABC</p>
                         </div>
                     </md-button>
                 </md-menu-item>
@@ -30,7 +39,7 @@
                     <md-button ng-click="personsctrl.personsOrder('debt');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="sort-numeric"></md-icon>
-                            <p flex>По долгам</p>
+                            <p flex>By dept</p>
                         </div>
                     </md-button>
                 </md-menu-item>
@@ -42,7 +51,7 @@
 <md-content flex layout="row" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingPersons" class="md-accent" md-diameter="20px"></md-progress-linear>
     <md-list flex ng-hide="isLoadingPersons">
-        <md-list-item class="md-2-line" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsctrl.personsOrderBy:personsctrl.personsReverse">
+        <md-list-item class="md-2-line" md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
             <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
                 <h3 style="overflow: hidden; text-overflow: ellipsis; width:200px;">{{person.name}}</h3>
                 <div layout="row">

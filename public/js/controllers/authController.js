@@ -33,8 +33,10 @@
             $auth.login(credentials).then(function(data) {
                 return $http.get('api/authenticate/user');
             }, function(error) {
-                vm.loginError = true;
-                vm.loginErrorText = error.data.error;
+                switch(error.data.error) {
+                    case 'invalid_credentials': $rootScope.showMessage('Invalid login/password combination', 'error'); break;
+                    default: $rootScope.showMessage(error.data.error, 'error');
+                }
 
                 // Because we returned the $http.get request in the $auth.login
                 // promise, we can chain the next promise to the end here

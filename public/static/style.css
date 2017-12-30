@@ -6,11 +6,31 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.search-bar .md-errors-spacer {
+	display:none;
+}
+.search-bar * { color: white !important; }
+md-toast.md-error-theme .md-toast-content {
+	background-color: darkred;
+}
+a.md-button {
+	display:flex;
+}
+.md-button.md-fab-bottom-right {
+	top: auto;
+	right: 10px !important;
+	bottom: 10px !important;
+	left: auto;
+	position: fixed;
+}
 .up_down_number {
 	width: 28px;
 	display: inline;
 	padding-right: 10px;
 	text-align: right;
+}
+.highlighted {
+	background-color:red;
 }
 .greyed * {
 	color: #999 !important;

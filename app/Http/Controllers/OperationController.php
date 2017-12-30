@@ -214,22 +214,7 @@ class OperationController extends Controller
                 $operation->datetime = date("Y-m-d H:i:s");
                 $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
                 $operation->price = $book['price'];
-                $operation->operation_type = 1;
-                $operation->description = "";
-                $operation->save();
-            }
-        }
-    }
-    public function store(Request $request) {
-        foreach($request->books as $book) {
-            if($book['qty']) {
-                $operation = new Operation;
-                $operation->book_id = $book['id'];
-                $operation->quantity = $book['qty'];
-                $operation->person_id = $request->id;
-                $operation->datetime = date("Y-m-d H:i:s");
-                $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
-                $operation->price = $book['price'];
+                $operation->price_buy = $book['price_buy'];
                 $operation->operation_type = 1;
                 $operation->description = "";
                 $operation->save();

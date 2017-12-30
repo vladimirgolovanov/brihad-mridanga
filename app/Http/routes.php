@@ -22,7 +22,6 @@ Route::group(['prefix' => 'api'], function() {
     Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
     Route::post('authenticate', 'AuthenticateController@authenticate');
     Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
-
     Route::get('db/{userid}', ['middleware' => 'cors', 'uses' => 'OrderController@get_books_db']);
     Route::post('order', ['middleware' => 'cors', 'uses' => 'OrderController@make_order']);
 });
@@ -31,8 +30,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {
     Route::resource('persons/{param}', 'PersonController', ['only' => ['index']]);
     Route::get('persons/show/{personid}', 'PersonController@show');
     Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
-
     Route::resource('books', 'BookController');
+    Route::post('book', 'BookController@store');
+    Route::post('bookgroup', 'BookGroupController@store');
+    Route::get('refresh', 'AuthenticateController@refresh');
 });
 //    Route::get('persons/{personid}/operation/{operationid}', ['as'=>'persons.operation', 'uses'=>'PersonController@operation']);
 //    Route::get('persons/{personid}/operation/{operationid}/edit/{bookid}', ['as'=>'persons.edit.operation', 'uses'=>'PersonController@edit_operation']);

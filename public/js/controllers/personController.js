@@ -6,21 +6,28 @@
         .module('bmApp')
         .controller('PersonController', PersonController);
 
-    function PersonController($http, $auth, $rootScope, $state, $stateParams) {
+    function PersonController($http, $auth, $rootScope, $scope, $state, $stateParams) {
 
         var vm = this;
-        vm.isLoading = true;
-        vm.person;
-        vm.opIcon = {
+
+        $scope.isLoading = true;
+        $scope.person;
+        $scope.opIcon = {
             'remain': 'checkbox-marked-circle'
         };
 
         $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
-            vm.person = person.data;
-            vm.isLoading = false;
+            $scope.person = person.data;
+            $scope.isLoading = false;
         }, function(error) {
-            vm.error = error;
-            vm.isLoading = false;
+            $scope.error = error;
+            $scope.isLoading = false;
+        });
+
+        $scope.$on('operation', function(event, data) {
+            switch(data.num) {
+                case '1': $state.go('make', { id: $scope.person.id}); break;
+            }
         });
     }
 

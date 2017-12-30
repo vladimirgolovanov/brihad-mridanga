@@ -41,14 +41,16 @@ class BookGroupController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-        $bg = new BookGroup;
-        $bg->name = $request->name;
+        if($request->id) {
+            $bg = BookGroup::findOrFail($request->id);
+        } else {
+            $bg = new BookGroup;
+        }
+        $input = $request->all();
+        $bg->fill($input);
         $bg->user_id = Auth::user()->id;
         $bg->save();
-        return redirect()->route('bookgroups.index');
+        return $bg;
     }
 
     /**
