@@ -24,6 +24,7 @@
     "angular": "^1.6.8",
     "angular-jwt": "^0.0.9",
     "angular-material": "^1.1.5",
+    "angular-filter": "^0.5.17",
     "satellizer": "^0.15.5",
     "ng-focus-if": "^1.0.7",
     "angular-moment": "^1.2.0"
