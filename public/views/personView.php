@@ -7,6 +7,9 @@
         <div flex>
             <h2>{{person.name}}</h2>
         </div>
+        <md-button class="md-icon-button">
+            <md-icon md-svg-icon="account-edit"></md-icon>
+        </md-button>
     </div>
 </md-toolbar>
 <md-content flex layout="column" layout-margin id="content">
@@ -19,38 +22,55 @@
         <md-list-item>
             <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
             <div class="md-list-item-text" flex>
-                <p>Долг</p>
+                <p>Debt</p>
             </div>
             <md-text-float class="md-secondary">{{person.debt}} р.</md-text-float>
         </md-list-item>
     </md-whiteframe>
-    <md-whiteframe class="md-whiteframe-1dp" ng-if="person.books">
+    <md-whiteframe class="md-whiteframe-1dp" ng-if="person.laxmi">
+        <md-list-item>
+            <md-icon md-svg-icon="currency-rub"></md-icon>
+            <div class="md-list-item-text" flex>
+                <p>Laxmi</p>
+            </div>
+            <md-text-float class="md-secondary">{{person.laxmi}} р.</md-text-float>
+        </md-list-item>
+    </md-whiteframe>
+    <md-whiteframe class="md-whiteframe-1dp" ng-if="booksCount">
         <md-list flex>
             <md-subheader ng-show="person.current_books_price">Книги на руках (на {{person.current_books_price}} р.)</md-subheader>
             <md-list-item ng-repeat="book in person.books">
                 <md-icon md-svg-icon="library-books" class="md-primary md-hue-1"></md-icon>
-                <div class="md-list-item-text" flex>
+                <div class="md-list-item-text nowrap" flex>
                     <p>{{book.name}}</p>
                 </div>
-                <md-text-float class="md-secondary">{{book[0]}}</md-text-float>
+                <md-text-float class="md-secondary book-list-num">{{book[0]}}</md-text-float>
             </md-list-item>
         </md-list>
     </md-whiteframe>
     <md-whiteframe class="md-whiteframe-1dp">
-        <md-list flex>
+        <md-list flex class="operations">
             <md-subheader>Операции</md-subheader>
-            <md-list-item class="md-3-line" ng-repeat="os in person.osgrp" layout="row">
-                <md-icon md-svg-icon="{{opIcon[os.type]}}" class="md-accent"></md-icon>
+<!--            <md-list-item ui-sref="os.type == 1 ? editmake({id:person.id, op:os.id}) : (os.type == 2 ? editLaxmi({id:person.id, op:os.id}) : null)" class="md-3-line" ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">-->
+            <md-list-item ng-click="editOperation(os)" class="md-3-line" md-no-ink ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">
+                <md-icon md-svg-icon="{{opIcon[os.type].icon}}" ng-class="opIcon[os.type].class"></md-icon>
                 <div class="md-list-item-text" flex>
-                    <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;"><span ng-repeat="book in os.books_distr">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book.o}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span></h3>
-                    <h4 md-colors="{color:'grey-700'}">
+                    <p><span md-colors="{color:opIcon[os.type].color}">{{os.date | date:'dd.MM.yy'}}</span><span ng-if="os.description" md-colors="{color:'grey'}"> / {{os.description}}</span></p>
+                    <h3 ng-if="os.type == 'remains'"><span ng-if="!os.books_distr.length">:(</span><span ng-repeat="book in os.books_distr">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'primary-400'}">{{book.o}}</span><span md-colors="{color:'primary-200'}" ng-if="!$last"> &bullet; </span></span></span></h3>
+                    <h3 ng-if="os.type == 'make'"><span ng-if="!os.books.length">:(</span><span ng-repeat="book in os.books">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book.o}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span></h3>
+                    <h3 ng-if="os.type == 'return'"><span ng-if="!os.books.length">:(</span><span ng-repeat="book in os.books">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book.o}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span></h3>
+                    <h3 ng-if="os.type == 'Laxmi'"><span>{{os.Laxmi}} р.</span></h3>
+                    <h4 md-colors="{color:'primary'}" ng-if="os.type == 'remains'">
+                        <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
+                        <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;
+                        <span ng-if="os.total_gain" md-colors="{color:'green'}"><md-icon md-svg-icon="small:currency-rub" class="s12"></md-icon><md-icon md-svg-icon="small:arrow-up" class="s12"></md-icon> {{os.total_gain}}</span></h4>
+                    <h4 md-colors="{color:'grey-700'}" ng-if="os.type == 'make'">
                         <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;
-                        <md-icon md-svg-icon="small:currency-rub" class="s12" md-colors="{color:'grey-500'}"></md-icon><md-icon md-svg-icon="small:arrow-up" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_gain}}</h4>
-                    <p md-colors="{color:'grey'}">{{os.description ? os.description : '&nbsp;'}}</p>
+                        <md-icon md-svg-icon="small:currency-rub" class="s12"></md-icon> {{os.total_Laxmi}}</h4>
+                    <h4 ng-if="os.type == 'Laxmi' || os.type == 'return'">&nbsp;</h4>
                     <md-divider></md-divider>
                 </div>
-                <md-text-float class="md-secondary md-caption" md-colors="{color:'grey'}">{{os.date | date:'d MMM yy'}}</md-text-float>
 
             </md-list-item>
         </md-list>
@@ -58,8 +78,20 @@
 </md-content>
 <md-toolbar>
     <div class="md-toolbar-tools" layout-align="space-around center">
-        <md-button aria-label="{{item}}" class="md-icon-button" ui-sref="make({id:person.id})" ng-repeat="item in ['inbox', 'currency-rub', 'checkbox-marked-circle', 'account-switch', 'minus']">
-            <md-icon md-svg-icon="{{item}}"></md-icon>
+        <md-button aria-label="Issue books" class="md-icon-button" ui-sref="make({id:person.id})">
+            <md-icon md-svg-icon="plus-circle-outline"></md-icon>
+        </md-button>
+        <md-button aria-label="Laxmi" class="md-icon-button" ui-sref="Laxmi({id:person.id})">
+            <md-icon md-svg-icon="cash-100"></md-icon>
+        </md-button>
+        <md-button aria-label="Remains" class="md-icon-button" ui-sref="remains({id:person.id})">
+            <md-icon md-svg-icon="checkbox-marked"></md-icon>
+        </md-button>
+        <md-button aria-label="Exchange" class="md-icon-button" ui-sref="exchange({id:person.id})">
+            <md-icon md-svg-icon="cached"></md-icon>
+        </md-button>
+        <md-button aria-label="Return" class="md-icon-button" ui-sref="return({id:person.id})">
+            <md-icon md-svg-icon="undo"></md-icon>
         </md-button>
     </div>
 </md-toolbar>

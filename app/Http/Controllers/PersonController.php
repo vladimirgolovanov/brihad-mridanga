@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Person;
 use App\Operation;
+use App\Book;
 
 use Auth;
 
@@ -26,6 +27,7 @@ class PersonController extends Controller
             $p->last_remains_date = Operation::get_last_remains_date($p->id);
             list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($p->id);
             $p->debt = $debt;
+            $p->laxmi = $laxmi;
             $p->current_books_price = $current_books_price;
             $ps[] = $p;
         }
@@ -64,6 +66,17 @@ class PersonController extends Controller
         return redirect()->route('persons.index');
     }
 
+    public function current_books($id, $tilldate) {
+        list($os, $current_books) = Operation::get_operations($id, $tilldate);
+        $books = Book::get_all_books(Auth::user()->id);
+        $boooks = [];
+        foreach($current_books as $k => $v) {
+            $boooks[$k] = $books[$k];
+            $boooks[$k]->current_qty = $v[0];
+            $boooks[$k]->qty = null;
+        }
+        return $boooks;
+    }
     /**
      * Display the specified resource.
      *

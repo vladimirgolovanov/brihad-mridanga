@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular.filter'])
+        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular.filter', 'angularMoment'])
         .config(function($stateProvider,
                          $urlRouterProvider,
                          $mdDateLocaleProvider,
@@ -12,10 +12,15 @@
                          $provide,
                          $animateProvider,
                          $mdIconProvider,
-                         $mdThemingProvider) {
+                         $mdThemingProvider,
+                         $mdAriaProvider) {
+
+            // TEMPORARY DISABLED
+            $mdAriaProvider.disableWarnings();
 
             //$animateProvider.classNameFilter(/animate/);
 
+            $mdThemingProvider.theme('error');
             $mdThemingProvider.theme('default')
                 .primaryPalette('blue-grey')
                 .accentPalette('orange');
@@ -25,10 +30,9 @@
             $mdIconProvider.defaultIconSet('/static/mdi.svg');
             $mdIconProvider.iconSet('small', '/static/mdi.svg', 24);
 
-            //$mdDateLocaleProvider.formatDate = function(date) {
-            //    var m = moment(date);
-            //    return m.isValid() ? m.format('dd.MM.yyyy') : '';
-            //}
+            $mdDateLocaleProvider.formatDate = function(date) {
+                return moment(date).format('DD.MM.YYYY');
+            };
 
             function redirectWhenLoggedOut($q, $injector) {
 
@@ -126,6 +130,61 @@
                     templateUrl: '/views/makeView.php',
                     controller: 'MakeController as c'
                 })
+                .state('editmake', {
+                    url: '/person/:id/make/:op',
+                    templateUrl: '/views/makeView.php',
+                    controller: 'MakeController as c'
+                })
+                .state('Laxmi', {
+                    url: '/person/:id/Laxmi',
+                    templateUrl: '/views/LaxmiView.php',
+                    controller: 'LaxmiController as c'
+                })
+                .state('editLaxmi', {
+                    url: '/person/:id/Laxmi/:op',
+                    templateUrl: '/views/LaxmiView.php',
+                    controller: 'LaxmiController as c'
+                })
+                .state('return', {
+                    url: '/person/:id/return',
+                    templateUrl: '/views/reView.php',
+                    data: {
+                        optype: 'return'
+                    },
+                    controller: 'ReController as c'
+                })
+                .state('editreturn', {
+                    url: '/person/:id/return/:op',
+                    templateUrl: '/views/reView.php',
+                    data: {
+                        optype: 'return'
+                    },
+                    controller: 'ReController as c'
+                })
+                .state('remains', {
+                    url: '/person/:id/remains',
+                    templateUrl: '/views/reView.php',
+                    data: {
+                        optype: 'remains'
+                    },
+                    controller: 'ReController as c'
+                })
+                .state('editremains', {
+                    url: '/person/:id/remains/:op',
+                    templateUrl: '/views/reView.php',
+                    data: {
+                        optype: 'remains'
+                    },
+                    controller: 'ReController as c'
+                })
+                .state('exchange', {
+                    url: '/person/:id/exchange',
+                    templateUrl: '/views/reView.php',
+                    data: {
+                        optype: 'exchange'
+                    },
+                    controller: 'ReController as c'
+                })
                 .state('users', {
                     url: '/users',
                     templateUrl: '/views/userView.php',
@@ -140,6 +199,7 @@
             $rootScope.bookgroups = [];
             $rootScope.isLoadingBooks = true;
             $rootScope.lastdate = new Date();
+            $rootScope.mousePresent = false;
 
             var refreshToken = function() {
                 $http.get('admin/refresh')
@@ -149,12 +209,30 @@
                     });
             }
 
+            $rootScope.blurAllInputs = function() {
+                document.activeElement.blur();
+                var inputs = document.querySelectorAll('input');
+                for(var i=0; i < inputs.length; i++) {
+                    inputs[i].blur();
+                }
+            }
+
+            $rootScope.getPersonById = function(id) {
+                var obj = {'id': id};
+                return $rootScope.persons.find(function(el) {
+                    return this.id == el.id;
+                }, obj);
+            }
+
             $rootScope.preloadData = function() {
 
                 $rootScope.stop = $interval(refreshToken, 600000);
 
                 $http.get('admin/persons/visible').then(function(persons) {
-                    $rootScope.persons = persons.data;
+                    $rootScope.persons = persons.data.map(function(item, index, arr) {
+                        item.last_remains_date_formated = item.last_remains_date?moment(item.last_remains_date).format('DD.MM.YY'):'';
+                        return item;
+                    });
                     $rootScope.isLoadingPersons = false;
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');
@@ -217,29 +295,42 @@
             });
         })
         .controller('MainCtrl', function($scope, $rootScope, $mdSidenav, $mdToast, $http, $auth, $state, $interval) {
+            $scope.mouseMove = function(event) {
+                $scope.mousePresent = true;
+            }
             $scope.keyPressEvent = function(event) {
                 if(event.ctrlKey && event.altKey) {
                     switch(event.key) {
                         case 'p': $state.go('persons'); event.stopPropagation(); break;
                         case 'b': $state.go('books'); event.stopPropagation(); break;
+                        case 'd':
+                        case 'в': $scope.$broadcast('date'); event.stopPropagation(); break;
+                        case 'l':
+                        case 'д': $scope.$broadcast('payed'); event.stopPropagation(); break;
+                        case 's':
+                        case 'ы': $scope.$broadcast('descr'); event.stopPropagation(); break;
                         case '1': $scope.$broadcast('operation', { num: '1' }); break;
+                        case '2': $scope.$broadcast('operation', { num: '2' }); break;
+                        case '3': $scope.$broadcast('operation', { num: '3' }); break;
+                        case '4': $scope.$broadcast('operation', { num: '4' }); break;
+                        case '5': $scope.$broadcast('operation', { num: '5' }); break;
+                        case 'Backspace': $scope.$broadcast('back'); event.stopPropagation(); break;
+                        case 'Enter': $scope.$broadcast('submit'); event.stopPropagation(); break;
                     }
-                } else if(!event.ctrlKey && !event.altKey && ['books', 'persons'].indexOf($state.current.name) != -1) {
+                } else if(!event.ctrlKey && !event.altKey && ['books', 'persons', 'person', 'make', 'Laxmi'].indexOf($state.current.name) != -1) {
                     if((event.charCode >= 1040 && event.charCode <= 1103) || event.charCode == 1105 || event.charCode == 1025) {
                         $scope.$broadcast('charPressed', {
                             char: event.key
                         });
                     } else if(event.key == 'ArrowDown') {
-                        $scope.$broadcast('arrow', { direction: 'down'});
+                        $scope.$broadcast('arrow', { direction: 'down' });
                     } else if(event.key == 'ArrowUp') {
-                        $scope.$broadcast('arrow', { direction: 'up'});
+                        $scope.$broadcast('arrow', { direction: 'up' });
                     } else if(event.key == 'Enter') {
-                        $scope.$broadcast('arrow', { direction: 'enter'});
-                    } else if(event.key == 'Escape') {
-                        $scope.$broadcast('arrow', { direction: 'esc'});
-                        event.stopPropagation();
+                        $scope.$broadcast('arrow', { direction: 'enter' });
                     }
                 }
+//                console.log(event);
             }
             $scope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
@@ -254,7 +345,7 @@
                     $scope.isLoadingPersons = false;
                 });
             };
-            $rootScope.showMessage = function(text, theme = '') {
+            $rootScope.showMessage = function(text, theme) {
                 $mdToast.show(
                     $mdToast.simple()
                         .hideDelay(5000)

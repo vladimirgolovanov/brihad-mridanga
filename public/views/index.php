@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 
 </head>
-<body ng-app="bmApp" ng-controller="MainCtrl" layout="row" ng-keypress="keyPressEvent($event)">
+<body ng-app="bmApp" ng-controller="MainCtrl" layout="row" ng-keypress="keyPressEvent($event)" ng-mousemove="mouseMove($event)">
     <md-sidenav layout="column" ng-show="authenticated" class="md-sidenav-left md-whiteframe-z2 animate" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
         <md-toolbar class="md-accent md-hue-1">
             <div class="md-toolbar-tools">
@@ -31,7 +31,7 @@
         </md-list>
     </md-sidenav>
     <div class="container" flex>
-        <div ui-view></div>
+        <div ui-view ng-click="angular.noop()"></div>
     </div>
 
 </body>
@@ -46,6 +46,8 @@
 <script src="/bower_components/angular-material/angular-material.min.js"></script>
 <script src="/bower_components/ng-focus-if/focusIf.min.js"></script>
 <script src="/bower_components/angular-filter/dist/angular-filter.min.js"></script>
+<script src="/bower_components/moment/moment.js"></script>
+<script src="/bower_components/angular-moment/angular-moment.js"></script>
 
 <script src="/js/app.js"></script>
 <script src="/js/controllers/authController.js"></script>
@@ -53,9 +55,12 @@
 <script src="/js/controllers/personController.js"></script>
 <script src="/js/controllers/personsController.js"></script>
 <script src="/js/controllers/makeController.js"></script>
+<script src="/js/controllers/reController.js"></script>
+<script src="/js/controllers/LaxmiController.js"></script>
 <script src="/js/controllers/booksController.js"></script>
 <script src="/js/controllers/bookController.js"></script>
 <script src="/js/controllers/bookgroupsController.js"></script>
 <script src="/js/controllers/bookgroupController.js"></script>
+<script src="/js/controllers/descrController.js"></script>
 
 </html>

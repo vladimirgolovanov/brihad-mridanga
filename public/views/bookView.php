@@ -7,7 +7,7 @@
         <div flex>
             <h2>Book</h2>
         </div>
-        <md-button class="md-icon-button" ng-click="c.submit();" ng-disabled="bookForm.$invalid">
+        <md-button class="md-icon-button" ng-click="c.submit();" ng-disabled="bookForm.$invalid || c.submiting">
             <md-icon md-svg-icon="check" ng-hide="c.submiting"></md-icon>
             <md-progress-circular ng-show="c.submiting" class="md-hue-2" md-diameter="24px"></md-progress-circular>
         </md-button>

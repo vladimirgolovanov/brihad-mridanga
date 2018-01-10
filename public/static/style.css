@@ -1,16 +1,84 @@
 input[type='number'] {
-    -moz-appearance:textfield;
+    -moz-appearance:textfield !important;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.operations .md-button {
+	background: none !important;
+}
+.md-button.md-small {
+	min-width: 1%;
+	margin:6px 0px;
+}
+.return-books-list {
+	padding-bottom:0px;
+}
+.return-books-list .md-list-item {
+	padding-right:6px;
+}
+.books-list {
+	padding-bottom:0px;
+}
+.list-form {
+	margin:0px;
+}
+.toolbar-subtitle {
+	font-size:12px;
+}
+.book-list-num {
+	margin-left:20px;
+}
+.nowrap, .nowrap p, .selected-book p, .operations .md-list-item-text p, .books-list p {
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.operation-icon {
+	margin-right: 16px;
+}
+.Laxmi-input {
+	padding:10px 40px 10px 9px !important;
+}
+.descr-textarea .md-errors-spacer {
+	display:none;
+}
+.descr-textarea {
+	margin-bottom:0px;
+}
+.datepick .md-datepicker-input-container {
+	padding-left: 4px;
+	margin-top:10px;
+}
+.datepick .md-datepicker-input {
+	min-width: 100px;
+}
+.lastdate {
+	margin-top: 1px;
+}
+.lastdate span {
+	margin: 0px 6px 0px 12px;
+}
+.datepick .md-datepicker-button {
+	display: none;
+}
+.payed-input.md-icon-left {
+	padding-left:20px;
+}
+.payed-input input {
+	border-bottom-width:2px !important;
+	border-bottom-style:solid !important;
+}
+.payed-input .md-errors-spacer {
+	display:none;
+}
 .search-bar .md-errors-spacer {
 	display:none;
 }
 .search-bar * { color: white !important; }
-md-toast.md-error-theme .md-toast-content {
+.md-toast.md-error-theme .md-toast-content {
 	background-color: darkred;
 }
 a.md-button {
@@ -32,8 +100,20 @@ a.md-button {
 .highlighted {
 	background-color:red;
 }
+.price-button {
+	font-size:20px;
+	padding:6px 8px;
+	margin:0px 0px 4px 0px !important;
+	line-height:16px;
+	min-height:16px;
+	min-width:0px;
+	height:30px;
+}
 .greyed * {
 	color: #999 !important;
+}
+.grey-font {
+	color: #CCC !important;
 }
 .float-toolbar {
 	height: 36px;
@@ -82,7 +162,7 @@ a.md-button {
 	margin-bottom:2px;
 }
 
-.books-list md-input-container {
+.books-list .md-input-container {
 	margin:4px 0px 0px 0px;
 }
 

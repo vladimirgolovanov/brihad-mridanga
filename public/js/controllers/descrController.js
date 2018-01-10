@@ -4,25 +4,14 @@
 
     angular
         .module('bmApp')
-        .controller('BooksController', BooksController);
+        .controller('DescrController', DescrController);
 
-    function BooksController($http, $auth, $rootScope, $scope, $state) {
+    function DescrController($scope, $mdBottomSheet, descr) {
 
-        var vm = this;
-
-        $scope.searchQ = '';
-        $scope.showSearch = false;
-        $scope.searchIsFocused = false;
-        $scope.toggleSearch = function() {
-            $scope.showSearch = !$scope.showSearch;
+        $scope.descr = descr;
+        $scope.submit = function() {
+            $mdBottomSheet.hide($scope.descr);
         };
-
-        $scope.$on('charPressed', function(event, data) {
-            $scope.showSearch = true;
-            if(!$scope.searchIsFocused) {
-                $scope.searchQ += data.char;
-            }
-        });
 
     }
 

@@ -11,10 +11,16 @@
         switch($state.current.data.optype) {
             case 'return': $scope.optype = 'return'; $scope.optypeNum = 4; break;
             case 'remains': $scope.optype = 'remains'; $scope.optypeNum = 10; break;
-            case 'exchange': $scope.optype = 'exchange'; $scope.optypeNum = 5; break;
+            case 'exchange': $scope.optype = 'exchange'; $scope.optypeNum = 4; break;
         }
 
         var self = this;
+
+        $scope.simulateQuery = false;
+        $scope.querySearch   = querySearch;
+        $scope.selectedItemChange = selectedItemChange;
+        $scope.searchTextChange   = searchTextChange;
+        $scope.setFocus = setFocus;
 
         $scope.submit = submit;
         $scope.canSubmit = canSubmit;
@@ -27,6 +33,7 @@
 
         $scope.id = $stateParams.id;
         $scope.op = null;
+        $scope.exchangeId = null;
 
         $scope.lastdate = $rootScope.lastdate;
         $scope.setDateToLast = setDateToLast;
@@ -42,6 +49,7 @@
                 $scope.descr = result.data.descr;
                 $scope.date = new Date(result.data.date);
                 $scope.isLoading = false;
+                $scope.setFocus();
             }, function(error) {
                 $rootScope.showMessage(error.statusText, 'error');
                 $scope.isLoading = false;
@@ -50,6 +58,7 @@
         } else {
             $scope.date = new Date();
             getCurrentBooksByDate();
+            $scope.setFocus();
         }
 
         $scope.payed = null;
@@ -108,11 +117,11 @@
             $scope.submit();
         }
         function canSubmit() {
-            return $scope.form.$valid && $scope.totalQty() && !$scope.submiting && !$scope.isLoading;
+            return $scope.form.$valid && $scope.totalQty() && !$scope.submiting && !$scope.isLoading && ($scope.optype != 'exchange' || $scope.exchangeId);
         }
         function submit() {
             $rootScope.lastdate = $scope.date;
-            var postdata = { 'datetime': $scope.op, 'operation_type': $scope.optypeNum, 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'descr':$scope.descr };
+            var postdata = { 'datetime': $scope.op, 'operation_type': $scope.optypeNum, 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'descr':$scope.descr, 'exchange_id':$scope.exchangeId };
             $http.post('admin/operation', postdata).then(function(response) {
                 $state.go('person', {'id': $scope.id});
             }, function(response) {
@@ -139,6 +148,37 @@
                 $scope.isLoading = false;
                 $scope.op = null;
             });
+        }
+
+        function querySearch (query) {
+            if(query) {
+                var ps = $rootScope.persons.map(createFilterFor(query));
+                return ps.filter(function(value) {
+                    return value !== null;
+                });
+            } else return null;
+        }
+        function searchTextChange(text) {
+        }
+        function selectedItemChange(item) {
+            if(typeof(item) === 'undefined') $scope.exchangeId = null;
+            else $scope.exchangeId = item.id;
+        }
+        function setFocus() {
+            setTimeout(function() {
+                document.querySelector("#autoCompleteId").focus();
+            }, 0);
+        }
+        function createFilterFor(query) {
+            var lowercaseQuery = angular.lowercase(query);
+            return function filterFn(state) {
+                var lowercaseState = angular.lowercase(state.shortname+':'+state.name);
+                var idx = lowercaseState.indexOf(lowercaseQuery);
+                if(idx !== -1) {
+                    state.orderby = idx;
+                    return state;
+                } else return null;1
+            };
         }
 
     }

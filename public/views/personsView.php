@@ -28,7 +28,7 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                    <md-button ng-click="personsctrl.personsOrder('name');">
+                    <md-button ng-click="personsOrder('name');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="sort-alphabetical"></md-icon>
                             <p flex>By ABC</p>
@@ -36,7 +36,7 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                    <md-button ng-click="personsctrl.personsOrder('debt');">
+                    <md-button ng-click="personsOrder('debt');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="sort-numeric"></md-icon>
                             <p flex>By dept</p>
@@ -53,11 +53,10 @@
     <md-list flex ng-hide="isLoadingPersons">
         <md-list-item class="md-2-line" md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
             <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
-                <h3 style="overflow: hidden; text-overflow: ellipsis; width:200px;">{{person.name}}</h3>
+                <h3>{{person.name}}</h3>
                 <div layout="row">
-                    <p class="md-caption"><span ng-show="person.current_books_price">{{person.current_books_price}} р.</span><span ng-show="person.current_books_price && person.debt"> &bullet; </span><span ng-show="person.debt"><span style="color:red;">{{person.debt}} р.</span></span></p>
+                    <p class="md-caption"><span ng-show="person.last_remains_date_formated" md-colors="{color:'primary-400'}">{{person.last_remains_date_formated}}</span><span ng-show="person.last_remains_date_formated && person.current_books_price" class="grey-font"> &bullet; </span><span ng-show="(person.current_books_price - person.laxmi) > 0">{{(person.current_books_price - person.laxmi)}} р.</span><span ng-show="(person.last_remains_date_formated || person.current_books_price) && person.debt" class="grey-font"> &bullet; </span><span ng-show="person.debt"><span md-colors="{color:'warn'}">{{person.debt}} р.</span></span></p>
                 </div>
-                <div class="md-secondary md-caption" style="width:70px;">{{person.last_remains_date}}</div>
             </div>
         </md-list-item>
         <div class="alert alert-danger" ng-if="persons.error">
