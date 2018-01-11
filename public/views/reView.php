@@ -15,30 +15,32 @@
             <md-progress-circular ng-show="submiting" class="md-hue-2" md-diameter="24px"></md-progress-circular>
         </md-button>
     </div>
-    <md-autocomplete placeholder="To"
-                     md-no-cache="noCache"
-                     md-selected-item="selectedItem"
-                     md-search-text-change="searchTextChange(searchText)"
-                     md-search-text="searchText"
-                     md-selected-item-change="selectedItemChange(item)"
-                     md-items="item in querySearch(searchText) | orderBy:'orderby'"
-                     md-menu-class="autocomplete-custom-template"
-                     md-item-text="item.name"
-                     md-input-id="autoCompleteId"
-                     md-min-length="0"
-                     md-autoselect="true"
-                     key-focus flex
-                     ng-show="optype == 'exchange'"
-                     style="border-radius:0px;"
-                     tabindex="1"
-                     md-autofocus>
-        <md-item-template>
-            <span md-highlight-text="searchText" md-highlight-flags="i" class="item-title">{{item.name}}</span>
-        </md-item-template>
-        <md-not-found>
-            No states matching "{{searchText}}" were found.
-        </md-not-found>
-    </md-autocomplete>
+    <div>
+        <md-autocomplete placeholder="To"
+                         md-no-cache="noCache"
+                         md-selected-item="selectedItem"
+                         md-search-text-change="searchTextChange(searchText)"
+                         md-search-text="searchText"
+                         md-selected-item-change="selectedItemChange(item)"
+                         md-items="item in querySearch(searchText) | orderBy:'orderby'"
+                         md-menu-class="autocomplete-custom-template"
+                         md-item-text="item.name"
+                         md-input-id="autoCompleteId"
+                         md-min-length="0"
+                         md-autoselect="true"
+                         key-focus flex
+                         ng-show="optype == 'exchange'"
+                         style="border-radius:0px;"
+                         tabindex="1"
+                         md-autofocus>
+            <md-item-template>
+                <span md-highlight-text="searchText" md-highlight-flags="i" class="item-title">{{item.name}}</span>
+            </md-item-template>
+            <md-not-found>
+                No states matching "{{searchText}}" were found.
+            </md-not-found>
+        </md-autocomplete>
+    </div>
 </md-toolbar>
 <md-progress-linear md-mode="indeterminate" ng-show="showSearch > 2" class="md-accent" md-diameter="20px"></md-progress-linear>
 <md-content flex>

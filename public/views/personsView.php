@@ -50,8 +50,8 @@
 </md-toolbar>
 <md-content flex layout="row" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingPersons" class="md-accent" md-diameter="20px"></md-progress-linear>
-    <md-list flex ng-hide="isLoadingPersons">
-        <md-list-item class="md-2-line" md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
+    <md-list flex ng-hide="isLoadingPersons" class="persons">
+        <md-list-item class="md-2-line" md-no-ink md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
             <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
                 <h3>{{person.name}}</h3>
                 <div layout="row">

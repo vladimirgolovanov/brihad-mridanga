@@ -14,10 +14,6 @@
 </md-toolbar>
 <md-content flex layout="column" layout-margin id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="person.isLoading" class="md-accent" md-diameter="20px"></md-progress-linear>
-    <div class="alert alert-danger" ng-if="persons.error">
-        <strong>There was an error: </strong> {{persons.error.error}}
-        <br>Please go back and login again
-    </div>
     <md-whiteframe class="md-whiteframe-1dp" ng-if="person.debt">
         <md-list-item>
             <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
