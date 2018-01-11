@@ -6,26 +6,29 @@
         .module('bmApp')
         .controller('BookgroupController', BookgroupController);
 
-    function BookgroupController($http, $auth, $rootScope, $state, $stateParams, $filter) {
+    function BookgroupController($http, $auth, $rootScope, $scope, $state, $stateParams, $filter) {
 
-        var self = this;
-        self.submit = submit;
-        self.submiting = false;
+        $scope.submit = submit;
+        $scope.submiting = false;
 
         $rootScope.$watch('isLoadingBooks', function(newVal, oldVal) {
             if(!newVal) {
-                if($stateParams.id) self.bookgroup = $filter('filter')($rootScope.bookgroups, {id: $stateParams.id})[0];
-                else self.bookgroup = {
+                if($stateParams.id) $scope.bookgroup = $filter('filter')($rootScope.bookgroups, {id: $stateParams.id})[0];
+                else $scope.bookgroup = {
                     name: ''
                 };
             }
         });
 
+        $scope.$on('back', function(event, data) {
+            $state.go('bookgroups');
+        });
+
         function submit() {
-            $http.post('admin/bookgroup', self.bookgroup).then(function(response) {
-                if(!self.bookgroup.id) {
-                    self.bookgroup = response.data;
-                    $rootScope.bookgroups.push(self.bookgroup);
+            $http.post('admin/bookgroup', $scope.bookgroup).then(function(response) {
+                if(!$scope.bookgroup.id) {
+                    $scope.bookgroup = response.data;
+                    $rootScope.bookgroups.push($scope.bookgroup);
                     $rootScope.showMessage('Book group was created!');
                 } else {
                     $rootScope.showMessage('Book group was updated!');
@@ -34,7 +37,7 @@
             }, function(response) {
 
             });
-            self.submiting = true;
+            $scope.submiting = true;
         }
 
     }

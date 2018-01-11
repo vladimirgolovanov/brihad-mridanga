@@ -6,16 +6,15 @@
         .module('bmApp')
         .controller('BookController', BookController);
 
-    function BookController($http, $auth, $rootScope, $state, $stateParams, $filter) {
+    function BookController($http, $auth, $rootScope, $scope, $state, $stateParams, $filter) {
 
-        var self = this;
-        self.submit = submit;
-        self.submiting = false;
+        $scope.submit = submit;
+        $scope.submiting = false;
 
         $rootScope.$watch('isLoadingBooks', function(newVal, oldVal) {
             if(!newVal) {
-                if($stateParams.id) self.book = $filter('filter')($rootScope.books, {id: $stateParams.id})[0];
-                else self.book = {
+                if($stateParams.id) $scope.book = Object.assign({}, $rootScope.books.find(findIndexById, $stateParams.id));
+                else $scope.book = {
                     name: '',
                     shortname: '',
                     pack: null,
@@ -28,23 +27,31 @@
             }
         });
 
+        $scope.$on('back', function(event, data) {
+            $state.go('books');
+        });
+
         function submit() {
-            $http.post('admin/book', self.book).then(function(response) {
-                if(!self.book.id) {
-                    self.book = response.data;
-                    $rootScope.books.push(self.book);
+            $http.post('admin/book', $scope.book).then(function(response) {
+                if(typeof $scope.book.id === "undefined") {
+                    $scope.book = response.data;
+                    $rootScope.books.push($scope.book);
                     $rootScope.showMessage('Book was created!');
                 } else {
-                    $rootScope.books[self.book.id] = response.data;
+                    $rootScope.books[$rootScope.books.findIndex(findIndexById, $scope.book.id)] = response.data;
                     $rootScope.showMessage('Book was updated!');
                 }
+
                 $state.go('books');
             }, function(response) {
 
             });
-            self.submiting = true;
+            $scope.submiting = true;
         }
 
+        function findIndexById(el, idx, arr) {
+            return el.id == this;
+        }
     }
 
 })();

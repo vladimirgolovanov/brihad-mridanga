@@ -120,10 +120,20 @@
                     templateUrl: '/views/personsView.php',
                     controller: 'PersonsController as personsctrl'
                 })
+                .state('addperson', {
+                    url: '/person/add',
+                    templateUrl: '/views/editPersonView.php',
+                    controller: 'EditPersonController as c'
+                })
                 .state('person', {
                     url: '/person/:id',
                     templateUrl: '/views/personView.php',
                     controller: 'PersonController as c'
+                })
+                .state('editperson', {
+                    url: '/person/:id/edit',
+                    templateUrl: '/views/editPersonView.php',
+                    controller: 'EditPersonController as c'
                 })
                 .state('make', {
                     url: '/person/:id/make',
@@ -301,7 +311,9 @@
             $scope.keyPressEvent = function(event) {
                 if(event.ctrlKey && event.altKey) {
                     switch(event.key) {
+                        case 'з':
                         case 'p': $state.go('persons'); event.stopPropagation(); break;
+                        case 'и':
                         case 'b': $state.go('books'); event.stopPropagation(); break;
                         case 'd':
                         case 'в': $scope.$broadcast('date'); event.stopPropagation(); break;
@@ -332,17 +344,17 @@
                 }
 //                console.log(event);
             }
-            $scope.toggleSidenav = function() {
+            $rootScope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
             };
-            $scope.showPersons = function(parm) {
-                $scope.isLoadingPersons = true;
+            $rootScope.showPersons = function(parm) {
+                $rootScope.isLoadingPersons = true;
                 $http.get('admin/persons'+((parm == 'all')?'/all':'')).then(function(persons) {
-                    $scope.persons = persons.data;
-                    $scope.isLoadingPersons = false;
+                    $rootScope.persons = persons.data;
+                    $rootScope.isLoadingPersons = false;
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');
-                    $scope.isLoadingPersons = false;
+                    $rootScope.isLoadingPersons = false;
                 });
             };
             $rootScope.showMessage = function(text, theme) {

@@ -7,7 +7,7 @@
         <div flex>
             <h2>{{person.name}}</h2>
         </div>
-        <md-button class="md-icon-button">
+        <md-button class="md-icon-button" ui-sref="editperson({id:person.id})">
             <md-icon md-svg-icon="account-edit"></md-icon>
         </md-button>
     </div>
@@ -48,7 +48,7 @@
         <md-list flex class="operations">
             <md-subheader>Операции</md-subheader>
 <!--            <md-list-item ui-sref="os.type == 1 ? editmake({id:person.id, op:os.id}) : (os.type == 2 ? editLaxmi({id:person.id, op:os.id}) : null)" class="md-3-line" ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">-->
-            <md-list-item ng-click="editOperation(os)" class="md-3-line" md-no-ink ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">
+            <md-list-item ng-click="editOperation(os)" class="md-3-line no-hover-effect" md-no-ink ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">
                 <md-icon md-svg-icon="{{opIcon[os.type].icon}}" ng-class="opIcon[os.type].class"></md-icon>
                 <div class="md-list-item-text" flex>
                     <p><span md-colors="{color:opIcon[os.type].color}">{{os.date | date:'dd.MM.yy'}}</span><span ng-if="os.description" md-colors="{color:'grey'}"> / {{os.description}}</span></p>

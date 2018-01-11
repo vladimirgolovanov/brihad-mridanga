@@ -55,15 +55,22 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-        $person = new Person;
+        if($request->id) {
+            $person = Person::findOrFail($request->id);
+        } else {
+            $person = new Person;
+        }
         $person->name = $request->name;
-        $person->user_id = Auth::user()->id;
+        $person->hide = $request->hide;
         $person->save();
-        //Session::flash('flash_message', 'Person successfully added!');
-        return redirect()->route('persons.index');
+        if($request->id) {
+            $person->last_remains_date = Operation::get_last_remains_date($request->id);
+            list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($request->id);
+            $person->debt = $debt;
+            $person->laxmi = $laxmi;
+            $person->current_books_price = $current_books_price;
+        }
+        return $person;
     }
 
     public function current_books($id, $tilldate) {

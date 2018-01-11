@@ -6,9 +6,11 @@
         .module('bmApp')
         .controller('BookgroupsController', BookgroupsController);
 
-    function BookgroupsController($http, $auth, $rootScope, $state) {
+    function BookgroupsController($http, $auth, $rootScope, $scope, $state) {
 
-        var vm = this;
+        $scope.$on('back', function(event, data) {
+            $state.go('books');
+        });
 
     }
 

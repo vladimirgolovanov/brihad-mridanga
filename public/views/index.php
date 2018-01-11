@@ -53,6 +53,7 @@
 <script src="/js/controllers/authController.js"></script>
 <script src="/js/controllers/userController.js"></script>
 <script src="/js/controllers/personController.js"></script>
+<script src="/js/controllers/editPersonController.js"></script>
 <script src="/js/controllers/personsController.js"></script>
 <script src="/js/controllers/makeController.js"></script>
 <script src="/js/controllers/reController.js"></script>
