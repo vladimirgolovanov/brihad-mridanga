@@ -182,7 +182,7 @@
             $scope.showSearch = 1;
         }
         function keyUppp(event) {
-            if(event.keyCode == 13) {
+            if(event.keyCode == 13 || event.keyCode == 9) {
                 if($scope.showSearch == 1) {
                     $scope.showSearch = 2;
                 } else if($scope.showSearch == 2) {
