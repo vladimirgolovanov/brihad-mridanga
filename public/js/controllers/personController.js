@@ -21,10 +21,21 @@
             'make': {icon:'plus-circle', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'},
             'return': {icon:'undo', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'}
         };
+        $scope.data = [[], []];
+        $scope.labels = [];
+        $scope.series = ['Books', 'Points'];
 
         $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
             $scope.person = person.data;
             $scope.booksCount = Object.keys($scope.person.books).length;
+            var osgrp = $scope.person.osgrp.reverse();
+            for(var el in osgrp) {
+                if(osgrp[el].type == 'remains') {
+                    $scope.labels.push(osgrp[el].date);
+                    $scope.data[0].push(osgrp[el].total_books);
+                    $scope.data[1].push(osgrp[el].total_points);
+                }
+            }
             $scope.isLoading = false;
         }, function(error) {
             $scope.error = error;

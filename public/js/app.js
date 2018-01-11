@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular.filter', 'angularMoment'])
+        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular.filter', 'angularMoment', 'chart.js'])
         .config(function($stateProvider,
                          $urlRouterProvider,
                          $mdDateLocaleProvider,
@@ -14,6 +14,8 @@
                          $mdIconProvider,
                          $mdThemingProvider,
                          $mdAriaProvider) {
+
+            Chart.defaults.global.colors = [ '#803690', '#46BFBD', '#00ADF9', '#DCDCDC', '#FDB45C', '#949FB1', '#4D5360'];
 
             // TEMPORARY DISABLED
             $mdAriaProvider.disableWarnings();
