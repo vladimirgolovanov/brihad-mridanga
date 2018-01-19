@@ -2,7 +2,7 @@
     <md-card class="md-whiteframe-z1" flex="100" flex-gt-xs="70" flex-gt-sm="50" flex-gt-md="33" layout-padding>
         <md-toolbar class="md-accent md-hue-1">
             <div class="md-toolbar-tools">
-                <h2>Brihad Mridanga Login</h2>
+                <h2>Brihad Mridanga Login!</h2>
             </div>
         </md-toolbar>
         <md-card-content>
