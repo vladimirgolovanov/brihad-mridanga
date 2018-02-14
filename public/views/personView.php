@@ -14,13 +14,13 @@
 </md-toolbar>
 <md-content flex layout="column" layout-margin id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="person.isLoading" class="md-accent" md-diameter="20px"></md-progress-linear>
-    <md-whiteframe class="md-whiteframe-1dp">
+<!--    <md-whiteframe class="md-whiteframe-1dp">
         <canvas class="chart chart-line"
                 chart-data="data"
                 chart-labels="labels"
                 chart-series="series"
                 chart-options="chartOptions"></canvas>
-    </md-whiteframe>
+    </md-whiteframe>-->
     <md-whiteframe class="md-whiteframe-1dp" ng-if="person.debt">
         <md-list-item>
             <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
