@@ -87,20 +87,9 @@ class OperationController extends Controller
             }
         }
         if($request->operation_type == 4 || $request->operation_type == 10) {
-            if($request->operation_type == 10 && !count($request->books)) {
-                    $operation = new Operation;
-                    $operation->book_id = 0;
-                    $operation->quantity = 0;
-                    $operation->person_id = $request->id;
-                    $operation->datetime = $datetime;
-                    $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
-                    $operation->price = 0;
-                    $operation->price_buy = 0;
-                    $operation->operation_type = $request->operation_type;
-                    $operation->description = $request->descr;
-                    $operation->save();
-            } else {
+            $totalqty = 0;
             foreach ($request->books as $book) {
+                $totalqty += $book['qty'];
                 if ($book['qty']) {
                     $operation = new Operation;
                     $operation->book_id = $book['id'];
@@ -128,6 +117,18 @@ class OperationController extends Controller
                     }
                 }
             }
+            if($request->operation_type == 10 && !$totalqty) {
+                $operation = new Operation;
+                $operation->book_id = 0;
+                $operation->quantity = 0;
+                $operation->person_id = $request->id;
+                $operation->datetime = $datetime;
+                $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
+                $operation->price = 0;
+                $operation->price_buy = 0;
+                $operation->operation_type = $request->operation_type;
+                $operation->description = $request->descr;
+                $operation->save();
             }
         }
         if($request->payed) {
