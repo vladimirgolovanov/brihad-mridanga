@@ -117,7 +117,7 @@
             $scope.submit();
         }
         function canSubmit() {
-            return $scope.form.$valid && $scope.totalQty() && !$scope.submiting && !$scope.isLoading && ($scope.optype != 'exchange' || $scope.exchangeId);
+            return $scope.form.$valid && ($scope.optype == 'remains' || $scope.totalQty()) && !$scope.submiting && !$scope.isLoading && ($scope.optype != 'exchange' || $scope.exchangeId);
         }
         function submit() {
             $rootScope.lastdate = $scope.date;
