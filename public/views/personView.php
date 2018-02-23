@@ -22,7 +22,7 @@
                 chart-options="chartOptions"></canvas>
     </md-whiteframe>-->
     <md-whiteframe class="md-whiteframe-1dp" ng-if="person.debt">
-        <md-list-item>
+        <md-list-item class="laxmi-list-item">
             <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
             <div class="md-list-item-text" flex>
                 <p>Debt</p>
@@ -31,8 +31,8 @@
         </md-list-item>
     </md-whiteframe>
     <md-whiteframe class="md-whiteframe-1dp" ng-if="person.laxmi">
-        <md-list-item>
-            <md-icon md-svg-icon="currency-rub"></md-icon>
+        <md-list-item class="laxmi-list-item">
+            <md-icon md-svg-icon="cash-multiple"></md-icon>
             <div class="md-list-item-text" flex>
                 <p>Laxmi</p>
             </div>
@@ -66,7 +66,8 @@
                     <h4 md-colors="{color:'primary'}" ng-if="os.type == 'remains'">
                         <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;
-                        <span ng-if="os.total_gain" md-colors="{color:'green'}"><md-icon md-svg-icon="small:currency-rub" class="s12"></md-icon><md-icon md-svg-icon="small:arrow-up" class="s12"></md-icon> {{os.total_gain}}</span></h4>
+                        <span ng-if="os.donation_gain" md-colors="{color:'green'}"><md-icon md-svg-icon="small:arrow-up-bold" class="s12" md-colors="{color:'green'}"></md-icon> {{os.donation_gain}}&nbsp;&nbsp;</span>
+                        <span ng-if="os.debt" md-colors="{color:'warn-400'}"><md-icon md-svg-icon="small:alert" class="s12" md-colors="{color:'warn-400'}"></md-icon> {{os.debt}}</span></h4>
                     <h4 md-colors="{color:'grey-700'}" ng-if="os.type == 'make'">
                         <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;

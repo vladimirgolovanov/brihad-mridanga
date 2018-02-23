@@ -200,6 +200,7 @@ class Operation extends Model
                 } elseif($laxmi - $debt < $lxm) {
                     $debt -= $laxmi - $lxm;
                     $oss[] = array('type' => 'info', 'text' => 'Долг', 'o' => $debt);
+                    $osg['debt'] = $debt;
                 } else {
                     $debt = 0;
                 }
@@ -350,6 +351,13 @@ class Operation extends Model
             }
         }
         $osgrp = array_reverse($osgrp);
+        if($laxmi > $debt) {
+            $laxmi -= $debt;
+            $debt = 0;
+        } else {
+            $debt -= $laxmi;
+            $laxmi = 0;
+        }
         return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp];
     }
 

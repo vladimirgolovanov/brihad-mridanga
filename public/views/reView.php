@@ -52,6 +52,10 @@
                     <md-icon md-svg-icon="small:chevron-double-left" class="s18"></md-icon>
                     <span>{{lastdate | date:'dd.MM.yyyy'}}</span>
                 </md-button>
+                <div flex="auto"></div>
+                <md-button class="md-icon-button empty-flag" ng-click="empty = !empty;" ng-show="optype=='remains'">
+                    <md-icon md-svg-icon="numeric-0-box" md-colors="empty ? {color:'accent'} : {color:'primary-100'}"></md-icon>
+                </md-button>
             </div>
             <md-divider></md-divider>
             <md-progress-linear md-mode="indeterminate" ng-show="isLoading" class="md-accent" md-diameter="20px"></md-progress-linear>

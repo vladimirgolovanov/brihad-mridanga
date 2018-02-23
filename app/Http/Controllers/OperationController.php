@@ -117,7 +117,7 @@ class OperationController extends Controller
                     }
                 }
             }
-            if($request->operation_type == 10 && !$totalqty) {
+            if($request->operation_type == 10 && $request->empty) {
                 $operation = new Operation;
                 $operation->book_id = 0;
                 $operation->quantity = 0;
