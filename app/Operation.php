@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Log;
+
 use Auth;
 
 use DB;
@@ -278,8 +280,9 @@ class Operation extends Model
                                 break;
                             }
                         }
+                        $prices = array_pop($books[$o->book_id]);
                         if ($o->quantity > 0) {
-                            $books_left[$o->book_id] = [$o->quantity, [$o->quantity, $o->price, $o->price_buy]];
+                            $books_left[$o->book_id] = [$o->quantity, [$o->quantity, $prices[1], $prices[2]]];
                         }
                         unset($books[$o->book_id]);
                     } else {
