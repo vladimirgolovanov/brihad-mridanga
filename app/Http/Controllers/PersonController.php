@@ -59,6 +59,7 @@ class PersonController extends Controller
             $person = Person::findOrFail($request->id);
         } else {
             $person = new Person;
+            $person->user_id = Auth::user()->id;
         }
         $person->name = $request->name;
         $person->hide = $request->hide;
