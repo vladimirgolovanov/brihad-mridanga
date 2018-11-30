@@ -122,12 +122,11 @@ class Operation extends Model
         $laxmi = 0;
         $osgrp = array();
         $osg = [];
-        if(!$tilldate) $tilldate = date("Y-m-d");
         $os = DB::table('operations AS o')
             ->leftJoin('books AS b', 'o.book_id', '=', 'b.id')
-            ->where('o.person_id', $personid)
-            ->where('o.custom_date', '<=', $tilldate)
-            ->orderBy('o.custom_date', 'asc')
+            ->where('o.person_id', $personid);
+        if($tilldate) $os->where('o.custom_date', '<=', $tilldate);
+        $os ->orderBy('o.custom_date', 'asc')
             ->orderBy('o.operation_type', 'asc')
             ->orderBy('o.datetime', 'asc')
             ->select(
