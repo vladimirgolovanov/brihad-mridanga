@@ -64,12 +64,12 @@
                     <h3 ng-if="os.type == 'return'"><span ng-if="!os.books.length">:(</span><span ng-repeat="book in os.books">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book.o}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span></h3>
                     <h3 ng-if="os.type == 'Laxmi'"><span>{{os.Laxmi}} р.</span></h3>
                     <h4 md-colors="{color:'primary'}" ng-if="os.type == 'remains'">
-                        <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
+                        <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_books}}<span ng-if="os.total_non_bbt" md-colors="{color:'primary-300'}">+{{os.total_non_bbt}}</span>&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'primary-300'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;
                         <span ng-if="os.donation_gain" md-colors="{color:'green'}"><md-icon md-svg-icon="small:arrow-up-bold" class="s12" md-colors="{color:'green'}"></md-icon> {{os.donation_gain}}&nbsp;&nbsp;</span>
                         <span ng-if="os.debt" md-colors="{color:'warn-400'}"><md-icon md-svg-icon="small:alert" class="s12" md-colors="{color:'warn-400'}"></md-icon> {{os.debt}}</span></h4>
                     <h4 md-colors="{color:'grey-700'}" ng-if="os.type == 'make'">
-                        <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_books}}&nbsp;&nbsp;
+                        <md-icon md-svg-icon="small:library-books" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_books}}<span ng-if="os.total_non_bbt" md-colors="{color:'grey-400'}">+{{os.total_non_bbt}}</span>&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:star" class="s12" md-colors="{color:'grey-500'}"></md-icon> {{os.total_points}}&nbsp;&nbsp;
                         <md-icon md-svg-icon="small:currency-rub" class="s12"></md-icon> {{os.total_Laxmi}}</h4>
                     <h4 ng-if="os.type == 'Laxmi' || os.type == 'return'">&nbsp;</h4>

@@ -168,6 +168,7 @@ class Operation extends Model
                 $oss[] = array('type' => 'info', 'text' => 'Распространенные книги:', 'o' => '');
                 $book_types = ['Махабиги' => 0, 'Биги' => 0, 'Средние' => 0, 'Маленькие' => 0];
                 $total_books = 0;
+                $total_non_bbt = 0;
                 $points = 0;
                 $osg['books_distr'] = [];
                 foreach($books_distr as $k => $v) {
@@ -178,11 +179,13 @@ class Operation extends Model
                         case 2: $points += 1 * $v; $book_types['Биги'] += $v; $total_books += $v; break;
                         case 3: $points += 0.5 * $v; $book_types['Средние'] += $v; $total_books += $v; break;
                         case 4: $points += 0.25 * $v; $book_types['Маленькие'] += $v; $total_books += $v; break;
+                        default: $total_non_bbt += $v; break;
                     }
                 }
                 $books_distr = [];
                 $oss[] = array('type' => 'info', 'text' => 'Всего распространено книг', 'o' => $total_books);
                 $osg['total_books'] = $total_books;
+                $osg['total_non_bbt'] = $total_non_bbt;
                 foreach($book_types as $k => $v) {
                     $oss[] = array('type' => 'info', 'text' => $k, 'o' => $v);
                 }
@@ -212,6 +215,7 @@ class Operation extends Model
             }
             if($prevcase == 1 && (gettype($o) != 'object' || ($o->operation_type != 1 || ($o->operation_type == 1 && $prevop != $o->datetime)))) {
                 $total_books = 0;
+                $total_non_bbt = 0;
                 $points = 0;
                 $Laxmi = 0;
                 foreach($books_left as $k => $v) {
@@ -221,9 +225,11 @@ class Operation extends Model
                         case 2: $points += 1 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
                         case 3: $points += 0.5 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
                         case 4: $points += 0.25 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                        default: $total_non_bbt += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
                     }
                 }
                 $osg['total_books'] = $total_books;
+                $osg['total_non_bbt'] = $total_non_bbt;
                 $osg['total_points'] = $points;
                 $osg['total_Laxmi'] = $Laxmi;
                 $osgrp[] = $osg;
