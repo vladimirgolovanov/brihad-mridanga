@@ -91,7 +91,7 @@ class PersonController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($id, $showall = false)
     {
         $person = Person::findOrFail($id);
         list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($id);
@@ -100,7 +100,7 @@ class PersonController extends Controller
         $person['laxmi'] = $laxmi;
         $person['current_books_price'] = $current_books_price;
         $person['debt'] = $debt;
-        $person['osgrp'] = $osgrp;
+        $person['osgrp'] = $showall?$osgrp:array_slice($osgrp, 0, 30);
         return $person;
         /*$person = Person::findOrFail($id);
         list($operations, $summ, $books) = Operation::get_all_operations($id);

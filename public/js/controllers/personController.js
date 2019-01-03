@@ -15,6 +15,7 @@
         $scope.isLoading = true;
         $scope.person;
         $scope.booksCount = 0;
+        $scope.booksTable = false;
         $scope.opIcon = {
             'remains': {icon:'checkbox-marked', 'class':'md-primary', color:'primary', bgcolor:'primary-100'},
             'Laxmi': {icon:'currency-rub', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'},
@@ -28,15 +29,6 @@
         $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
             $scope.person = person.data;
             $scope.booksCount = Object.keys($scope.person.books).length;
-//            var osgrp = $scope.person.osgrp.reverse();
-            for(var el in osgrp) {
-                if(osgrp[el].type == 'remains') {
-                    $scope.labels.push(osgrp[el].date);
-//                    $scope.data[0].push(osgrp[el].total_books);
-//                    $scope.data[1].push(osgrp[el].total_points);
-                }
-            }
-//            $scope.person.osgrp.reverse();
             $scope.isLoading = false;
         }, function(error) {
             $scope.error = error;
@@ -67,6 +59,20 @@
             } else if(os.type == 'remains') {
                 $state.go('editremains', {id: $scope.person.id, op: os.id});
             }
+        }
+
+        $scope.showAll = function() {
+            $scope.isLoading = true;
+            $scope.person;
+            $scope.booksCount = 0;
+            $http.get('admin/persons/show/'+$stateParams.id+'/showall').then(function(person) {
+                $scope.person = person.data;
+                $scope.booksCount = Object.keys($scope.person.books).length;
+                $scope.isLoading = false;
+            }, function(error) {
+                $scope.error = error;
+                $scope.isLoading = false;
+            });
         }
     }
 

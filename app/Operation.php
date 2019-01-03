@@ -350,6 +350,7 @@ class Operation extends Model
         foreach($os as $o) {
             if($o->book_id && isset($books[$o->book_id])) {
                 $books[$o->book_id]['name'] = $o->name;
+                $books[$o->book_id]['shortname'] = $books_info[$o->book_id]->shortname;
             }
         }
         $current_books_price = 0;

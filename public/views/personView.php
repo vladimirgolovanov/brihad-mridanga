@@ -41,8 +41,15 @@
     </md-whiteframe>
     <md-whiteframe class="md-whiteframe-1dp" ng-if="booksCount">
         <md-list flex>
-            <md-subheader ng-show="person.current_books_price">Книги на руках (на {{person.current_books_price}} р.)</md-subheader>
-            <md-list-item ng-repeat="book in person.books">
+            <md-subheader ng-show="person.current_books_price">
+                Книги на руках (на {{person.current_books_price}} р.)
+            </md-subheader>
+            <md-list-item ng-click="booksTable = true;" ng-show="!booksTable" class="no-hover-effect">
+                <div class="md-list-item-text" flex>
+                    <span ng-repeat="book in person.books">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'grey'}">{{book[0]}}</span><span md-colors="{color:'grey'}" ng-if="!$last"> &bullet; </span></span></span>
+                </div>
+            </md-list-item>
+            <md-list-item ng-show="booksTable" ng-repeat="book in person.books">
                 <md-icon md-svg-icon="library-books" class="md-primary md-hue-1"></md-icon>
                 <div class="md-list-item-text nowrap" flex>
                     <p>{{book.name}}</p>
@@ -77,6 +84,8 @@
                 </div>
 
             </md-list-item>
+            <md-divider></md-divider>
+            <div layout="row" layout-align="center"><md-button ng-click="showAll();">Show all</md-button></div>
         </md-list>
     </md-whiteframe>
 </md-content>

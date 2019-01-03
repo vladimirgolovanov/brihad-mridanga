@@ -29,6 +29,7 @@ Route::group(['prefix' => 'api'], function() {
 Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {
     Route::resource('persons/{param}', 'PersonController', ['only' => ['index']]);
     Route::get('persons/show/{personid}', 'PersonController@show');
+    Route::get('persons/show/{personid}/{showall}', 'PersonController@show');
     Route::get('persons/show/{personid}/currentbooks/{tilldate}', 'PersonController@current_books');
     Route::post('person', 'PersonController@store');
     Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
