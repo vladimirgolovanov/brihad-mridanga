@@ -49,6 +49,8 @@
 
         $scope.delete = 0;
 
+        $scope.textToCopy = "";
+
         if($stateParams.op) {
             $scope.op = $stateParams.op;
             $scope.isLoading = true;
@@ -82,6 +84,17 @@
                 $scope.showSearch = 0;
                 $scope.setFocus();
             }
+        });
+
+        $scope.$watch('books', function(newVal, oldVal) {
+            var text = "";
+            var totalPrice = 0;
+            for(var k in $scope.books) {
+                totalPrice += ($scope.books[k].qty?parseInt($scope.books[k].qty):0) * $scope.books[k].price;
+                text += $scope.books[k].name + "\t" + $scope.books[k].qty + " x " + $scope.books[k].price + " р. = " + $scope.books[k].qty*$scope.books[k].price + " р.\n";
+            }
+            text += "Итого: " + totalPrice + " р.";
+            $scope.textToCopy = text;
         });
 
         $scope.$on('submit', function(event, data) {

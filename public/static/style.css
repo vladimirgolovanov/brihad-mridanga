@@ -6,6 +6,9 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.make-tools {
+	margin-top:5px;
+}
 .laxmi-list-item md-icon {
 	margin-bottom:16px !important;
 }
