@@ -50,7 +50,7 @@
 <script src="/bower_components/angular-moment/angular-moment.js"></script>
 <script src="/bower_components/chart.js/dist/Chart.min.js"></script>
 <script src="/bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
-<script src="/bower_components/angular-clipboard/angular-clipboard.js"></script>
+<!--<script src="/bower_components/angular-clipboard/angular-clipboard.js"></script>-->
 
 <script src="/js/app.js"></script>
 <script src="/js/controllers/authController.js"></script>
