@@ -91,7 +91,7 @@
             <md-divider></md-divider>
             <input type="hidden" ng-model="textToCopy">
             <div layout="row" layout-align="space-between center" ng-if="op" class="make-tools">
-                <div><md-button class="md-icon-button" clipboard text="textToCopy" supported="clipboardSupported" ng-show="clipboardSupported"><md-icon md-colors="{color:'grey-400'}" md-svg-icon="clipboard-text"></md-icon></md-button></div>
+                <div><md-button class="md-icon-button" clipboard text="textToCopy" supported="clipboardSupported" ng-show="clipboardSupported" on-copied="clipboardSuccess()"><md-tooltip md-direction="right" md-visible="tooltipCopied" md-delay="100000">Copied</md-tooltip><md-icon md-colors="{color:'grey-400'}" md-svg-icon="clipboard-text"></md-icon></md-button></div>
                 <div><md-button class="md-icon-button" ng-click="delete = 1" ng-hide="delete"><md-icon md-colors="{color:'grey-400'}" md-svg-icon="delete"></md-icon></md-button><md-button class="md-icon-button" ng-click="delete = 0" ng-show="delete" ng-disabled="submiting"><md-icon md-svg-icon="undo"></md-icon></md-button><md-button class="md-icon-button md-warn" ng-click="del()" ng-show="delete" ng-disabled="submiting"><md-icon md-svg-icon="delete-forever"></md-icon></md-button></div>
             </div>
         </md-list>

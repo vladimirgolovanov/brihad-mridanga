@@ -51,6 +51,8 @@
 
         $scope.textToCopy = "";
         $scope.clipboardSupported = false;
+        $scope.clipboardSuccess = clipboardSuccess;
+        $scope.tooltipCopied = false;
 
         if($stateParams.op) {
             $scope.op = $stateParams.op;
@@ -121,6 +123,13 @@
         $scope.$on('payed', function(event, data) {
             pay();
         });
+
+        function clipboardSuccess() {
+            $scope.tooltipCopied = true;
+            setTimeout(function() {
+                $scope.tooltipCopied = false;
+            }, 3000);
+        }
 
         function showDescr() {
             $scope.descrIsOpen = true;
