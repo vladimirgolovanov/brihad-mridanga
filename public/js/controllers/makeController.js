@@ -128,7 +128,7 @@
             $scope.tooltipCopied = true;
             setTimeout(function() {
                 $scope.tooltipCopied = false;
-            }, 3000);
+            }, 1000);
         }
 
         function showDescr() {
