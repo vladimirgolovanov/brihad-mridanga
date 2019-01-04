@@ -50,6 +50,7 @@
         $scope.delete = 0;
 
         $scope.textToCopy = "";
+        $scope.clipboardSupported = false;
 
         if($stateParams.op) {
             $scope.op = $stateParams.op;
