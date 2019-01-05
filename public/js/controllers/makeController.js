@@ -48,6 +48,7 @@
         $scope.dateIsOpen = false;
 
         $scope.delete = 0;
+        $scope.showHoldTip = false;
 
         $scope.textToCopy = "";
         $scope.clipboardSupported = false;
