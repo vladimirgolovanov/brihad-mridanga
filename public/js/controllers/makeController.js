@@ -52,7 +52,7 @@
         $scope.textToCopy = "";
         $scope.clipboardSupported = false;
         $scope.clipboardSuccess = clipboardSuccess;
-        $scope.tooltipCopied = false;
+        $scope.clipboardCopied = false;
 
         if($stateParams.op) {
             $scope.op = $stateParams.op;
@@ -125,9 +125,9 @@
         });
 
         function clipboardSuccess() {
-            $scope.tooltipCopied = true;
+            $scope.clipboardCopied = true;
             setTimeout(function() {
-                $scope.tooltipCopied = false;
+                $scope.clipboardCopied = false;
             }, 1000);
         }
 
