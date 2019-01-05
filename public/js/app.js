@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular-clipboard', 'pr.longpress', 'angular.filter', 'angularMoment', 'chart.js'])
+        .module('bmApp', ['ngMaterial', 'ui.router', 'satellizer', 'focus-if', 'angular-clipboard', 'pr.longpress', 'hmTouchEvents', 'angular.filter', 'angularMoment', 'chart.js'])
         .config(function($stateProvider,
                          $urlRouterProvider,
                          $mdDateLocaleProvider,

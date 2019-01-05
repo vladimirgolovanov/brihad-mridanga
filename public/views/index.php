@@ -52,6 +52,8 @@
 <script src="/bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
 <script src="/bower_components/angular-clipboard/angular-clipboard.js"></script>
 <script src="/bower_components/angular-long-press/dist/angular-long-press.min.js"></script>
+<script src="/bower_components/hammerjs/hammer.js"></script>
+<script src="/bower_components/AngularHammer/angular.hammer.min.js"></script>
 
 <script src="/js/app.js"></script>
 <script src="/js/controllers/authController.js"></script>
