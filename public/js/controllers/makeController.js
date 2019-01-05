@@ -53,6 +53,7 @@
         $scope.clipboardSupported = false;
         $scope.clipboardSuccess = clipboardSuccess;
         $scope.clipboardCopied = false;
+        $scope.noClick = function() {};
 
         if($stateParams.op) {
             $scope.op = $stateParams.op;
