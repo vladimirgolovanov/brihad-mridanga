@@ -27,6 +27,9 @@
         $scope.submiting = false;
         $scope.del = del;
         $scope.pay = pay;
+        $scope.settingsMenu = false;
+        $scope.shopPrices = false;
+        $scope.preorder = false;
 
         $scope.selectedId = null;
         $scope.selectedGroup = null;
@@ -64,6 +67,7 @@
                     return item;
                 });
                 $scope.descr = result.data.descr;
+                $scope.preorder = result.data.operation_type == 3;
                 $scope.date = new Date(result.data.date);
                 $scope.isLoading = false;
             }, function(error) {
@@ -163,7 +167,7 @@
         }
         function submit() {
             $rootScope.lastdate = $scope.date;
-            var postdata = { 'datetime': $scope.op, 'operation_type': '1', 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'payed': $scope.payed, 'descr':$scope.descr };
+            var postdata = { 'datetime': $scope.op, 'operation_type': $scope.preorder?'3':'1', 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'payed': $scope.payed, 'descr':$scope.descr };
             $http.post('admin/operation', postdata).then(function(response) {
                 $state.go('person', {'id': $scope.id});
             }, function(response) {
@@ -200,7 +204,7 @@
             $scope.selectedName = item.name;
             $scope.selectedShortname = item.shortname;
             $scope.selectedQty = '';
-            $scope.selectedPrice = item.price;
+            $scope.selectedPrice = $scope.shopPrices?item.price_shop:item.price;
             $scope.selectedPriceBuy = item.price_buy;
             $scope.selectedPoints = item.book_type == 0 ? 0 : item.book_type == 1 ? 2 : item.book_type == 2 ? 1 : item.book_type == 3 ? 0.5 : item.book_type == 4 ? 0.25 : 0;
             $scope.showSearch = 1;

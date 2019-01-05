@@ -16,10 +16,12 @@
         $scope.person;
         $scope.booksCount = 0;
         $scope.booksTable = false;
+        $scope.isIssue = false;
         $scope.opIcon = {
             'remains': {icon:'checkbox-marked', 'class':'md-primary', color:'primary', bgcolor:'primary-100'},
             'Laxmi': {icon:'currency-rub', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'},
             'make': {icon:'plus-circle', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'},
+            'order': {icon:'message-bulleted', 'class':'md-accent', color:'primary', bgcolor:'grey-50-0.1'},
             'return': {icon:'undo', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'}
         };
         $scope.data = [[], []];
@@ -51,6 +53,8 @@
 
         $scope.editOperation = function(os) {
             if(os.type == 'make') {
+                $state.go('editmake', {id: $scope.person.id, op: os.id});
+            } else if(os.type == 'order') {
                 $state.go('editmake', {id: $scope.person.id, op: os.id});
             } else if(os.type == 'Laxmi') {
                 $state.go('editLaxmi', {id: $scope.person.id, op: os.id});

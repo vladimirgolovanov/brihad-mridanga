@@ -23,14 +23,14 @@ class OperationController extends Controller
         $test = DB::table('operations')
             ->where('datetime', $datetime)
             ->first();
-        if($test && $test->operation_type == 1) {
+        if($test && ($test->operation_type == 1 || $test->operation_type == 3)) {
             $os = DB::table('operations')
                 ->where('datetime', $datetime)
                 ->leftJoin('books', 'operations.book_id', '=', 'books.id')
                 ->leftJoin('bookgroups', 'books.bookgroup_id', '=', 'bookgroups.id')
                 ->select('books.id', 'books.name', 'books.shortname', 'bookgroups.name as bookgroup_name', 'operations.quantity as qty', 'operations.price', 'operations.price_buy', 'book_type')
                 ->get();
-            return ['books' => $os, 'descr' => $test->description, 'date' => $test->custom_date];
+            return ['books' => $os, 'descr' => $test->description, 'date' => $test->custom_date, 'operation_type' => $test->operation_type];
         } else if($test && ($test->operation_type == 4 || $test->operation_type == 10)) {
             $os = DB::table('operations')
                 ->where('datetime', $datetime)
@@ -69,7 +69,7 @@ class OperationController extends Controller
             $books = Book::get_all_books(Auth::user()->id);
             $datetime2 = date("Y-m-d H:i:s", time()+1);
         }
-        if($request->operation_type == 1) {
+        if($request->operation_type == 1 || $request->operation_type == 3) {
             foreach ($request->books as $book) {
                 if ($book['qty']) {
                     $operation = new Operation;
@@ -80,7 +80,7 @@ class OperationController extends Controller
                     $operation->custom_date = date("Y-m-d H:i:s", strtotime($request->date));
                     $operation->price = $book['price'];
                     $operation->price_buy = $book['price_buy'];
-                    $operation->operation_type = 1;
+                    $operation->operation_type = $request->operation_type;
                     $operation->description = $request->descr;
                     $operation->save();
                 }

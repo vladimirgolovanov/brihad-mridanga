@@ -69,12 +69,24 @@
                     <span>{{lastdate | date:'dd.MM.yyyy'}}</span>
                 </md-button>
                 <div flex="auto"></div>
-                <md-button class="md-icon-button">
-                    <md-icon md-svg-icon="cart-outline" md-colors="{color:'primary-300'}"></md-icon>
-<!--                    <md-icon md-svg-icon="cart" md-colors="{color:'primary-600'}"></md-icon>-->
+                <md-button class="md-icon-button" ng-click="settingsMenu = !settingsMenu">
+                    <md-icon md-svg-icon="settings" md-colors="{color:'primary-300'}"></md-icon>
                 </md-button>
             </div>
             <md-divider></md-divider>
+            <md-list ng-show="settingsMenu">
+                <md-list-item>
+                    <md-icon md-svg-icon="cart"></md-icon>
+                    <p>Shop prices</p>
+                    <md-checkbox class="md-secondary" ng-model="shopPrices"></md-checkbox>
+                </md-list-item>
+                <md-list-item>
+                    <md-icon md-svg-icon="message-bulleted"></md-icon>
+                    <p>Preorder</p>
+                    <md-checkbox class="md-secondary" ng-model="preorder"></md-checkbox>
+                </md-list-item>
+            </md-list>
+            <md-divider ng-show="settingsMenu"></md-divider>
             <md-progress-linear md-mode="indeterminate" ng-show="isLoading" class="md-accent" md-diameter="20px"></md-progress-linear>
             <md-list-item class="md-2-line books-list" flex ng-repeat="item in books" layout-align="space-between top" layout="row">
                 <div class="md-list-item-text" layout="column" layout-align="start start" flex="70">

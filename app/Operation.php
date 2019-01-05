@@ -234,6 +234,27 @@ class Operation extends Model
                 $osg['total_Laxmi'] = $Laxmi;
                 $osgrp[] = $osg;
             }
+            if($prevcase == 3 && (gettype($o) != 'object' || ($o->operation_type != 3 || ($o->operation_type == 3 && $prevop != $o->datetime)))) {
+                $total_books = 0;
+                $total_non_bbt = 0;
+                $points = 0;
+                $Laxmi = 0;
+                foreach($books_left as $k => $v) {
+                    $osg['books'][] = ['name' => $books_info[$k]->name, 'shortname' => $books_info[$k]->shortname, 'o' => $v->quantity];
+                    switch($books_info[$k]->book_type) {
+                        case 1: $points += 2 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                        case 2: $points += 1 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                        case 3: $points += 0.5 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                        case 4: $points += 0.25 * $v->quantity; $total_books += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                        default: $total_non_bbt += $v->quantity; $Laxmi += $v->price * $v->quantity; break;
+                    }
+                }
+                $osg['total_books'] = $total_books;
+                $osg['total_non_bbt'] = $total_non_bbt;
+                $osg['total_points'] = $points;
+                $osg['total_Laxmi'] = $Laxmi;
+                $osgrp[] = $osg;
+            }
             if($prevcase == 4 && (gettype($o) != 'object' || ($o->operation_type != 4 || ($o->operation_type == 4 && $prevop != $o->datetime)))) {
                 $total_books = 0;
                 foreach($books_left as $k => $v) {
@@ -303,6 +324,17 @@ class Operation extends Model
                     } else {
                         $books[$o->book_id] = [$o->quantity, [$o->quantity, $o->price, $o->price_buy]];
                     }
+                    $books_left[$o->book_id] = $o;
+                    $oss[] = array('type' => 'subop', 'o' => $o);
+                    break;
+                case 3:
+                    $osg['type'] = 'order';
+//                    if(isset($books[$o->book_id])) {
+//                        $books[$o->book_id][0] += $o->quantity;
+//                        $books[$o->book_id][] = array($o->quantity, $o->price, $o->price_buy);
+//                    } else {
+//                        $books[$o->book_id] = [$o->quantity, [$o->quantity, $o->price, $o->price_buy]];
+//                    }
                     $books_left[$o->book_id] = $o;
                     $oss[] = array('type' => 'subop', 'o' => $o);
                     break;
