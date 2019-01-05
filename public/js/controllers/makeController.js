@@ -6,7 +6,7 @@
         .module('bmApp')
         .controller('MakeController', MakeController);
 
-    function MakeController($http, $auth, $scope, $rootScope, $log, $state, $stateParams, $filter, $mdBottomSheet) {
+    function MakeController($http, $auth, $scope, $rootScope, $log, $state, $stateParams, $filter, $mdBottomSheet, $timeout) {
 
         var self = this;
 
@@ -126,7 +126,7 @@
 
         function clipboardSuccess() {
             $scope.clipboardCopied = true;
-            setTimeout(function() {
+            $timeout(function() {
                 $scope.clipboardCopied = false;
             }, 1000);
         }
@@ -224,7 +224,7 @@
             }
         }
         function setFocus() {
-            setTimeout(function() {
+            $timeout(function() {
                 document.querySelector("#autoCompleteId").focus();
             }, 0);
         }
