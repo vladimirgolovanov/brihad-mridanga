@@ -16,7 +16,10 @@
                 if($stateParams.id) $scope.person = Object.assign({}, $rootScope.persons.find(findIndexById, $stateParams.id));
                 else $scope.person = {
                     name: '',
-                    hide: null
+                    descr: '',
+                    persongroup_id: null,
+                    hide: null,
+                    favourite: null
                 };
             }
         });

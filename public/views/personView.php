@@ -4,9 +4,10 @@
         <md-button class="md-icon-button" ui-sref="persons" aria-label="Back">
             <md-icon md-svg-icon="arrow-left"></md-icon>
         </md-button>
-        <div flex>
-            <h2>{{person.name}}</h2>
-        </div>
+        <h3 flex layout="column">
+            <div>{{person.name}}</div>
+            <div class="toolbar-subtitle">{{person.descr}}</div>
+        </h3>
         <md-button class="md-icon-button" ui-sref="editperson({id:person.id})">
             <md-icon md-svg-icon="account-edit"></md-icon>
         </md-button>

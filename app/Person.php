@@ -10,6 +10,8 @@ class Person extends Model
 
     protected $fillable = [
         'name',
+        'descr',
         'hide',
+        'favourite',
     ];
 }

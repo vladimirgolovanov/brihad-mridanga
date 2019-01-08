@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Person;
+use App\PersonGroup;
 use App\Operation;
 use App\Book;
+use DB;
 
 use Auth;
 
@@ -18,9 +20,24 @@ class PersonController extends Controller
     public function index($param = null)
     {
         if($param == 'all') {
-            $persons = Person::where('user_id', Auth::user()->id)->orderBy('hide')->orderBy('name')->get();
+            $persons = DB::table('persons AS p')
+                ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
+                ->where('p.user_id', Auth::user()->id)
+                ->orderBy(DB::raw('-pg.id'), 'desc')
+                ->orderBy('p.hide')
+                ->orderBy('p.name')
+                ->select('p.*', 'pg.name AS persongroup_name')
+                ->get();
         } else {
-            $persons = Person::where('user_id', Auth::user()->id)->whereNull('hide')->orderBy('hide')->orderBy('name')->get();
+            $persons = DB::table('persons AS p')
+                ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
+                ->where('p.user_id', Auth::user()->id)
+                ->orderBy(DB::raw('-pg.id'), 'desc')
+                ->whereNull('p.hide')
+                ->orderBy('p.hide')
+                ->orderBy('p.name')
+                ->select('p.*', 'pg.name AS persongroup_name')
+                ->get();
         }
         $ps = [];
         foreach($persons as $k => $p) {
@@ -29,12 +46,14 @@ class PersonController extends Controller
             $p->debt = $debt;
             $p->laxmi = $laxmi;
             $p->current_books_price = $current_books_price;
+            $p->fav_or_grp = $p->favourite?"":($p->persongroup_id?$p->persongroup_name:null);
             $ps[] = $p;
         }
         usort($ps, function($a, $b) {
             return $b->debt > $a->debt;
         });
-        return $ps;
+        $persongroups = PersonGroup::get_all_persongroups(Auth::user()->id);
+        return ['persons' => $ps, 'persongroups' => $persongroups];
      }
 
     /**
@@ -62,7 +81,10 @@ class PersonController extends Controller
             $person->user_id = Auth::user()->id;
         }
         $person->name = $request->name;
+        $person->descr = $request->descr;
+        $person->persongroup_id = $request->persongroup_id ?: null;
         $person->hide = $request->hide;
+        $person->favourite = $request->favourite;
         $person->save();
         if($request->id) {
             $person->last_remains_date = Operation::get_last_remains_date($request->id);
@@ -71,6 +93,8 @@ class PersonController extends Controller
             $person->laxmi = $laxmi;
             $person->current_books_price = $current_books_price;
         }
+        $person->persongroup_name = $person->persongroup_id?PersonGroup::get_persongroup_name($person->persongroup_id):null;
+        $person->fav_or_grp = $person->favourite?"":($person->persongroup_id?$person->persongroup_name:null);
         return $person;
     }
 

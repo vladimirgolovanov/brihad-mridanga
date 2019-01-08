@@ -32,6 +32,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {
     Route::get('persons/show/{personid}/{showall}', 'PersonController@show');
     Route::get('persons/show/{personid}/currentbooks/{tilldate}', 'PersonController@current_books');
     Route::post('person', 'PersonController@store');
+    Route::post('persongroup', 'PersonGroupController@store');
     Route::post('operation', ['as'=>'operation.store', 'uses'=>'OperationController@store']);
     Route::get('operation/show/{id}', 'OperationController@show');
     Route::resource('books', 'BookController');

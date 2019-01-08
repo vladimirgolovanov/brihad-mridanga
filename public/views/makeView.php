@@ -70,7 +70,8 @@
                 </md-button>
                 <div flex="auto"></div>
                 <md-button class="md-icon-button" ng-click="settingsMenu = !settingsMenu">
-                    <md-icon md-svg-icon="settings" md-colors="{color:'primary-300'}"></md-icon>
+                    <md-icon ng-show="settingsMenu" md-svg-icon="chevron-up" md-colors="{color:'primary-300'}"></md-icon>
+                    <md-icon ng-hide="settingsMenu" md-svg-icon="settings" md-colors="{color:'primary-300'}"></md-icon>
                 </md-button>
             </div>
             <md-divider></md-divider>

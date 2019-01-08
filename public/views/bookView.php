@@ -15,7 +15,7 @@
 </md-toolbar>
 <md-content flex layout="column" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingBooks" class="md-accent" md-diameter="20px"></md-progress-linear>
-    <form name="form" novalidate layout-margin>
+    <form name="form" novalidate layout-margin layout="column">
         <div layout="row">
             <md-input-container flex="66">
                 <label>Name</label>

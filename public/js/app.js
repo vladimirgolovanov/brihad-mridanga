@@ -117,6 +117,16 @@
                     templateUrl: '/views/bookView.php',
                     controller: 'BookController as c'
                 })
+                .state('persongroups', {
+                    url: '/persongroups',
+                    templateUrl: '/views/persongroupsView.php',
+                    controller: 'PersongroupsController as c'
+                })
+                .state('persongroup', {
+                    url: '/persongroup/:id',
+                    templateUrl: '/views/persongroupView.php',
+                    controller: 'PersongroupController as c'
+                })
                 .state('persons', {
                     url: '/persons',
                     templateUrl: '/views/personsView.php',
@@ -206,6 +216,7 @@
         .run(function($rootScope, $state, $http, $interval, $auth) {
 
             $rootScope.persons = [];
+            $rootScope.persongroups = [];
             $rootScope.isLoadingPersons = true;
             $rootScope.books = [];
             $rootScope.bookgroups = [];
@@ -241,10 +252,14 @@
                 $rootScope.stop = $interval(refreshToken, 600000);
 
                 $http.get('admin/persons/visible').then(function(persons) {
-                    $rootScope.persons = persons.data.map(function(item, index, arr) {
+                    $rootScope.persongroups = [];
+                    $rootScope.persons = persons.data['persons'].map(function(item, index, arr) {
                         item.last_remains_date_formated = item.last_remains_date?moment(item.last_remains_date).format('DD.MM.YY'):'';
                         return item;
                     });
+                    for(var key in persons.data['persongroups']) {
+                        $rootScope.persongroups.push(persons.data['persongroups'][key]);
+                    }
                     $rootScope.isLoadingPersons = false;
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');
@@ -352,7 +367,7 @@
             $rootScope.showPersons = function(parm) {
                 $rootScope.isLoadingPersons = true;
                 $http.get('admin/persons'+((parm == 'all')?'/all':'')).then(function(persons) {
-                    $rootScope.persons = persons.data;
+                    $rootScope.persons = persons.data['persons'];
                     $rootScope.isLoadingPersons = false;
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');

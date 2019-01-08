@@ -43,6 +43,14 @@
                         </div>
                     </md-button>
                 </md-menu-item>
+                <md-menu-item>
+                    <md-button ui-sref="persongroups">
+                        <div layout="row" flex>
+                            <md-icon md-menu-align-target md-svg-icon="account-circle"></md-icon>
+                            <p flex>Person groups</p>
+                        </div>
+                    </md-button>
+                </md-menu-item>
             </md-menu-content>
         </md-menu>
 
@@ -51,14 +59,18 @@
 <md-content flex layout="row" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingPersons" class="md-accent" md-diameter="20px"></md-progress-linear>
     <md-list flex ng-hide="isLoadingPersons" class="persons">
-        <md-list-item class="md-2-line no-hover-effect" md-no-ink md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in persons | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
-            <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
-                <h3>{{person.name}}</h3>
-                <div layout="row">
-                    <p class="md-caption"><span ng-show="person.last_remains_date_formated" md-colors="{color:'primary-400'}">{{person.last_remains_date_formated}}</span><span ng-show="person.last_remains_date_formated && person.current_books_price" class="grey-font"> &bullet; </span><span ng-show="(person.current_books_price - person.laxmi) > 0">{{(person.current_books_price - person.laxmi)}} р.</span><span ng-show="(person.last_remains_date_formated || person.current_books_price) && person.debt" class="grey-font"> &bullet; </span><span ng-show="person.debt"><span md-colors="{color:'warn'}">{{person.debt}} р.</span></span></p>
+        <div ng-repeat="group in persons | orderBy:['favourite','persongroup_id'] | groupBy: 'fav_or_grp' | toArray:true track by group.$key">
+            <md-divider ng-hide="$first"></md-divider>
+            <md-subheader>{{group.$key!='null'?(group.$key?group.$key:'Избранные'):'Другие'}}</md-subheader>
+            <md-list-item class="md-2-line no-hover-effect" md-no-ink md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in group | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
+                <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
+                    <h3>{{person.name}}</h3>
+                    <div layout="row">
+                        <p class="md-caption"><span ng-show="person.last_remains_date_formated" md-colors="{color:'primary-400'}">{{person.last_remains_date_formated}}</span><span ng-show="person.last_remains_date_formated && person.current_books_price" class="grey-font"> &bullet; </span><span ng-show="(person.current_books_price - person.laxmi) > 0">{{(person.current_books_price - person.laxmi)}} р.</span><span ng-show="(person.last_remains_date_formated || person.current_books_price) && person.debt" class="grey-font"> &bullet; </span><span ng-show="person.debt"><span md-colors="{color:'warn'}">{{person.debt}} р.</span></span></p>
+                    </div>
                 </div>
-            </div>
-        </md-list-item>
+            </md-list-item>
+        </div>
         <div class="alert alert-danger" ng-if="persons.error">
             <strong>There was an error: </strong> {{error.error}}
             <br>Please go back and login again

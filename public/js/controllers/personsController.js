@@ -42,9 +42,9 @@
         $scope.$on('arrow', function(event, data) {
             if(data.direction == 'down' || data.direction == 'up') {
                 if(data.direction == 'down') {
-                    var items = $filter('filter')($filter('orderBy')($rootScope.persons, $scope.personsOrderBy, $scope.personsReverse), $scope.searchQ);
+                    var items = $filter('filter')($filter('orderBy')($rootScope.persons, ['favourite','persongroup_id',$scope.personsOrderBy], $scope.personsReverse), $scope.searchQ);
                 } else {
-                    var items = $filter('filter')($filter('orderBy')($rootScope.persons, $scope.personsOrderBy, !$scope.personsReverse), $scope.searchQ);
+                    var items = $filter('filter')($filter('orderBy')($rootScope.persons, ['favourite','persongroup_id',$scope.personsOrderBy], !$scope.personsReverse), $scope.searchQ);
                 }
                 $scope.next = 1;
                 if($scope.highlightedItem) {
