@@ -23,6 +23,7 @@
         $scope.searchIsFocused = false;
         $scope.toggleSearch = function() {
             $scope.showSearch = !$scope.showSearch;
+            if(!$scope.showSearch) $scope.searchQ = '';
         };
         $scope.highlightedItem = 0;
 

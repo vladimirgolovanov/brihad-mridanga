@@ -125,6 +125,9 @@
             $rootScope.lastdate = $scope.date;
             var postdata = { 'empty': $scope.empty, 'datetime': $scope.op, 'operation_type': $scope.optypeNum, 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'descr':$scope.descr, 'exchange_id':$scope.exchangeId };
             $http.post('admin/operation', postdata).then(function(response) {
+                if($scope.optypeNum == 4) {
+                    $rootScope.refreshPersonById($scope.exchangeId);
+                }
                 $state.go('person', {'id': $scope.id});
             }, function(response) {
 

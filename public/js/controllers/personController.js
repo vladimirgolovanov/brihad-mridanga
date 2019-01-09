@@ -6,7 +6,7 @@
         .module('bmApp')
         .controller('PersonController', PersonController);
 
-    function PersonController($http, $auth, $rootScope, $scope, $state, $stateParams) {
+    function PersonController($http, $auth, $rootScope, $scope, $state, $stateParams, $filter) {
 
         var vm = this;
 
@@ -30,6 +30,7 @@
 
         $http.get('admin/persons/show/'+$stateParams.id).then(function(person) {
             $scope.person = person.data;
+            $rootScope.refreshPerson(person.data);
             $scope.booksCount = Object.keys($scope.person.books).length;
             $scope.isLoading = false;
         }, function(error) {

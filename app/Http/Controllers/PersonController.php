@@ -19,6 +19,8 @@ class PersonController extends Controller
 {
     public function index($param = null)
     {
+        $time = microtime(true);
+        $param = 'all';
         if($param == 'all') {
             $persons = DB::table('persons AS p')
                 ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
@@ -42,18 +44,21 @@ class PersonController extends Controller
         $ps = [];
         foreach($persons as $k => $p) {
             $p->last_remains_date = Operation::get_last_remains_date($p->id);
-            list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($p->id);
-            $p->debt = $debt;
-            $p->laxmi = $laxmi;
-            $p->current_books_price = $current_books_price;
-            $p->fav_or_grp = $p->favourite?"":($p->persongroup_id?$p->persongroup_name:null);
+            $p->debt = 0;
+            if(!$p->hide) {
+                list($os, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp) = Operation::get_operations($p->id);
+                $p->debt = $debt;
+                $p->lxm = $lxm;
+                $p->laxmi = $laxmi;
+                $p->current_books_price = $current_books_price;
+            }
             $ps[] = $p;
         }
-        usort($ps, function($a, $b) {
-            return $b->debt > $a->debt;
-        });
+//        usort($ps, function($a, $b) {
+//            return $b->debt > $a->debt;
+//        });
         $persongroups = PersonGroup::get_all_persongroups(Auth::user()->id);
-        return ['persons' => $ps, 'persongroups' => $persongroups];
+        return ['persons' => $ps, 'persongroups' => $persongroups, 'ms' => microtime(true)-$time];
      }
 
     /**
@@ -125,6 +130,7 @@ class PersonController extends Controller
         $person['current_books_price'] = $current_books_price;
         $person['debt'] = $debt;
         $person['osgrp'] = $showall?$osgrp:array_slice($osgrp, 0, 30);
+        $person['last_remains_date'] = Operation::get_last_remains_date($id);
         return $person;
         /*$person = Person::findOrFail($id);
         list($operations, $summ, $books) = Operation::get_all_operations($id);

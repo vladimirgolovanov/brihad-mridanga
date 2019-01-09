@@ -223,6 +223,7 @@
             $rootScope.isLoadingBooks = true;
             $rootScope.lastdate = new Date();
             $rootScope.mousePresent = false;
+            $rootScope.changed = [];
 
             var refreshToken = function() {
                 $http.get('admin/refresh')
@@ -247,6 +248,34 @@
                 }, obj);
             }
 
+            $rootScope.refreshPerson = function(item) {
+                if(!$rootScope.isLoadingPersons) {
+                    for (var k in $rootScope.persons) {
+                        if ($rootScope.persons[k].id == item.id) {
+                            item.last_remains_date_formated = item.last_remains_date ? moment(item.last_remains_date).format('DD.MM.YY') : '';
+                            item.fav_or_grp = item.favourite ? "" : (item.persongroup_id ? $rootScope.getPersonGroupName(item.persongroup_id) : null);
+                            $rootScope.persons[k] = item;
+                        }
+                    }
+                }
+            }
+
+            $rootScope.refreshPersonById = function(id) {
+                $http.get('admin/persons/show/'+id).then(function(person) {
+                    $rootScope.refreshPerson(person.data);
+                    $rootScope.isLoadingPersons = false;
+                }, function(error) {
+                    $rootScope.showMessage(error.data.error, 'error');
+                    $rootScope.isLoadingPersons = false;
+                });
+            }
+
+            $rootScope.getPersonGroupName = function(id) {
+                for(var key in $rootScope.persongroups) {
+                    if($rootScope.persongroups[key].id == id) return $rootScope.persongroups[key].name;
+                }
+            }
+
             $rootScope.preloadData = function() {
 
                 $rootScope.stop = $interval(refreshToken, 600000);
@@ -255,6 +284,7 @@
                     $rootScope.persongroups = [];
                     $rootScope.persons = persons.data['persons'].map(function(item, index, arr) {
                         item.last_remains_date_formated = item.last_remains_date?moment(item.last_remains_date).format('DD.MM.YY'):'';
+                        item.fav_or_grp = item.favourite?"":(item.persongroup_id?item.persongroup_name:null);
                         return item;
                     });
                     for(var key in persons.data['persongroups']) {
@@ -363,16 +393,6 @@
             }
             $rootScope.toggleSidenav = function() {
                 $mdSidenav('left').toggle();
-            };
-            $rootScope.showPersons = function(parm) {
-                $rootScope.isLoadingPersons = true;
-                $http.get('admin/persons'+((parm == 'all')?'/all':'')).then(function(persons) {
-                    $rootScope.persons = persons.data['persons'];
-                    $rootScope.isLoadingPersons = false;
-                }, function(error) {
-                    $rootScope.showMessage(error.data.error, 'error');
-                    $rootScope.isLoadingPersons = false;
-                });
             };
             $rootScope.showMessage = function(text, theme) {
                 $mdToast.show(

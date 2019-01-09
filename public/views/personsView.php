@@ -20,14 +20,6 @@
             </md-button>
             <md-menu-content width="4" >
                 <md-menu-item>
-                    <md-button ng-click="showPersons('all');">
-                        <div layout="row" flex>
-                            <md-icon md-menu-align-target md-svg-icon="account-multiple"></md-icon>
-                            <p flex>Show all</p>
-                        </div>
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
                     <md-button ng-click="personsOrder('name');">
                         <div layout="row" flex>
                             <md-icon md-menu-align-target md-svg-icon="sort-alphabetical"></md-icon>
@@ -46,7 +38,7 @@
                 <md-menu-item>
                     <md-button ui-sref="persongroups">
                         <div layout="row" flex>
-                            <md-icon md-menu-align-target md-svg-icon="account-circle"></md-icon>
+                            <md-icon md-menu-align-target md-svg-icon="account-multiple"></md-icon>
                             <p flex>Person groups</p>
                         </div>
                     </md-button>
@@ -62,11 +54,11 @@
         <div ng-repeat="group in persons | orderBy:['favourite','persongroup_id'] | groupBy: 'fav_or_grp' | toArray:true track by group.$key">
             <md-divider ng-hide="$first"></md-divider>
             <md-subheader>{{group.$key!='null'?(group.$key?group.$key:'Избранные'):'Другие'}}</md-subheader>
-            <md-list-item class="md-2-line no-hover-effect" md-no-ink md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in group | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
+            <md-list-item ng-if="!person.hide || showSearch" class="md-2-line no-hover-effect" md-no-ink md-colors="person.id == highlightedItem ? {background: 'primary-100'} : {}" ui-sref="person({id:person.id})" ng-repeat="person in group | orderBy:personsOrderBy:personsReverse | filter:searchQ track by person.id">
                 <div ng-class="{1:'greyed', null:''}[person.hide]" class="md-list-item-text" layout="column" layout-align="start start">
-                    <h3>{{person.name}}</h3>
+                    <h3>{{person.name}}<span ng-show="person.descr"><md-icon md-svg-icon="chevron-right" class="s12" md-colors="{color:'grey-500'}"></md-icon>{{person.descr}}</span></h3>
                     <div layout="row">
-                        <p class="md-caption"><span ng-show="person.last_remains_date_formated" md-colors="{color:'primary-400'}">{{person.last_remains_date_formated}}</span><span ng-show="person.last_remains_date_formated && person.current_books_price" class="grey-font"> &bullet; </span><span ng-show="(person.current_books_price - person.laxmi) > 0">{{(person.current_books_price - person.laxmi)}} р.</span><span ng-show="(person.last_remains_date_formated || person.current_books_price) && person.debt" class="grey-font"> &bullet; </span><span ng-show="person.debt"><span md-colors="{color:'warn'}">{{person.debt}} р.</span></span></p>
+                        <p class="md-caption"><span ng-show="person.last_remains_date_formated" md-colors="{color:'primary-400'}">{{person.last_remains_date_formated}}</span><span ng-show="person.last_remains_date_formated && person.current_books_price" class="grey-font"> &bullet; </span><span ng-show="person.current_books_price">{{(person.laxmi)}} / </span><span ng-show="person.current_books_price">{{(person.current_books_price)}} р.</span><span ng-show="(person.last_remains_date_formated || person.current_books_price) && person.debt" class="grey-font"> &bullet; </span><span ng-show="person.debt"><span md-colors="{color:'warn'}">{{person.debt}} р.</span></span></p>
                     </div>
                 </div>
             </md-list-item>
@@ -79,5 +71,5 @@
 </md-content>
 </div>
 <md-button ui-sref="addperson" class="md-fab md-fab-bottom-right" aria-label="Add person">
-    <md-icon md-svg-icon="plus""></md-icon>
+    <md-icon md-svg-icon="plus"></md-icon>
 </md-button>

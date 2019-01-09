@@ -6,6 +6,13 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.persons h3 span {
+	color:#AAAAAA;
+	font-size:12px;
+}
+.persons h3 span md-icon {
+	margin:0px 3px 3px 8px;;
+}
 .tooltip {
 	display:block;
 	font-size:12px;

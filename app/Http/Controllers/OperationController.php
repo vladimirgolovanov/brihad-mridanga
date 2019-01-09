@@ -65,6 +65,11 @@ class OperationController extends Controller
         } else {
             $datetime = date("Y-m-d H:i:s");
         }
+        if($request->id) {
+            $person = Person::findOrFail($request->id);
+            $person->hide = null;
+            $person->save();
+        }
         if($request->exchange_id) {
             $books = Book::get_all_books(Auth::user()->id);
             $datetime2 = date("Y-m-d H:i:s", time()+1);
