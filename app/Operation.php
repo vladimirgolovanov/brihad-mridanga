@@ -130,6 +130,7 @@ class Operation extends Model
                 'o.person_id',
                 'o.book_id',
                 'o.price',
+                'o.price_buy',
                 'o.quantity',
                 'o.operation_type',
                 'o.created_at',
@@ -143,6 +144,7 @@ class Operation extends Model
         $prevop = 0;
         $lxm = 0;
         $gain = 0;
+        $lxmprice = 0;
         $debt = 0;
         $oss = [];
         $os[] = 1;
@@ -152,7 +154,8 @@ class Operation extends Model
                     if(!isset($books_distr[$k])) $books_distr[$k] = 0;
                     foreach(array_slice($v, 1) as $b) {
                         $lxm += $b[0] * $b[1];
-                        $gain += $b[0] * (($b[1] > $books_info[$k]->price_buy)?($b[1] - $books_info[$k]->price_buy):0);
+                        if($books_info[$k]->book_type) $lxmprice += $b[0] * $b[2];
+                        $gain += $b[0] * (($b[1] > $b[2])?($b[1] - $b[2]):0);
                         $books_distr[$k] += $b[0];
                     }
                     unset($books[$k]);
@@ -179,6 +182,7 @@ class Operation extends Model
                 }
                 $oss[] = array('type' => 'info', 'text' => 'Всего очков', 'o' => $points);
                 $oss[] = array('type' => 'info', 'text' => 'Распространено на', 'o' => $lxm);
+                $oss[] = array('type' => 'info', 'text' => 'Закупочная', 'o' => $lxmprice);
                 $oss[] = array('type' => 'info', 'text' => 'Прибыль', 'o' => $gain);
                 $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
                 if($laxmi - $debt > $lxm) {
@@ -193,6 +197,7 @@ class Operation extends Model
                 $lxm = 0;
                 $laxmi = 0;
                 $gain = 0;
+                $lxmprice = 0;
             }
             if(gettype($o) != 'object') break;
             if($prevop != $o->datetime || !$prevop) {
@@ -213,20 +218,25 @@ class Operation extends Model
                         if(!isset($books_distr[$o->book_id]) && $used) $books_distr[$o->book_id] = 0;
                         if($used) $books_distr[$o->book_id] += $used;
                         foreach (array_slice($books[$o->book_id], 1) as $b) {
+                            $price = $b[1];
+                            $price_buy = $b[2];
                             if ($b[0] <= $used) {
                                 $shifted_b = array_splice($books[$o->book_id], 1, 1);
                                 $used -= $shifted_b[0][0];
                                 $lxm += $b[0] * $b[1];
-                                $gain += $b[0] * (($b[1] > $books_info[$o->book_id]->price_buy)?($b[1] - $books_info[$o->book_id]->price_buy):0);
+                                if($books_info[$o->book_id]->book_type) $lxmprice += $b[0] * $b[2];
+                                $gain += $b[0] * (($b[1] > $b[2])?($b[1] - $b[2]):0);
                             } else {
                                 $books[$o->book_id][1][0] -= $used;
                                 $lxm += $used * $b[1];
-                                $gain += $used * (($b[1] > $books_info[$o->book_id]->price_buy)?($b[1] - $books_info[$o->book_id]->price_buy):0);
+                                if($books_info[$o->book_id]->book_type) $lxmprice += $used * $b[2];
+                                $gain += $used * (($b[1] > $b[2])?($b[1] - $b[2]):0);
                                 break;
                             }
                         }
+                        $prices = array_pop($books[$o->book_id]);
                         if ($o->quantity > 0) {
-                            $books_left[$o->book_id] = [$o->quantity, [$o->quantity, $o->price]];
+                            $books_left[$o->book_id] = [$o->quantity, [$o->quantity, $prices[1], $prices[2]]];
                         }
                         unset($books[$o->book_id]);
                     } else {
@@ -237,9 +247,9 @@ class Operation extends Model
                 case 1:
                     if(isset($books[$o->book_id])) {
                         $books[$o->book_id][0] += $o->quantity;
-                        $books[$o->book_id][] = array($o->quantity, $o->price);
+                        $books[$o->book_id][] = array($o->quantity, $o->price, $o->price_buy);
                     } else {
-                        $books[$o->book_id] = [$o->quantity, [$o->quantity, $o->price]];
+                        $books[$o->book_id] = [$o->quantity, [$o->quantity, $o->price, $o->price_buy]];
                     }
                     $oss[] = array('type' => 'subop', 'o' => $o);
                     break;
@@ -265,7 +275,7 @@ class Operation extends Model
                         if($books[$o->book_id][0] == 0) {
                             unset($books[$o->book_id]);
                         } elseif($complete) {
-                            $books[$o->book_id] = [$books[$o->book_id][0], [$books[$o->book_id][0], $o->price]];
+                            $books[$o->book_id] = [$books[$o->book_id][0], [$books[$o->book_id][0], $books[$o->book_id][1][1], $books[$o->book_id][1][2]]];
                         } else {
                             unset($books[$o->book_id]);
                             $oss[] = array('type' => 'warning', 'o' => 'Вернули лишние книги');
@@ -293,6 +303,17 @@ class Operation extends Model
         return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt];
     }
 
+    public static function checkpoints() {
+        return DB::table('operations AS o')
+            ->where('o.operation_type', 10)
+            ->orderBy('o.custom_date', 'desc')
+            ->groupBy('o.custom_date')
+            ->select(
+                'o.custom_date'
+            )
+            ->get();
+    }
+
     public static function monthly_report($begin_date, $end_date, $persons) {
         if(count($persons)) {
             $ps = DB::table('persons')
@@ -312,6 +333,7 @@ class Operation extends Model
         $totals = [
             'total' => 0,
             'points' => 0,
+            'buying_price' => 0,
             'gain' => 0,
             'donation' => 0,
             'debt' => 0,
@@ -335,6 +357,7 @@ class Operation extends Model
                 $r->total = 0;
                 $r->points = 0;
                 $r->gain = 0;
+                $r->buying_price = 0;
                 $r->maha = 0;
                 $r->big = 0;
                 $r->middle = 0;
@@ -355,6 +378,10 @@ class Operation extends Model
                                 case 'Всего очков':
                                     $r->points += $os['o'];
                                     $totals['points'] += $os['o'];
+                                    break;
+                                case 'Закупочная':
+                                    $r->buying_price += $os['o'];
+                                    $totals['buying_price'] += $os['o'];
                                     break;
                                 case 'Прибыль':
                                     $r->gain += $os['o'];
