@@ -14,9 +14,9 @@ class BookGroup extends Model
         'name',
     ];
 
-    public static function get_all_bookgroups($user_id)
+    public static function get_all_bookgroups()
     {
-        $result = DB::table('bookgroups')->where('user_id', $user_id)->orderBy('name', 'asc')->get();
+        $result = DB::table('bookgroups')->orderBy('name', 'asc')->get();
         $items = [];
         foreach($result as $item) {
             $items[$item->id] = $item;

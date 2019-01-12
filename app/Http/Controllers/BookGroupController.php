@@ -19,7 +19,7 @@ class BookGroupController extends Controller
      */
     public function index()
     {
-        $bookgroups = BookGroup::get_all_bookgroups(Auth::user()->id);
+        $bookgroups = BookGroup::get_all_bookgroups();
         return view('bookgroups.index', ['bookgroups' => $bookgroups]);
     }
 
@@ -48,7 +48,6 @@ class BookGroupController extends Controller
         }
         $input = $request->all();
         $bg->fill($input);
-        $bg->user_id = Auth::user()->id;
         $bg->save();
         return $bg;
     }

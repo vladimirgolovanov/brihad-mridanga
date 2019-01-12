@@ -24,7 +24,6 @@ class PersonController extends Controller
         if($param == 'all') {
             $persons = DB::table('persons AS p')
                 ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
-                ->where('p.user_id', Auth::user()->id)
                 ->orderBy(DB::raw('-pg.id'), 'desc')
                 ->orderBy('p.hide')
                 ->orderBy('p.name')
@@ -33,7 +32,6 @@ class PersonController extends Controller
         } else {
             $persons = DB::table('persons AS p')
                 ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
-                ->where('p.user_id', Auth::user()->id)
                 ->orderBy(DB::raw('-pg.id'), 'desc')
                 ->whereNull('p.hide')
                 ->orderBy('p.hide')
@@ -57,7 +55,7 @@ class PersonController extends Controller
 //        usort($ps, function($a, $b) {
 //            return $b->debt > $a->debt;
 //        });
-        $persongroups = PersonGroup::get_all_persongroups(Auth::user()->id);
+        $persongroups = PersonGroup::get_all_persongroups();
         return ['persons' => $ps, 'persongroups' => $persongroups, 'ms' => microtime(true)-$time];
      }
 
@@ -83,7 +81,6 @@ class PersonController extends Controller
             $person = Person::findOrFail($request->id);
         } else {
             $person = new Person;
-            $person->user_id = Auth::user()->id;
         }
         $person->name = $request->name;
         $person->descr = $request->descr;
@@ -105,7 +102,7 @@ class PersonController extends Controller
 
     public function current_books($id, $tilldate) {
         list($os, $current_books) = Operation::get_operations($id, $tilldate);
-        $books = Book::get_all_books(Auth::user()->id);
+        $books = Book::get_all_books();
         $boooks = [];
         foreach($current_books as $k => $v) {
             $boooks[$k] = $books[$k];
@@ -131,6 +128,7 @@ class PersonController extends Controller
         $person['debt'] = $debt;
         $person['osgrp'] = $showall?$osgrp:array_slice($osgrp, 0, 30);
         $person['last_remains_date'] = Operation::get_last_remains_date($id);
+//        $person['report'] = Operation::monthly_report('2015-01-01', '2018-12-31', [$id]);
         return $person;
         /*$person = Person::findOrFail($id);
         list($operations, $summ, $books) = Operation::get_all_operations($id);

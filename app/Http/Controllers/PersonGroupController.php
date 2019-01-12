@@ -19,7 +19,7 @@ class PersonGroupController extends Controller
      */
     public function index()
     {
-        $persongroups = PersonGroup::get_all_persongroups(Auth::user()->id);
+        $persongroups = PersonGroup::get_all_persongroups();
         return view('persongroups.index', ['persongroups' => $persongroups]);
     }
 
@@ -48,7 +48,6 @@ class PersonGroupController extends Controller
         }
         $input = $request->all();
         $pg->fill($input);
-        $pg->user_id = Auth::user()->id;
         $pg->save();
         return $pg;
     }

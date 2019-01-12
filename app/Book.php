@@ -17,11 +17,10 @@ class Book extends Model
         'price',
         'price_shop',
     ];
-    public static function get_all_books($user_id)
+    public static function get_all_books()
     {
         $books = DB::table('books AS b')
             ->leftJoin('bookgroups AS bg', 'b.bookgroup_id', '=', 'bg.id')
-            ->where('b.user_id', $user_id)
             ->orderBy(DB::raw('-bg.id'), 'desc')
             ->orderBy('b.name', 'asc')
             ->select('b.*', 'bg.name AS bookgroup_name')
@@ -32,11 +31,10 @@ class Book extends Model
         }
         return $bks;
     }
-    public static function get_books_db($user_id)
+    public static function get_books_db()
     {
         $books = DB::table('books AS b')
             ->leftJoin('bookgroups AS bg', 'b.bookgroup_id', '=', 'bg.id')
-            ->where('b.user_id', $user_id)
             ->orderBy(DB::raw('-bg.id'), 'desc')
             ->orderBy('b.name', 'asc')
             ->select(
@@ -56,9 +54,9 @@ class Book extends Model
         }
         return $bks;
     }
-    public static function get_books_info($user_id)
+    public static function get_books_info()
     {
-        $books = DB::table('books')->where('user_id', $user_id)->orderBy('books.id', 'asc')->get();
+        $books = DB::table('books')->orderBy('books.id', 'asc')->get();
         $book_names = [];
         foreach($books as $k => $v) {
             $book_names[$v->id] = $v;

@@ -14,9 +14,9 @@ class PersonGroup extends Model
         'name',
     ];
 
-    public static function get_all_persongroups($user_id)
+    public static function get_all_persongroups()
     {
-        $result = DB::table('persongroups')->where('user_id', $user_id)->orderBy('name', 'asc')->get();
+        $result = DB::table('persongroups')->orderBy('name', 'asc')->get();
         $items = [];
         foreach($result as $item) {
             $items[$item->id] = $item;

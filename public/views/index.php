@@ -22,6 +22,9 @@
             <md-list-item ui-sref="books" ng-click="toggleSidenav('left')">
                 <div>Books</div>
             </md-list-item>
+<!--            <md-list-item ui-sref="reports" ng-click="toggleSidenav('left')">-->
+<!--                <div>Reports</div>-->
+<!--            </md-list-item>-->
             <md-list-item ui-sref="settings" ng-click="toggleSidenav('left')">
                 <div>Settings</div>
             </md-list-item>
@@ -70,6 +73,8 @@
 <script src="/js/controllers/bookController.js"></script>
 <script src="/js/controllers/bookgroupsController.js"></script>
 <script src="/js/controllers/bookgroupController.js"></script>
+<script src="/js/controllers/reportsController.js"></script>
+<script src="/js/controllers/reportController.js"></script>
 <script src="/js/controllers/descrController.js"></script>
 
 </html>

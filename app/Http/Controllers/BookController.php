@@ -21,8 +21,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::get_all_books(Auth::user()->id);
-        $bookgroups = BookGroup::get_all_bookgroups(Auth::user()->id);
+        $books = Book::get_all_books();
+        $bookgroups = BookGroup::get_all_bookgroups();
         return ['books' => $books, 'bookgroups' => $bookgroups];
     }
 
@@ -33,7 +33,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('books.create');
+        //
     }
 
     /**
@@ -51,7 +51,6 @@ class BookController extends Controller
         }
         $input = $request->all();
         $book->fill($input);
-        $book->user_id = Auth::user()->id;
         $book->bookgroup_id = $request->bookgroup_id ?: null;
         $book->save();
         $book->bookgroup_name = $book->bookgroup_id?BookGroup::get_bookgroup_name($book->bookgroup_id):null;
@@ -66,8 +65,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.show')->withBook($book);
+        //
     }
 
     /**
@@ -78,8 +76,7 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        $book = Book::findOrFail($id);
-        return view('books.edit')->withBook($book);
+        //
     }
 
     /**
@@ -91,15 +88,7 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $book = Book::findOrFail($id);
-        $this->validate($request, [
-            'name' => 'required'
-        ]);
-        $input = $request->all();
-        $book->fill($input);
-        $book->bookgroup_id = $request->bookgroup_id?:null;
-        $book->save();
-        return redirect()->route('books.index');
+        //
     }
 
     /**
@@ -110,8 +99,6 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
-        $book->delete();
-        return redirect()->route('books.index');
+        //
     }
 }

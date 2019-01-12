@@ -40,7 +40,7 @@
 
             <md-input-container flex="33">
                 <label>Type</label>
-                <md-select ng-model="book.book_type">
+                <md-select ng-model="book.book_type" ng-disabled="book.id && !editType" hm-press="editType = !editType" hm-recognizer-options="{time: 3000, tap_always: false}">
                     <md-option ng-value="0"><em>None</em></md-option>
                     <md-option ng-value="1">Maha</md-option>
                     <md-option ng-value="2">Big</md-option>

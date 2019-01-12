@@ -38,7 +38,6 @@ class OrderController extends Controller
     public function make_order(Request $request)
     {
         $order = new Order;
-        $order->user_id = $request->uid;
         $order->bv = $request->bv;
         $order->name = $request->name;
         $order->phone = $request->phone;

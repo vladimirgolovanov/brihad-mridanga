@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Person;
+use App\Report;
 use App\Operation;
 use Auth;
+use DB;
 
 use Illuminate\Http\Request;
 
@@ -18,23 +19,36 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($begin_date = 0, $end_date = 0)
+    public function index()
     {
-        list($report, $totals) = Operation::monthly_report($begin_date, $end_date, []);
-        return view('reports.index', ['totals' => $totals])->withReport($report);
+        $rs = Operation::reports();
+        $reports = [];
+        foreach($rs['persons'] as $p) {
+            foreach($p->reports as $k =>$r) {
+                if (!isset($reports[$k])) {
+                    $reports[$k] = new \stdClass();
+                    $reports[$k]->persons = [];
+                }
+                foreach ($r as $v) {
+                    if ($v) {
+                        $reports[$k]->persons[$p->id] = $r;
+                        break;
+                    }
+                }
+            }
+        }
+        krsort($reports);
+        return ['reports' => $reports];
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getselected(Request $request, $begin_date = 0, $end_date = 0)
+    public function fill_reports()
     {
-        $persons = explode(',', $request->persons);
-        list($report, $totals) = Operation::monthly_report($begin_date, $end_date, $persons);
-        return view('reports.index', ['totals' => $totals])->withReport($report);
+        $reports = DB::table('operations AS o')
+            ->where('operation_type', 10)
+            ->groupBy('o.custom_date')
+            ->select('o.custom_date')
+            ->get();
+        return $reports;
     }
 
     /**
@@ -55,7 +69,15 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->id) {
+            $report = Report::findOrFail($request->id);
+        } else {
+            $report = new Report;
+        }
+        $input = $request->all();
+        $report->fill($input);
+        $report->save();
+        return $report;
     }
 
     /**

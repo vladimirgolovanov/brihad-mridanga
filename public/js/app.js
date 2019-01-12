@@ -117,6 +117,16 @@
                     templateUrl: '/views/bookView.php',
                     controller: 'BookController as c'
                 })
+                .state('reports', {
+                    url: '/reports',
+                    templateUrl: '/views/reportsView.php',
+                    controller: 'ReportsController as reportsctrl'
+                })
+                .state('report', {
+                    url: '/report/:id',
+                    templateUrl: '/views/reportView.php',
+                    controller: 'ReportController as c'
+                })
                 .state('persongroups', {
                     url: '/persongroups',
                     templateUrl: '/views/persongroupsView.php',
@@ -215,12 +225,14 @@
         })
         .run(function($rootScope, $state, $http, $interval, $auth) {
 
+            $rootScope.isLoadingPersons = true;
+            $rootScope.isLoadingBooks = true;
+            $rootScope.isLoadingReports = true;
             $rootScope.persons = [];
             $rootScope.persongroups = [];
-            $rootScope.isLoadingPersons = true;
             $rootScope.books = [];
             $rootScope.bookgroups = [];
-            $rootScope.isLoadingBooks = true;
+            $rootScope.reports = [];
             $rootScope.lastdate = new Date();
             $rootScope.mousePresent = false;
             $rootScope.changed = [];
@@ -309,6 +321,17 @@
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');
                     $rootScope.isLoadingBooks = false;
+                });
+
+                $http.get('admin/reports').then(function(reports) {
+                    $rootScope.reports = reports.data['reports'];
+                    for(var key in $rootScope.reports) {
+                        $rootScope.reports[key].custom_date_formated = moment(key).format('DD.MM.YY');
+                    }
+                    $rootScope.isLoadingReports = false;
+                }, function(error) {
+                    $rootScope.showMessage(error.data.error, 'error');
+                    $rootScope.isLoadingReports = false;
                 });
             };
 

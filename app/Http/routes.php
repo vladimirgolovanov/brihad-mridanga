@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth']], function() {
     Route::resource('books', 'BookController');
     Route::post('book', 'BookController@store');
     Route::post('bookgroup', 'BookGroupController@store');
+    Route::resource('reports', 'ReportController');
+    Route::post('report', 'ReportController@store');
     Route::get('refresh', 'AuthenticateController@refresh');
 });
 //    Route::get('persons/{personid}/operation/{operationid}', ['as'=>'persons.operation', 'uses'=>'PersonController@operation']);

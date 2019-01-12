@@ -41,7 +41,7 @@ class OperationController extends Controller
                 $bks[$b->book_id] = $b;
             }
             list($os, $current_books) = Operation::get_operations($test->person_id, $test->custom_date, $datetime);
-            $books = Book::get_all_books(Auth::user()->id);
+            $books = Book::get_all_books();
             $boooks = [];
             foreach($current_books as $k => $v) {
                 $boooks[$k] = $books[$k];
@@ -71,7 +71,7 @@ class OperationController extends Controller
             $person->save();
         }
         if($request->exchange_id) {
-            $books = Book::get_all_books(Auth::user()->id);
+            $books = Book::get_all_books();
             $datetime2 = date("Y-m-d H:i:s", time()+1);
         }
         if($request->operation_type == 1 || $request->operation_type == 3) {

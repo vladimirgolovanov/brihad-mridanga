@@ -10,6 +10,7 @@
 
         $scope.submit = submit;
         $scope.submiting = false;
+        $scope.editType = false;
 
         $rootScope.$watch('isLoadingBooks', function(newVal, oldVal) {
             if(!newVal) {
