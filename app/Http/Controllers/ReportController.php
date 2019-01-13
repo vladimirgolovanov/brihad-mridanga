@@ -21,7 +21,8 @@ class ReportController extends Controller
     public function index($begin_date = 0, $end_date = 0)
     {
         list($report, $totals) = Operation::monthly_report($begin_date, $end_date, []);
-        return view('reports.index', ['totals' => $totals])->withReport($report);
+        $checkpoints = Operation::checkpoints();
+        return view('reports.index', ['totals' => $totals, 'checkpoints' => $checkpoints, 'begin_date' => $begin_date, 'end_date' => $end_date])->withReport($report);
     }
 
     /**
@@ -34,7 +35,8 @@ class ReportController extends Controller
     {
         $persons = explode(',', $request->persons);
         list($report, $totals) = Operation::monthly_report($begin_date, $end_date, $persons);
-        return view('reports.index', ['totals' => $totals])->withReport($report);
+        $checkpoints = Operation::checkpoints();
+        return view('reports.index', ['totals' => $totals, 'checkpoints' => $checkpoints, 'begin_date' => $begin_date, 'end_date' => $end_date])->withReport($report);
     }
 
     /**
