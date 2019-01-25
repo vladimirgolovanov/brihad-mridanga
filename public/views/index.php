@@ -11,7 +11,7 @@
 </head>
 <body ng-app="bmApp" ng-controller="MainCtrl" layout="row" ng-keypress="keyPressEvent($event)" ng-mousemove="mouseMove($event)">
     <md-sidenav layout="column" ng-show="authenticated" class="md-sidenav-left md-whiteframe-z2 animate" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-        <md-toolbar class="md-accent md-hue-1" style="background:url(/static/app-name-bg.png) -10px center no-repeat">
+        <md-toolbar class="md-accent md-hue-1" style="background:url(/static/app-name-bg.png) -45px center no-repeat">
             <div class="md-toolbar-tools">
                 <h2 style="margin-left:70px;">Brihad Mridanga</h2>
             </div>
