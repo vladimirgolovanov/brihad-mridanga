@@ -199,22 +199,24 @@
         function searchTextChange(text) {
         }
         function selectedItemChange(item) {
-            $scope.selectedId = item.id;
-            $scope.selectedGroup = item.bookgroup_name;
-            $scope.selectedName = item.name;
-            $scope.selectedShortname = item.shortname;
-            $scope.selectedQty = '';
-            $scope.selectedPrice = $scope.shopPrices?item.price_shop:item.price;
-            $scope.selectedPriceBuy = item.price_buy;
-            $scope.selectedPoints = item.book_type == 0 ? 0 : item.book_type == 1 ? 2 : item.book_type == 2 ? 1 : item.book_type == 3 ? 0.5 : item.book_type == 4 ? 0.25 : 0;
-            $scope.showSearch = 1;
+            if(typeof item !== 'undefined') {
+                $scope.selectedId = item.id;
+                $scope.selectedGroup = item.bookgroup_name;
+                $scope.selectedName = item.name;
+                $scope.selectedShortname = item.shortname;
+                $scope.selectedQty = '';
+                $scope.selectedPrice = $scope.shopPrices ? item.price_shop : item.price;
+                $scope.selectedPriceBuy = item.price_buy;
+                $scope.selectedPoints = item.book_type == 0 ? 0 : item.book_type == 1 ? 2 : item.book_type == 2 ? 1 : item.book_type == 3 ? 0.5 : item.book_type == 4 ? 0.25 : 0;
+                $scope.showSearch = 1;
+            }
         }
         function keyUppp(event) {
             if(event.keyCode == 13 || event.keyCode == 9) {
                 if($scope.showSearch == 1) {
                     $scope.showSearch = 2;
                 } else if($scope.showSearch == 2) {
-                    $scope.books.unshift({ id: $scope.selectedId, name: $scope.selectedName, shortname: $scope.selectedShortname, bookgroup_name: $scope.selectedGroup, qty: $scope.selectedQty, price: $scope.selectedPrice, price_buy: $scope.selectedPriceBuy, points: $scope.selectedPoints});
+                    $scope.books.unshift({ id: $scope.selectedId, name: $scope.selectedName, shortname: $scope.selectedShortname, bookgroup_name: $scope.selectedGroup, qty: parseInt($scope.selectedQty), price: $scope.selectedPrice, price_buy: $scope.selectedPriceBuy, points: $scope.selectedPoints});
                     $scope.showSearch = 0;
                     $scope.searchText = '';
                     $scope.setFocus();

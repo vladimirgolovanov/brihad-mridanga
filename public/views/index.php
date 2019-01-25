@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/fonts.css">
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 
@@ -22,9 +23,9 @@
             <md-list-item ui-sref="books" ng-click="toggleSidenav('left')">
                 <div>Books</div>
             </md-list-item>
-<!--            <md-list-item ui-sref="reports" ng-click="toggleSidenav('left')">-->
-<!--                <div>Reports</div>-->
-<!--            </md-list-item>-->
+            <md-list-item ui-sref="reports" ng-click="toggleSidenav('left')">
+                <div>Reports</div>
+            </md-list-item>
             <md-list-item ui-sref="settings" ng-click="toggleSidenav('left')">
                 <div>Settings</div>
             </md-list-item>
@@ -59,6 +60,7 @@
 <script src="/bower_components/AngularHammer/angular.hammer.min.js"></script>
 
 <script src="/js/app.js"></script>
+<script src="/js/dir.js"></script>
 <script src="/js/controllers/authController.js"></script>
 <script src="/js/controllers/userController.js"></script>
 <script src="/js/controllers/personController.js"></script>

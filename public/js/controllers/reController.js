@@ -44,6 +44,16 @@
 
         $scope.empty = false;
 
+        $rootScope.$watch('isLoadingReports', function(newVal, oldVal) {
+            if(!newVal) {
+                if($state.current.data.optype == 'remains') {
+                    if(!$rootScope.reports[0].compiled) {
+                        $scope.date = $rootScope.reports[0].custom_date;
+                    }
+                }
+            }
+        });
+
         if($stateParams.op) {
             $scope.op = $stateParams.op;
             $http.get('admin/operation/show/'+$stateParams.op).then(function(result) {
@@ -58,7 +68,9 @@
                 $scope.op = null;
             });
         } else {
-            $scope.date = new Date();
+            if($state.current.data.optype != 'remains') {
+                $scope.date = new Date();
+            }
             getCurrentBooksByDate();
             $scope.setFocus();
         }
@@ -123,7 +135,7 @@
         }
         function submit() {
             $rootScope.lastdate = $scope.date;
-            var postdata = { 'empty': $scope.empty, 'datetime': $scope.op, 'operation_type': $scope.optypeNum, 'id': $scope.id, 'date': $filter('date')($scope.date, 'yyyy-MM-dd'), 'books': $scope.books, 'descr':$scope.descr, 'exchange_id':$scope.exchangeId };
+            var postdata = { 'empty': $scope.empty, 'datetime': $scope.op, 'operation_type': $scope.optypeNum, 'id': $scope.id, 'date': ($scope.optype == 'remains'?$scope.date:$filter('date')($scope.date, 'yyyy-MM-dd')), 'books': $scope.books, 'descr':$scope.descr, 'exchange_id':$scope.exchangeId };
             $http.post('admin/operation', postdata).then(function(response) {
                 if($scope.optypeNum == 4) {
                     $rootScope.refreshPersonById($scope.exchangeId);

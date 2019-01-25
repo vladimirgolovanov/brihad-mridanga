@@ -22,7 +22,7 @@ class Report extends Model
     public static function get_all_reports()
     {
         $reports = DB::table('reports AS r')
-            ->orderBy('r.custom_date', 'desc')
+            ->orderBy('r.custom_date')
             ->select('r.*')
             ->get();
         return $reports;

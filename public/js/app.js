@@ -1,5 +1,4 @@
 (function() {
-
     'use strict';
 
     angular
@@ -123,7 +122,7 @@
                     controller: 'ReportsController as reportsctrl'
                 })
                 .state('report', {
-                    url: '/report/:id',
+                    url: '/report/:from/:till',
                     templateUrl: '/views/reportView.php',
                     controller: 'ReportController as c'
                 })
@@ -233,6 +232,7 @@
             $rootScope.books = [];
             $rootScope.bookgroups = [];
             $rootScope.reports = [];
+            $rootScope.lastCompiled = '';
             $rootScope.lastdate = new Date();
             $rootScope.mousePresent = false;
             $rootScope.changed = [];
@@ -257,6 +257,13 @@
                 var obj = {'id': id};
                 return $rootScope.persons.find(function(el) {
                     return this.id == el.id;
+                }, obj);
+            }
+
+            $rootScope.getReportById = function(id) {
+                var obj = {'id': id};
+                return $rootScope.reports.find(function(el) {
+                    return this.id == el.custom_date;
                 }, obj);
             }
 
@@ -286,6 +293,19 @@
                 for(var key in $rootScope.persongroups) {
                     if($rootScope.persongroups[key].id == id) return $rootScope.persongroups[key].name;
                 }
+            }
+
+            $rootScope.getLastCompiledReport = function() {
+                for(var key in $rootScope.reports) {
+                    if($rootScope.reports[key].compiled) return $rootScope.reports[key].custom_date;
+                }
+                return '';
+            }
+
+            $rootScope.dateFilter = function dateFilter(date) {
+                var last = $rootScope.lastCompiled;
+                var last_date = new Date(last);
+                return last?(date > last_date):true;
             }
 
             $rootScope.preloadData = function() {
@@ -325,9 +345,7 @@
 
                 $http.get('admin/reports').then(function(reports) {
                     $rootScope.reports = reports.data['reports'];
-                    for(var key in $rootScope.reports) {
-                        $rootScope.reports[key].custom_date_formated = moment(key).format('DD.MM.YY');
-                    }
+                    $rootScope.lastCompiled = reports.data['last_compiled'];
                     $rootScope.isLoadingReports = false;
                 }, function(error) {
                     $rootScope.showMessage(error.data.error, 'error');

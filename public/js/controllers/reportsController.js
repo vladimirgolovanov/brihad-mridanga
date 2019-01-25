@@ -10,6 +10,14 @@
 
         var vm = this;
 
+        $scope.totalProp = function(prop) {
+            var total = 0;
+            for(var k in $rootScope.reports) {
+                total += $rootScope.reports[k][prop];
+            }
+            return total;
+        }
+
     }
 
 })();

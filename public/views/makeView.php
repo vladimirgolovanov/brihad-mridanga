@@ -50,10 +50,10 @@
                 <p>{{selectedGroup}}{{selectedShortname?(' &bullet; '+selectedShortname):''}}</p>
             </div>
             <md-input-container flex="15" md-no-float class="md-subhead md-accent">
-                <input type="number" ng-model="selectedQty" focus-if="showSearch == 1" ng-keydown="keyUppp($event);">
+                <input type="text" numbers-only ng-model="selectedQty" focus-if="showSearch == 1" ng-keydown="keyUppp($event);">
             </md-input-container>
             <md-input-container flex="15" md-no-float class="md-subhead">
-                <input type="number" ng-model="selectedPrice" focus-if="showSearch == 2" ng-keydown="keyUppp($event);">
+                <input type="text" numbers-only ng-model="selectedPrice" focus-if="showSearch == 2" ng-keydown="keyUppp($event);">
             </md-input-container>
         </md-list-item>
     </md-list>
@@ -63,7 +63,7 @@
     <form name="form" flex layout="column" novalidate class="list-form">
         <md-list class="books-list">
             <div layout="row">
-                <md-datepicker ng-model="date" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
+                <md-datepicker md-date-filter="dateFilter" ng-model="date" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
                 <md-button ng-click="setDateToLast();" class="lastdate">
                     <md-icon md-svg-icon="small:chevron-double-left" class="s18"></md-icon>
                     <span>{{lastdate | date:'dd.MM.yyyy'}}</span>
@@ -95,10 +95,10 @@
                     <p>{{item.bookgroup_name}}{{item.shortname?(' &bullet; '+item.shortname):''}}</p>
                 </div>
                 <md-input-container flex="15" md-no-float style="padding-top:6px">
-                    <input type="number" next-focus ng-model="item.qty" min="0">
+                    <input type="text" numbers-only next-focus ng-model="item.qty" min="0">
                 </md-input-container>
                 <md-input-container flex="15" md-no-float style="padding-top:6px;">
-                    <input type="number" next-focus ng-model="item.price" style="color:#999;" min="0">
+                    <input type="text" numbers-only next-focus ng-model="item.price" style="color:#999;" min="0">
                 </md-input-container>
             </md-list-item>
             <md-divider></md-divider>

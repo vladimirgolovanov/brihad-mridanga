@@ -6,6 +6,34 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+md-progress-linear.laxmi .md-bar {
+    background-color:#388E3C;
+}
+.report-bar {
+	height:56px;
+}
+.progress-divider {
+	border:0px;
+}
+.totals h2 {
+	font-size:20px;
+	font-weight:bold;
+}
+.group-header h3 {
+	font-weight:500 !important;
+}
+.currency-dark {
+	color:#81C784;
+}
+.currency {
+	color:#388E3C;
+}
+.currency-light {
+	color:#6ABF69;
+}
+.locked {
+	background-color: #EEEEEE;
+}
 .persons h3 span {
 	color:#AAAAAA;
 	font-size:12px;
@@ -77,6 +105,9 @@ input::-webkit-inner-spin-button {
 }
 .datepick .md-datepicker-input {
 	min-width: 100px;
+}
+.reportselect {
+	min-width: 150px;
 }
 .lastdate {
 	margin-top: 1px;

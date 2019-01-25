@@ -6,7 +6,7 @@
         .module('bmApp')
         .controller('PersonController', PersonController);
 
-    function PersonController($http, $auth, $rootScope, $scope, $state, $stateParams, $filter) {
+    function PersonController($http, $auth, $rootScope, $scope, $state, $stateParams, $filter, $timeout) {
 
         var vm = this;
 
@@ -17,6 +17,8 @@
         $scope.booksCount = 0;
         $scope.booksTable = false;
         $scope.isIssue = false;
+        $scope.lockedOp = null;
+        $scope.lockTimeoutPromise = null;
         $scope.opIcon = {
             'remains': {icon:'checkbox-marked', 'class':'md-primary', color:'primary', bgcolor:'primary-100'},
             'Laxmi': {icon:'currency-rub', 'class':'md-primary md-hue-1', color:'primary', bgcolor:'grey-50-0.1'},
@@ -53,16 +55,24 @@
         });
 
         $scope.editOperation = function(os) {
-            if(os.type == 'make') {
-                $state.go('editmake', {id: $scope.person.id, op: os.id});
-            } else if(os.type == 'order') {
-                $state.go('editmake', {id: $scope.person.id, op: os.id});
-            } else if(os.type == 'Laxmi') {
-                $state.go('editLaxmi', {id: $scope.person.id, op: os.id});
-            } else if(os.type == 'return') {
-                $state.go('editreturn', {id: $scope.person.id, op: os.id});
-            } else if(os.type == 'remains') {
-                $state.go('editremains', {id: $scope.person.id, op: os.id});
+            if(os.date > $rootScope.lastCompiled) {
+                if (os.type == 'make') {
+                    $state.go('editmake', {id: $scope.person.id, op: os.id});
+                } else if (os.type == 'order') {
+                    $state.go('editmake', {id: $scope.person.id, op: os.id});
+                } else if (os.type == 'Laxmi') {
+                    $state.go('editLaxmi', {id: $scope.person.id, op: os.id});
+                } else if (os.type == 'return') {
+                    $state.go('editreturn', {id: $scope.person.id, op: os.id});
+                } else if (os.type == 'remains') {
+                    $state.go('editremains', {id: $scope.person.id, op: os.id});
+                }
+            } else {
+                $timeout.cancel($scope.lockTimeoutPromise);
+                $scope.lockedOp = os.id;
+                $scope.lockTimeoutPromise = $timeout(function() {
+                    $scope.lockedOp = null;
+                }, 1000);
             }
         }
 

@@ -201,9 +201,9 @@ class Operation extends Model
                 $osg['donation_gain'] = 0;
                 $oss[] = array('type' => 'info', 'text' => 'Получено', 'o' => $laxmi);
                 if($laxmi - $debt > $lxm) {
-                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => ($laxmi - $debt - $lxm));
+                    $oss[] = array('type' => 'info', 'text' => 'Сверхпожертвование', 'o' => sprintf("%.2f", $laxmi - $debt - $lxm));
 //                    $osg['total_gain'] += $laxmi - $debt - $lxm;
-                    $osg['donation_gain'] = $laxmi - $debt - $lxm;
+                    $osg['donation_gain'] = sprintf("%.2f", $laxmi - $debt - $lxm);
                     $debt = 0;
                 } elseif($laxmi - $debt < $lxm) {
                     $debt -= $laxmi - $lxm;
@@ -412,8 +412,9 @@ class Operation extends Model
     }
 
     public static function reports() {
-        $ps = DB::table('persons')
-            ->select('id', 'name', 'hide')
+        $ps = DB::table('persons AS p')
+            ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
+            ->select('p.id AS id', 'p.name AS name', 'p.hide AS hide', 'pg.name AS persongroup_name')
             ->get();
         $persons = [];
         $totals = [
@@ -449,6 +450,9 @@ class Operation extends Model
                     $state = 1;
                     $report_date = $os['o']->custom_date;
                     $p->reports[$report_date] = new \stdClass();
+                    $p->reports[$report_date]->id = $p->id;
+                    $p->reports[$report_date]->name = $p->name;
+                    $p->reports[$report_date]->pgroup = $p->persongroup_name;
                     $p->reports[$report_date]->donation = 0;
                     $p->reports[$report_date]->debt = 0;
                     $p->reports[$report_date]->total = 0;
@@ -656,6 +660,10 @@ class Operation extends Model
             }
         }
         return [$report, $totals];
+    }
+
+    public static function get_first_operation_date() {
+        return DB::table('operations')->orderBy('custom_date')->first()->custom_date;
     }
 
     public static function operation_type_name() {

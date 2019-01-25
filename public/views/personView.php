@@ -24,7 +24,7 @@
     </md-whiteframe>-->
     <md-whiteframe class="md-whiteframe-1dp" ng-if="person.debt">
         <md-list-item class="laxmi-list-item">
-            <md-icon md-svg-icon="alert" class="md-warn"></md-icon>
+            <md-icon md-svg-icon="alert-circle-outline" class="md-warn"></md-icon>
             <div class="md-list-item-text" flex>
                 <p>Debt</p>
             </div>
@@ -64,7 +64,7 @@
             <md-subheader>Операции</md-subheader>
 <!--            <md-list-item ui-sref="os.type == 1 ? editmake({id:person.id, op:os.id}) : (os.type == 2 ? editLaxmi({id:person.id, op:os.id}) : null)" class="md-3-line" ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">-->
             <md-list-item ng-click="editOperation(os)" class="md-3-line no-hover-effect" md-no-ink ng-repeat="os in person.osgrp" layout="row"  layout-align="start start" md-colors="{background:opIcon[os.type].bgcolor}">
-                <md-icon md-svg-icon="{{opIcon[os.type].icon}}" ng-class="opIcon[os.type].class"></md-icon>
+                <md-icon md-svg-icon="{{(os.id==lockedOp)?'lock':opIcon[os.type].icon}}" ng-class="opIcon[os.type].class"></md-icon>
                 <div class="md-list-item-text" flex>
                     <p><span md-colors="{color:opIcon[os.type].color}">{{os.date | date:'dd.MM.yy'}}</span><span ng-if="os.description" md-colors="{color:'grey'}"> / {{os.description}}</span></p>
                     <h3 ng-if="os.type == 'remains'"><span ng-if="!os.books_distr.length">:(</span><span ng-repeat="book in os.books_distr">{{book.shortname?book.shortname:book.name}} <span class="md-caption caption-top-align" md-colors="{color:'primary-400'}">{{book.o}}</span><span md-colors="{color:'primary-200'}" ng-if="!$last"> &bullet; </span></span></span></h3>
@@ -93,8 +93,9 @@
 </md-content>
 <md-toolbar>
     <div class="md-toolbar-tools" layout-align="space-around center">
-        <md-button aria-label="Issue books" class="md-icon-button" ui-sref="make({id:person.id})">
+        <md-button style="min-height:48px;" aria-label="Issue books" class="md-icon-button" ui-sref="make({id:person.id})" layout="column">
             <md-icon md-svg-icon="plus-circle-outline"></md-icon>
+            <p style="font-size:10px;">aaa</p>
         </md-button>
         <md-button aria-label="Laxmi" class="md-icon-button" ui-sref="Laxmi({id:person.id})">
             <md-icon md-svg-icon="cash-100"></md-icon>

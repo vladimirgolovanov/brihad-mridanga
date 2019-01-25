@@ -63,10 +63,6 @@
                 </div>
             </md-list-item>
         </div>
-        <div class="alert alert-danger" ng-if="persons.error">
-            <strong>There was an error: </strong> {{error.error}}
-            <br>Please go back and login again
-        </div>
     </md-list>
 </md-content>
 </div>

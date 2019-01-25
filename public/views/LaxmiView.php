@@ -18,7 +18,7 @@
     <form flex layout="column">
         <md-list>
             <div layout="row">
-                <md-datepicker ng-model="date" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
+                <md-datepicker md-date-filter="dateFilter" ng-model="date" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
                 <md-button ng-click="setDateToLast();" class="lastdate">
                     <md-icon md-svg-icon="small:chevron-double-left" class="s18"></md-icon>
                     <span>{{lastdate | date:'dd.MM.yyyy'}}</span>
