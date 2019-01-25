@@ -1,28 +1,16 @@
-<div layout="row" layout-align="center center" layout-fill>
-    <md-card class="md-whiteframe-z1" flex="100" flex-gt-xs="70" flex-gt-sm="50" flex-gt-md="33" layout-padding>
-        <md-toolbar class="md-accent md-hue-1">
-            <div class="md-toolbar-tools">
-                <h2>Brihad Mridanga Login</h2>
-            </div>
-        </md-toolbar>
-        <md-card-content>
-            <form>
-                <md-input-container class="md-block">
-                    <label>Email</label>
-                    <input type="email" ng-model="auth.email" eopd-enter="auth.login()">
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <label>Password</label>
-                    <input ng-model="auth.password" type="password" eopd-enter="auth.login()">
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <div layout="row" layout-margin>
-                        <md-button class="md-raised" flex ng-click="auth.login()">Login</md-button>
-                    </div>
-                </md-input-container>
-            </form>
-        </md-card-content>
-    </md-card>
+<div layout="column" layout-align="center center" layout-fill style="background:url(/static/auth-bg.png) center center no-repeat">
+    <img src="/static/bm-logo.png" style="width:250px;height:250px;margin-bottom:10px;">
+    <form style="width:250px;" layout="column" layout-align="center stretch">
+        <md-input-container class="md-block no-error">
+            <label>Email</label>
+            <input type="email" ng-model="auth.email" eopd-enter="auth.login()">
+        </md-input-container>
+        <md-input-container class="md-block">
+            <label>Password</label>
+            <input ng-model="auth.password" type="password" eopd-enter="auth.login()">
+        </md-input-container>
+        <md-button class="md-accent md-raised login-button" ng-click="auth.login()">Login</md-button>
+    </form>
 </div>
 <!--<div flex layout="column" layout-align="center center">-->
 <!--    <div>-->

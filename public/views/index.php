@@ -11,12 +11,12 @@
 </head>
 <body ng-app="bmApp" ng-controller="MainCtrl" layout="row" ng-keypress="keyPressEvent($event)" ng-mousemove="mouseMove($event)">
     <md-sidenav layout="column" ng-show="authenticated" class="md-sidenav-left md-whiteframe-z2 animate" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
-        <md-toolbar class="md-accent md-hue-1">
+        <md-toolbar class="md-accent md-hue-1" style="background:url(/static/app-name-bg.png) -10px center no-repeat">
             <div class="md-toolbar-tools">
-                <h2>Brihad Mridanga</h2>
+                <h2 style="margin-left:70px;">Brihad Mridanga</h2>
             </div>
         </md-toolbar>
-        <md-list>
+        <md-list style="background:url(/static/sidenav-bg.png) no-repeat 0px 20px" flex>
             <md-list-item ui-sref="persons" ng-click="toggleSidenav('left')">
                 <div>Persons</div>
             </md-list-item>
