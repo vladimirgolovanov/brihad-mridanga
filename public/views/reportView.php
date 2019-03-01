@@ -7,6 +7,10 @@
         <div flex layout="row" layout-align="start center">
             <h2>{{report.id?'Report':'New report'}}</h2>
         </div>
+        <md-button ng-if="updateRequired()" class="md-icon-button" ng-click="update()" ng-disabled="updating">
+            <md-icon md-svg-icon="refresh" ng-hide="updating"></md-icon>
+            <md-progress-circular ng-show="updating" class="md-hue-2" md-diameter="24px"></md-progress-circular>
+        </md-button>
         <md-button class="md-icon-button" ng-click="showInfo = !showInfo">
             <md-icon md-svg-icon="information" ng-hide="showInfo"></md-icon>
             <md-icon ng-show="showInfo" md-svg-icon="information-outline"></md-icon>
@@ -19,7 +23,7 @@
             <md-icon md-svg-icon="check" ng-hide="submiting"></md-icon>
             <md-progress-circular ng-show="submiting" class="md-hue-2" md-diameter="24px"></md-progress-circular>
         </md-button>
-        <md-button ng-if="till && state == 1" class="md-icon-button" ng-click="submit()" ng-disabled="submiting">
+        <md-button ng-if="till && state == 1" class="md-icon-button" ng-click="submit()" ng-disabled="submiting || noRemains()">
             <md-icon md-svg-icon="lock" ng-hide="!report.compiled || submiting"></md-icon>
             <md-icon md-svg-icon="lock-open" ng-hide="report.compiled || submiting"></md-icon>
             <md-progress-circular ng-show="submiting" class="md-hue-2" md-diameter="24px"></md-progress-circular>
@@ -69,7 +73,7 @@
             <div class="md-list-item-text" layout="row">
                 <div flex="55" layout-align="start center">
                     <h2>
-                        <span md-colors="{color:'warn'}">&mdash; {{showInfo?'DEBT':reports[0].debt}}</span>
+                        <span md-colors="{color:'warn'}">&mdash; {{showInfo?'DEBT':getFieldSum(report.persons, 'debt')}}</span>
                     </h2>
                     <h2>
                         <span class="currency">{{showInfo?'TOTAL GAIN':(getFieldSum(report.persons, 'gain')+getFieldSum(report.persons, 'donation'))}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':getFieldSum(report.persons, 'buying_price')}}</span><br>
@@ -108,21 +112,28 @@
                 </div>
                 <md-divider></md-divider>
             </md-list-item>
-            <md-list-item class="md-2-line no-hover-effect" md-no-ink ng-repeat="p in group | orderBy:sortBy:(sortBy=='name'?false:true)">
+            <md-list-item md-colors="(p.no_remains && (p.current_books_price || p.laxmi || p.debt))?{background:'accent-50'}:{}" class="md-2-line no-hover-effect" md-no-ink ng-repeat="p in group | orderBy:sortBy:(sortBy=='name'?false:true)">
                 <div class="md-list-item-text" layout="row">
                     <div flex>
-                        <h3>{{p.name}}</h3>
+                        <h3 md-colors="(p.no_remains && !p.current_books_price && !p.laxmi && !p.debt)?{color:'grey-400'}:{}">{{p.name}}</h3>
                         <h4>
+                            <div style="width:120px;display:inline-block;" class="currency" ng-show="(p.current_books_price || p.laxmi) && p.no_remains">{{showInfo?'RECEIVED / COST':(p.laxmi+' / '+p.current_books_price)}}</div>
                             <div style="width:70px;display:inline-block;" class="currency" ng-show="p.donation">{{showInfo?'DONATION':p.donation}}</div>
                             <div style="width:70px;display:inline-block;" md-colors="{color:'warn'}" ng-show="p.debt">&mdash; {{showInfo?'DEBT':p.debt}}</div>
                         </h4>
                     </div>
-                    <div style="width:160px;text-align:right;">
+                    <div style="width:160px;text-align:right;" ng-show="p.no_remains !== true && p.no_remains !== false">
                         <h3>
-                            <div style="width:70px;display:inline-block;">{{showInfo?'BOOKS':p.total}}</div>
+                            <div style="width:70px;display:inline-block;">{{p.no_remains?p.books.length:(showInfo?'BOOKS':p.total)}}</div>
                             <div style="width:70px;display:inline-block;" md-colors="{color:'primary'}">{{showInfo?'POINTS':p.points}}</div>
                         </h3>
                         <h4 md-colors="{color:'grey-500'}" style="font-size:10px;">{{showInfo?'MAHA':p.maha}} / {{showInfo?'BIG':p.big}} / {{showInfo?'MIDDLE':p.middle}} / {{showInfo?'SMALL':p.small}}</span></h4>
+                    </div>
+                    <md-button style="padding-right:0px;margin-right:0px;" class="md-icon-button" ui-sref="remains({id:p.id})" ng-show="(p.no_remains && (p.current_books_price || p.laxmi || p.debt))">
+                        <md-icon md-colors="{color:'accent'}" md-svg-icon="checkbox-marked"></md-icon>
+                    </md-button>
+                    <div style="width:80px;text-align:right;" ng-show="p.no_remains === false">
+                        <md-icon md-colors="{color:'grey-400'}" md-svg-icon="refresh"></md-icon>
                     </div>
                 </div>
                 <md-divider></md-divider>

@@ -12,8 +12,12 @@
         $scope.recalcReport = recalcReport;
         $scope.dateSelected = dateSelected;
         $scope.getFieldSum = getFieldSum;
+        $scope.noRemains = noRemains;
+        $scope.updateRequired = updateRequired;
+        $scope.update = update;
         $scope.report = new Object();
         $scope.submiting = false;
+        $scope.updating = false;
         $scope.editDate = false;
         $scope.from = null;
         $scope.till = null;
@@ -56,7 +60,7 @@
 
         function getFieldSum(items, field) {
             return items
-                .map(function(x) { return x[field]; })
+                .map(function(x) { return (typeof x[field] === 'undefined')?0:x[field]; })
                 .reduce(function(a, b) { return a + b; });
         }
 
@@ -75,25 +79,38 @@
                             $scope.state = 2;
                             for(var psk in ps) {
                                 if(ps[psk].id == $rootScope.reports[k].persons[pk].id) {
-                                    ps[psk].donation += $rootScope.reports[k].persons[pk].donation;
-                                    ps[psk].debt = $rootScope.reports[k].persons[pk].debt;
-                                    ps[psk].total += $rootScope.reports[k].persons[pk].total;
-                                    ps[psk].points += $rootScope.reports[k].persons[pk].points;
-                                    ps[psk].gain += $rootScope.reports[k].persons[pk].gain;
-                                    ps[psk].buying_price += $rootScope.reports[k].persons[pk].buying_price;
-                                    ps[psk].maha += $rootScope.reports[k].persons[pk].maha;
-                                    ps[psk].big += $rootScope.reports[k].persons[pk].big;
-                                    ps[psk].middle += $rootScope.reports[k].persons[pk].middle;
-                                    ps[psk].small += $rootScope.reports[k].persons[pk].small;
-                                    $scope.state = 3;
+                                    if(typeof $rootScope.reports[k].persons[pk].total !== 'undefined') {
+                                        ps[psk].donation += $rootScope.reports[k].persons[pk].donation;
+                                        if ($rootScope.reports[k].custom_date == till)
+                                            ps[psk].debt = $rootScope.reports[k].persons[pk].debt;
+                                        else
+                                            ps[psk].debt = 0;
+                                        ps[psk].total += $rootScope.reports[k].persons[pk].total;
+                                        ps[psk].points += $rootScope.reports[k].persons[pk].points;
+                                        ps[psk].gain += $rootScope.reports[k].persons[pk].gain;
+                                        ps[psk].buying_price += $rootScope.reports[k].persons[pk].buying_price;
+                                        ps[psk].maha += $rootScope.reports[k].persons[pk].maha;
+                                        ps[psk].big += $rootScope.reports[k].persons[pk].big;
+                                        ps[psk].middle += $rootScope.reports[k].persons[pk].middle;
+                                        ps[psk].small += $rootScope.reports[k].persons[pk].small;
+                                        $scope.state = 3;
+                                    }
                                 }
                             }
-                            if($scope.state != 3) ps.push(JSON.parse(JSON.stringify($rootScope.reports[k].persons[pk])));
+                            if($scope.state != 3) {
+                                ps.push(JSON.parse(JSON.stringify($rootScope.reports[k].persons[pk])));
+                                if($rootScope.reports[k].custom_date != till)
+                                    ps[ps.length-1].debt = 0;
+                            }
                         }
                         $scope.report.custom_date = $rootScope.reports[k].custom_date;
                     } else {
                         $scope.report = JSON.parse(JSON.stringify($rootScope.reports[k]));
                         ps = JSON.parse(JSON.stringify($rootScope.reports[k].persons));
+                        if($rootScope.reports[k].custom_date != till)
+                            for(var psk in ps) {
+                                ps[psk].debt = 0;
+                            }
                         $scope.state = 1;
                     }
                 }
@@ -170,6 +187,43 @@
                     $scope.textToCopy += "\n";
                 }
             }
+        }
+
+        function noRemains() {
+            var result = false;
+            for(var pk in $scope.report.persons) {
+                var p = $scope.report.persons[pk];
+                if(typeof p.no_remains !== 'undefined' && (p.laxmi || p.current_books_price || p.debt)) {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        function updateRequired() {
+            var result = false;
+            for(var pk in $scope.report.persons) {
+                var p = $scope.report.persons[pk];
+                if(p.no_remains === false) {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+
+        function update() {
+            $http.get('admin/reports').then(function(reports) {
+                $rootScope.reports = reports.data['reports'];
+                $rootScope.lastCompiled = reports.data['last_compiled'];
+                $scope.updating = false;
+                recalcReport($scope.from, $scope.till);
+            }, function(error) {
+                $rootScope.showMessage(error.data.error, 'error');
+                $rootScope.isLoadingReports = false;
+            });
+            $scope.updating = true;
         }
 
         function submit() {

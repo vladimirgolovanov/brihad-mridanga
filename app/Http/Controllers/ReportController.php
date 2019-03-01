@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Report;
 use App\Operation;
+use App\Person;
 use Auth;
 use DB;
 
@@ -22,8 +23,8 @@ class ReportController extends Controller
     public function index()
     {
         self::fill_reports();
-        $reports = Operation::reports();
         $rs = Report::get_all_reports();
+        $all_reports = Operation::reports();
         $prev_date = Operation::get_first_operation_date();
         $last_compiled = '';
         foreach($rs as $k => $r) {
@@ -41,7 +42,12 @@ class ReportController extends Controller
             $rs[$k]->big = 0;
             $rs[$k]->middle = 0;
             $rs[$k]->small = 0;
-            foreach($reports['persons'] as  $p) {
+            if(!$r->compiled) {
+                $reports = Operation::reports($r->custom_date);
+            } else {
+                $reports = $all_reports;
+            }
+            foreach($reports['persons'] as $p) {
                 if(isset($p->reports[$r->custom_date])) {
                     $rs[$k]->persons[] = $p->reports[$r->custom_date];
                     $rs[$k]->donation += $p->reports[$r->custom_date]->donation;
@@ -54,6 +60,16 @@ class ReportController extends Controller
                     $rs[$k]->big += $p->reports[$r->custom_date]->big;
                     $rs[$k]->middle += $p->reports[$r->custom_date]->middle;
                     $rs[$k]->small += $p->reports[$r->custom_date]->small;
+                } elseif(!$r->compiled && !$p->hide) {
+                    $pp = new \stdClass;
+                    $pp->id = $p->id;
+                    $pp->name = $p->name;
+                    $pp->no_remains = true;
+                    $pp->laxmi = $p->laxmi;
+                    $pp->current_books_price = $p->current_books_price;
+                    $pp->debt = $p->debt;
+                    $pp->pgroup = $p->persongroup_name;
+                    $rs[$k]->persons[] = $pp;
                 }
             }
         }

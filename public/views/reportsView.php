@@ -5,50 +5,60 @@
             <md-icon md-svg-icon="menu"></md-icon>
         </md-button>
         <h2 flex ng-hide="showSearch">Reports</h2>
+        <md-button class="md-icon-button" ng-click="showInfo = !showInfo">
+            <md-icon md-svg-icon="information" ng-hide="showInfo"></md-icon>
+            <md-icon ng-show="showInfo" md-svg-icon="information-outline"></md-icon>
+        </md-button>
     </div>
 </md-toolbar>
 <md-content flex layout="column" id="content">
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingReports" class="md-accent" md-diameter="20px"></md-progress-linear>
     <md-list flex ng-hide="isLoadingReports">
-        <md-list-item ng-hide="isLoadingReports" class="md-2-line no-hover-effect">
+        <md-list-item ng-hide="isLoadingReports" class="md-2-line no-hover-effect totals">
             <div class="md-list-item-text" layout="row">
-                <div flex layout="row" layout-align="start center">
-                    <h3>
-                        <span md-colors="{color:'warn'}" style="font-weight:500;"><md-icon md-svg-icon="small:alert-circle-outline" md-colors="{color:'warn'}" style="margin-bottom:3px;"><md-tooltip>Debts</md-tooltip></md-icon> {{reports[0].debt}}</span>
-                    </h3>
+                <div flex="55" layout-align="start center">
+                    <h2>
+                        <span md-colors="{color:'warn'}">&mdash; {{showInfo?'DEBT':lastProp('debt')}}</span>
+                    </h2>
+                    <h2>
+                        <span class="currency">{{showInfo?'TOTAL GAIN':(totalProp('gain')+totalProp('donation'))}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':totalProp('buying_price')}}</span><br>
+                        <span class="currency-light" style="font-size:10px;">{{showInfo?'INCOME':totalProp('gain')}} + {{showInfo?'DONATION':totalProp('donation')}}{{showInfo?' = TOTAL GAIN':''}}</span>
+                    </h2>
                 </div>
-                <div style="width:250px;text-align:right;">
-                    <h3>
-                        <div style="width:70px;display:inline-block;font-weight:500;">{{totalProp('total')}}</div>
-                        <div style="width:70px;display:inline-block;font-weight:500;" md-colors="{color:'primary'}">{{totalProp('points')}}</div>
-                    </h3>
-                    <h4 md-colors="{color:'grey-500'}">{{totalProp('maha')}} / {{totalProp('big')}} / {{totalProp('middle')}} / {{totalProp('small')}}</span></h4>
+                <div flex="45" style="text-align:right;">
+                    <h2>
+                        <span md-colors="{color:'primary'}"> {{showInfo?'POINTS':totalProp('points')}}</span>
+                    </h2>
+                    <h2>
+                        <span>{{showInfo?'BOOKS':totalProp('total')}}</span><br>
+                        <span md-colors="{color:'grey-500'}" style="font-size:10px;margin-left:30px;">{{showInfo?'MAHA':totalProp('maha')}} / {{showInfo?'BIG':totalProp('big')}} / {{showInfo?'MIDDLE':totalProp('middle')}} / {{showInfo?'SMALL':totalProp('small')}}</span>
+                    </h2>
                 </div>
             </div>
             <md-divider></md-divider>
         </md-list-item>
-            <md-list-item ng-repeat="report in reports" md-colors="{background: report.compiled?'primary-50':'white'}" class="md-2-line no-hover-effect" md-no-ink ui-sref="report({from:report.custom_date_start, till:report.custom_date})">
-                <div class="md-list-item-text" layout="column">
-                    <div layout="row">
-                        <div flex>
-                            <h3>{{report.custom_date_start | amDateFormat:'MMM DD, YYYY'}} &ndash; {{report.custom_date | amDateFormat:'MMM DD, YYYY'}}</h3>
-                            <h4>
-                                <span class="currency">{{report.gain+report.donation}}<span class="currency-light"> / {{report.buying_price}}</span></span>
-                            </h4>
-                        </div>
-                        <div style="width:160px;text-align:right;">
-                            <h3>
-                                <div style="width:70px;display:inline-block;">{{report.total}}</div>
-                                <div style="width:70px;display:inline-block;" md-colors="{color:'primary'}">{{report.points}}</div>
-                            </h3>
-                            <h4 md-colors="{color:'grey-500'}">{{report.maha}} / {{report.big}} / {{report.middle}} / {{report.small}}</span></h4>
-                        </div>
+        <md-list-item ng-repeat="report in reports" md-colors="{background: report.compiled?'primary-50':''}" class="md-2-line no-hover-effect" md-no-ink ui-sref="report({from:report.custom_date_start, till:report.custom_date})">
+            <div class="md-list-item-text" layout="column">
+                <div layout="row">
+                    <div flex>
+                        <h3>{{report.custom_date_start | amDateFormat:'MMM DD, YYYY'}} &ndash; {{report.custom_date | amDateFormat:'MMM DD, YYYY'}}</h3>
+                        <h4>
+                            <span class="currency" ng-if="report.compiled">{{showInfo?'TOTAL_GAIN':(report.gain+report.donation)}}<span class="currency-light"> / {{showInfo?'BBT_COST':report.buying_price}}</span></span>
+                        </h4>
+                    </div>
+                    <div style="width:160px;text-align:right;">
+                        <h3>
+                            <div style="width:70px;display:inline-block;" ng-if="report.compiled">{{showInfo?'BOOKS':report.total}}</div>
+                            <div style="width:70px;display:inline-block;" md-colors="{color:'primary'}" ng-if="report.compiled">{{showInfo?'POINTS':report.points}}</div>
+                        </h3>
+                        <h4 md-colors="{color:'grey-500'}" style="font-size:10px;" ng-if="report.compiled">{{showInfo?'MAHA':report.maha}} / {{showInfo?'BIG':report.big}} / {{showInfo?'MIDDLE':report.middle}} / {{showInfo?'SMALL':report.small}}</span></h4>
                     </div>
                 </div>
-                <md-divider class="progress-divider">
-                    <md-progress-linear md-mode="determinate" value="{{report.points / 500}}" flex></md-progress-linear>
-                </md-divider>
-            </md-list-item>
+            </div>
+            <md-divider class="progress-divider">
+                <md-progress-linear md-mode="determinate" value="{{report.compiled ? report.points / 500 : 0}}" flex></md-progress-linear>
+            </md-divider>
+        </md-list-item>
     </md-list>
 </md-content>
 </div>

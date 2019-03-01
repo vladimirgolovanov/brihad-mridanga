@@ -47,10 +47,10 @@
     <form name="form" flex layout="column" novalidate class="list-form">
         <md-list class="return-books-list">
             <div layout="row" layout-margin>
-                <md-select ng-if="optype == 'remains'" ng-model="date" ng-change="dateSelected()" class="reportselect">
+                <md-select ng-disabled="op" ng-if="optype == 'remains'" ng-model="date.prop" class="reportselect">
                     <md-option ng-repeat="r in reports | filter:{'compiled':null}:strict" ng-value="r.custom_date">{{r.custom_date | amDateFormat:'MMM DD, YYYY'}}</md-option>
                 </md-select>
-                <md-datepicker md-date-filter="dateFilter" ng-if="optype != 'remains'" ng-model="date" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
+                <md-datepicker md-date-filter="dateFilter" ng-if="optype != 'remains'" ng-model="date.prop" md-placeholder="Enter date" class="datepick" md-is-open="dateIsOpen"></md-datepicker>
                 <md-button ng-if="optype != 'remains'" ng-click="setDateToLast();" class="lastdate">
                     <md-icon md-svg-icon="small:chevron-double-left" class="s18"></md-icon>
                     <span>{{lastdate | date:'dd.MM.yyyy'}}</span>

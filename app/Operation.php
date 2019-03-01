@@ -299,8 +299,6 @@ class Operation extends Model
                         if(!isset($books_distr[$o->book_id]) && $used) $books_distr[$o->book_id] = 0;
                         if($used) $books_distr[$o->book_id] += $used;
                         foreach (array_slice($books[$o->book_id], 1) as $b) {
-                            $price = $b[1];
-                            $price_buy = $b[2];
                             if ($b[0] <= $used) {
                                 $shifted_b = array_splice($books[$o->book_id], 1, 1);
                                 $used -= $shifted_b[0][0];
@@ -411,7 +409,7 @@ class Operation extends Model
         return [$oss, $books, $lxm, $laxmi, $current_books_price, $debt, $osgrp];
     }
 
-    public static function reports() {
+    public static function reports($tilldate = null) {
         $ps = DB::table('persons AS p')
             ->leftJoin('persongroups AS pg', 'p.persongroup_id', '=', 'pg.id')
             ->select('p.id AS id', 'p.name AS name', 'p.hide AS hide', 'pg.name AS persongroup_name')
@@ -431,10 +429,12 @@ class Operation extends Model
         ];
         foreach($ps as $p) {
             $last_remains_date = self::get_last_remains_date($p->id);
-            list($oss, $books, $lxm, $laxmi, $current_books_price) = self::get_operations($p->id);
+            list($oss, $books, $lxm, $laxmi, $current_books_price, $debt) = self::get_operations($p->id, $tilldate);
             $p->remains_date = $last_remains_date;
+            $p->books = $books;
+            $p->laxmi = $laxmi;
+            $p->current_books_price = $current_books_price;
             $p->donation = 0;
-            $p->debt = 0;
             $p->total = 0;
             $p->points = 0;
             $p->gain = 0;
@@ -444,10 +444,8 @@ class Operation extends Model
             $p->middle = 0;
             $p->small = 0;
             $p->reports = [];
-            $state = 0;
             foreach($oss as $os) {
-                if($state == 0 && $os['type'] == 'operation' && $os['o']->operation_type == 10) {
-                    $state = 1;
+                if($os['type'] == 'operation' && $os['o']->operation_type == 10) {
                     $report_date = $os['o']->custom_date;
                     $p->reports[$report_date] = new \stdClass();
                     $p->reports[$report_date]->id = $p->id;
@@ -463,9 +461,8 @@ class Operation extends Model
                     $p->reports[$report_date]->big = 0;
                     $p->reports[$report_date]->middle = 0;
                     $p->reports[$report_date]->small = 0;
-                } elseif($state > 0) {
-                    if($os['type'] == 'info') {
-                        $state = 2;
+                    $balance = false;
+                } elseif($os['type'] == 'info') {
                         switch($os['text']) {
                             case 'Всего распространено книг':
                                 $p->total += $os['o'];
@@ -493,10 +490,12 @@ class Operation extends Model
                                 $totals['donation'] += $os['o'];
                                 $p->debt = 0;
                                 $p->reports[$report_date]->debt = 0;
+                                $balance = true;
                                 break;
                             case 'Долг':
                                 $p->debt = $os['o'];
                                 $p->reports[$report_date]->debt = $os['o'];
+                                $balance = true;
                                 break;
                             case 'Махабиги':
                                 $p->maha += $os['o'];
@@ -519,11 +518,13 @@ class Operation extends Model
                                 $totals['small'] += $os['o'];
                                 break;
                         }
-                    } elseif($state == 2) {
-                        $state = 0;
-                    }
+                        if(!$balance) {
+                            $p->debt = 0;
+                            $p->reports[$report_date]->debt = 0;
+                        }
                 }
             }
+            $p->debt = $debt;
             $totals['debt'] += $p->debt;
             if($p->total || $p->donation || $p->debt || !$p->hide) $persons[] = $p;
         }

@@ -9,9 +9,9 @@ input::-webkit-inner-spin-button {
 md-progress-linear.laxmi .md-bar {
     background-color:#388E3C;
 }
-.login-button {
-	margin-left:0px;
-	margin-right:0px;
+.login-input {
+	margin-left:6px;
+	margin-right:6px;
 }
 .no-error .md-errors-spacer {
 	display: none;

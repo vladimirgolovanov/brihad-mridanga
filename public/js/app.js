@@ -237,6 +237,11 @@
             $rootScope.mousePresent = false;
             $rootScope.changed = [];
 
+            $rootScope.previousState = '';
+            $rootScope.previousParams = '';
+            $rootScope.currentState = '';
+            $rootScope.currentParams = '';
+
             var refreshToken = function() {
                 $http.get('admin/refresh')
                     .then(function(response) {
@@ -390,6 +395,13 @@
                         $state.go('persons');
                     }
                 }
+            });
+
+            $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+                $rootScope.previousState = from.name;
+                $rootScope.previousParams = fromParams;
+                $rootScope.currentState = to.name;
+                $rootScope.currentParams = toParams;
             });
         })
         .controller('MainCtrl', function($scope, $rootScope, $mdSidenav, $mdToast, $http, $auth, $state, $interval) {
