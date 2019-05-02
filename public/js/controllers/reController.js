@@ -48,11 +48,11 @@
 
         $rootScope.$watch('isLoadingReports', function(newVal, oldVal) {
             if(!newVal) {
-                if($state.current.data.optype == 'remains') {
-                    if(!$rootScope.reports[0].compiled) {
-                        $scope.date.prop = $rootScope.reports[0].custom_date;
-                    }
-                }
+                // if($state.current.data.optype == 'remains') {
+                //     if(!$rootScope.reports[0].compiled) {
+                //         $scope.date.prop = $rootScope.reports[0].custom_date;
+                //     }
+                // }
             }
         });
 
