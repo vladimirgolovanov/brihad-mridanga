@@ -394,7 +394,7 @@ class Operation extends Model
         }
         $current_books_price = 0;
         foreach($books as $k => $v) {
-            foreach(array_slice($v, 1, -1) as $b) {
+            foreach(array_slice($v, 1, -2) as $b) { // Очень опасное место
                 $current_books_price += $b[0] * $b[1];
             }
         }

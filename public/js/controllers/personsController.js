@@ -6,7 +6,7 @@
         .module('bmApp')
         .controller('PersonsController', PersonsController);
 
-    function PersonsController($http, $scope, $auth, $rootScope, $state, $filter) {
+    function PersonsController($http, $scope, $auth, $rootScope, $state, $filter, $timeout) {
 
         var vm = this;
 
@@ -26,6 +26,12 @@
             if(!$scope.showSearch) $scope.searchQ = '';
         };
         $scope.highlightedItem = 0;
+
+        $scope.$on('refreshScrollPos', function(event, data) {
+            $timeout(function () {
+                angular.element(document.querySelector('#content'))[0].scrollTop = $rootScope.personsScrollPos;
+            });
+        });
 
         $scope.$on('charPressed', function(event, data) {
             $scope.showSearch = true;

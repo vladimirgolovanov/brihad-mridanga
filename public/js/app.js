@@ -242,6 +242,8 @@
             $rootScope.currentState = '';
             $rootScope.currentParams = '';
 
+            $rootScope.personsScrollPos = 0;
+
             var refreshToken = function() {
                 $http.get('admin/refresh')
                     .then(function(response) {
@@ -402,6 +404,10 @@
                 $rootScope.previousParams = fromParams;
                 $rootScope.currentState = to.name;
                 $rootScope.currentParams = toParams;
+            });
+
+            $rootScope.$on('$viewContentLoaded', function(e) {
+                $rootScope.$broadcast('refreshScrollPos');
             });
         })
         .controller('MainCtrl', function($scope, $rootScope, $mdSidenav, $mdToast, $http, $auth, $state, $interval) {

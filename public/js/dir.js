@@ -22,5 +22,14 @@
                     ngModelCtrl.$parsers.push(fromUser);
                 }
             };
-        });
+        })
+        .directive('scroll', [function() {
+            return {
+                link: function ($scope, $elem, $attrs) {
+                    $elem.on('scroll', function (e) {
+                        $scope.$root.personsScrollPos = this.scrollTop;
+                    });
+                }
+            }
+        }]);
 })();
