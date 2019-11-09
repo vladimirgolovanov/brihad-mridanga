@@ -50,7 +50,7 @@
 </md-toolbar>
 <md-content flex layout="row" id="content" scroll>
     <md-progress-linear md-mode="indeterminate" ng-show="isLoadingPersons" class="md-accent" md-diameter="20px"></md-progress-linear>
-    <md-list flex ng-hide="isLoadingPersons" class="persons">
+    <md-list flex ng-hide="isLoadingPersons && hideList" class="persons">
         <div ng-repeat="group in persons | orderBy:['favourite','persongroup_id'] | groupBy: 'fav_or_grp' | toArray:true track by group.$key">
             <md-divider ng-hide="$first"></md-divider>
             <md-subheader>{{group.$key!='null'?(group.$key?group.$key:'Избранные'):'Другие'}}</md-subheader>

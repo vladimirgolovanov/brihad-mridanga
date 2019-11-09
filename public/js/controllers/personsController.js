@@ -27,9 +27,12 @@
         };
         $scope.highlightedItem = 0;
 
+        $scope.hideList = $rootScope.personsScrollPos?true:false;
+
         $scope.$on('refreshScrollPos', function(event, data) {
             $timeout(function () {
                 angular.element(document.querySelector('#content'))[0].scrollTop = $rootScope.personsScrollPos;
+                $scope.hideList = false;
             });
         });
 
