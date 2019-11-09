@@ -62,7 +62,7 @@
             </div>
             <md-divider></md-divider>
             <md-progress-linear md-mode="indeterminate" ng-show="isLoading" class="md-accent" md-diameter="20px"></md-progress-linear>
-            <md-list-item class="md-2-line books-list" flex ng-repeat="item in books" layout-align="space-between top" layout="row" ng-hide="isLoading">
+            <md-list-item class="md-2-line books-list" flex ng-repeat="item in books | toArray:false | orderBy:['bookgroup_id', 'name']" layout-align="space-between top" layout="row" ng-hide="isLoading">
                 <div class="md-list-item-text" layout="column" layout-align="start start" flex="70">
                     <h3>{{item.name}}</h3>
                     <p>{{item.bookgroup_name}}{{item.shortname?(' &bullet; '+item.shortname):''}}</p>
