@@ -76,8 +76,8 @@
                         <span md-colors="{color:'warn'}">&mdash; {{showInfo?'DEBT':getFieldSum(report.persons, 'debt')}}</span>
                     </h2>
                     <h2>
-                        <span class="currency">{{showInfo?'TOTAL GAIN':(getFieldSum(report.persons, 'gain')+getFieldSum(report.persons, 'donation'))}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':getFieldSum(report.persons, 'buying_price')}}</span><br>
-                        <span class="currency-light" style="font-size:10px;">{{showInfo?'INCOME':getFieldSum(report.persons, 'gain')}} + {{showInfo?'DONATION':getFieldSum(report.persons, 'donation')}}{{showInfo?' = TOTAL GAIN':''}}</span>
+                        <span class="currency">{{showInfo?'TOTAL GAIN':(getFieldSum(report.persons, 'gain')+getFieldSum(report.persons, 'donation')).toFixed()}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':getFieldSum(report.persons, 'buying_price').toFixed()}}</span><br>
+                        <span class="currency-light" style="font-size:10px;">{{showInfo?'INCOME':getFieldSum(report.persons, 'gain').toFixed()}} + {{showInfo?'DONATION':getFieldSum(report.persons, 'donation').toFixed()}}{{showInfo?' = TOTAL GAIN':''}}</span>
                     </h2>
                 </div>
                 <div flex="45" style="text-align:right;">

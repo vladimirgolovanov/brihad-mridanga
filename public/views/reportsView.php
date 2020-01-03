@@ -21,8 +21,8 @@
                         <span md-colors="{color:'warn'}">&mdash; {{showInfo?'DEBT':lastProp('debt')}}</span>
                     </h2>
                     <h2>
-                        <span class="currency">{{showInfo?'TOTAL GAIN':(totalProp('gain')+totalProp('donation'))}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':totalProp('buying_price')}}</span><br>
-                        <span class="currency-light" style="font-size:10px;">{{showInfo?'INCOME':totalProp('gain')}} + {{showInfo?'DONATION':totalProp('donation')}}{{showInfo?' = TOTAL GAIN':''}}</span>
+                        <span class="currency">{{showInfo?'TOTAL GAIN':(totalProp('gain')+totalProp('donation')).toFixed()}}</span><span class="currency-dark"> / {{showInfo?'BBT COST':totalProp('buying_price').toFixed()}}</span><br>
+                        <span class="currency-light" style="font-size:10px;">{{showInfo?'INCOME':totalProp('gain').toFixed()}} + {{showInfo?'DONATION':totalProp('donation').toFixed()}}{{showInfo?' = TOTAL GAIN':''}}</span>
                     </h2>
                 </div>
                 <div flex="45" style="text-align:right;">
